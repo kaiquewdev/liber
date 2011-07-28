@@ -48,3 +48,8 @@
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
+
+
+// Inflector em português
+require APP . 'plugins' . DS . 'cake_ptbr' . DS . 'config' . DS . 'inflections.php';
+
