@@ -1,4 +1,5 @@
 
+<h2>Consultar cliente</h2>
 
 <table>
 	<thead>
@@ -6,9 +7,9 @@
 			<th><?php print $paginator->sort('Cód','id'); ?></th>
 			<th><?php print $paginator->sort('Tipo','tipo_pessoa'); ?></th>
 			<th><?php print $paginator->sort('Nome','nome'); ?></th>
-			<th><?php print $paginator->sort('Log. nome','logradouro_nome'); ?></th>
-			<th><?php print $paginator->sort('Log. número','logradouro_numero'); ?></th>
-			<th><?php print $paginator->sort('Log. complemento','logradouro_complemento'); ?></th>
+			<th><?php print $paginator->sort('Logradouro','logradouro_nome'); ?></th>
+			<th><?php print $paginator->sort('Número','logradouro_numero'); ?></th>
+			<th><?php print $paginator->sort('Comp.','logradouro_complemento'); ?></th>
 			<th><?php print $paginator->sort('Bairro','bairro'); ?></th>
 			<th><?php print $paginator->sort('Cidade','cidade'); ?></th>
 			<th><?php print $paginator->sort('Telefone','numero_telefone'); ?></th>
@@ -24,7 +25,7 @@
 		<tr>
 			<td><?php print $cliente['Cliente']['id'];?></td>
 			<td><?php print $cliente['Cliente']['tipo_pessoa']; ?></td>
-			<td><?php print $html->link($cliente['Cliente']['nome'],'ver/' . $cliente['Cliente']['id']) ;?></td>
+			<td><?php print $html->link($cliente['Cliente']['nome'],'detalhar/' . $cliente['Cliente']['id']) ;?></td>
 			<td><?php print $cliente['Cliente']['logradouro_nome'];?></td>
 			<td><?php print $cliente['Cliente']['logradouro_numero'];?></td>
 			<td><?php print $cliente['Cliente']['logradouro_complemento'];?></td>

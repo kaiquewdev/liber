@@ -14,10 +14,10 @@
 			print $this->Html->css('estilo.css');
 			print $scripts_for_layout;
 		?>
-		<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			jQuery( function() {
+			$( function() {
 				$('ul.sf-menu').superfish();
 			});
 		</script>

@@ -53,3 +53,6 @@
 // Inflector em português
 require APP . 'plugins' . DS . 'cake_ptbr' . DS . 'config' . DS . 'inflections.php';
 
+//Mensagens do core em português
+require APP . 'plugins' . DS . 'cake_ptbr' . DS . 'config' . DS . 'traducao_core.php';
+

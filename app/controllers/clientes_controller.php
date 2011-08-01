@@ -35,7 +35,7 @@ class ClientesController extends AppController {
 		
 	}
 	
-	function ver($id = NULL) {
+	function detalhar($id = NULL) {
 		$this->Cliente->id = $id;
 		$this->set('cliente',$this->Cliente->read());
 	}

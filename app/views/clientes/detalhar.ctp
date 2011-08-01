@@ -1,4 +1,4 @@
-<!-- Arquivo: /app/views/clientes/ver.ctp --> 
+
 <h2>Visualizar cliente</h2>
 Nome: <h1><?php print $cliente['Cliente']['nome'] ?></h1>
 Nome fantasia: <h1><?php  print $cliente['Cliente']['nome_fantasia'];?></h1>
