@@ -65,4 +65,4 @@ Tipo pessoa: <?php
 	
 </table>
 
-Observação: <textarea><?php  print $cliente['Cliente']['observacao'];?></textarea>
+Observação: <textarea rows="5" readonly="readonly"><?php  print $cliente['Cliente']['observacao'];?></textarea>

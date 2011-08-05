@@ -4,7 +4,13 @@ $html->css("jquery-ui/jquery-ui.css", null, array("inline"=>false));
 ?>
 
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function() {
+		
+		$('#ClienteNome').focusout(function() {
+			if ($('#ClienteNomeFantasia').val() == '') {
+				$('#ClienteNomeFantasia').val($('#ClienteNome').val());
+			}
+		});
 		
 		$('[name="data[Cliente][tipo_pessoa]"]').change(function(){
 			if ($("#ClienteTipoPessoaF").is(':checked') ) {
@@ -69,7 +75,7 @@ array('legend'=>'Tipo de pessoa:') );
 		<?php
 		print $form->input('bairro');
 		print $form->input('cidade');
-		print $form->input('uf', array('label'=>'UF', 'type'=>'select','options'=>array('AC','MG') ) );
+		print $estados->input('uf',array('label'=>'UF'));
 		print $form->input('cep', array('label'=>'CEP'));
 		print $form->input('numero_telefone', array('label'=>'Número de telefone'));
 		?>

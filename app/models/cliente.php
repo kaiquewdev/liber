@@ -12,13 +12,13 @@ class Cliente extends AppModel {
 		
 		'nome' => array(
 			'allowEmpty' => false,
-			'rule' => 'alphanumeric',
+			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório. Somente letras e números.'
 		),
 		
 		'nome_fantasia' => array(
 			'allowEmpty' => false,
-			'rule' => 'alphanumeric',
+			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório. Somente letras e números.'
 		),
 		
@@ -52,7 +52,7 @@ class Cliente extends AppModel {
 		
 		'cep' => array(
 			'allowEmpty' => false,
-			'rule' => 'anumeric',
+			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório. Somente números.'
 		),
 		
@@ -82,7 +82,7 @@ class Cliente extends AppModel {
 		
 		'rg' => array(
 			'allowEmpty' => true,
-			'rule' => 'alphanumeric',
+			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório. Somente letras e números.'
 		)
 		
