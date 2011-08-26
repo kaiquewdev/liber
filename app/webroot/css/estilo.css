@@ -33,6 +33,21 @@
 	text-align: center;
 }
 
+#divs_grupo_2 {
+	background-color: white;
+}
+
+#div1_2 {
+	width: 45%;
+	float:left;
+	position: absolute;
+}
+
+#div2_2 {
+	width: 45%;
+	float:right;
+}
+
 #divs_grupo_3 {
 	background-color: white;
 }
@@ -56,6 +71,10 @@
 
 .limpar {
 	clear:both;
+}
+
+.descricao_cabecalho {
+	
 }
 
 /*---------------------------------- 
@@ -627,3 +646,6 @@ div.code-coverage-results span.result-good {
 #url-rewriting-warning {
 	display: none;
 }
+
+/** Jquery **/
+.ui-autocomplete-loading { background: white url('img/carregando.gif') right center no-repeat; }

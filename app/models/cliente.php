@@ -63,27 +63,55 @@ class Cliente extends AppModel {
 		),
 		
 		'cnpj' => array(
-			'allowEmpty' => true,
-			'rule' => 'numeric',
-			'message' => 'Somente números.'
+			'numerico' => array(
+				'allowEmpty' => true,
+				'rule' => 'numeric',
+				'message' => 'Somente números.'
+			),
+			'unico' => array(
+				'allowEmpty' => true,
+				'rule' => 'isUnique',
+				'message' => 'Já cadastrado.'
+			)
 		),
 		
 		'inscricao_estadual' => array(
-			'allowEmpty' => true,
-			'rule' => 'numeric',
-			'message' => 'Somente números.'
+			'numerico' => array(
+				'allowEmpty' => true,
+				'rule' => 'numeric',
+				'message' => 'Somente números.'
+			),
+			'unico' => array(
+				'allowEmpty' => true,
+				'rule' => 'isUnique',
+				'message' => 'Já cadastrado.'
+			)
 		),
 		
 		'cpf' => array(
-			'allowEmpty' => true,
-			'rule' => 'numeric',
-			'message' => 'Somente números.'
+			'numerico' => array(
+				'allowEmpty' => true,
+				'rule' => 'numeric',
+				'message' => 'Somente números.'
+			),
+			'unico' => array(
+				'allowEmpty' => true,
+				'rule' => 'isUnique',
+				'message' => 'Já cadastrado.'
+			)
 		),
 		
 		'rg' => array(
-			'allowEmpty' => true,
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório. Somente letras e números.'
+			'alphanumerico' => array(
+				'allowEmpty' => true,
+				'rule' => 'alphanumeric',
+				'message' => 'Somente letras e números.'
+			),
+			'unico' => array(
+				'allowEmpty' => true,
+				'rule' => 'isUnique',
+				'message' => 'Já cadastrado.'
+			)
 		)
 		
 	);

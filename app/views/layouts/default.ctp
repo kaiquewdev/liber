@@ -53,19 +53,19 @@
 					</li>
 			
 					<li>
-						<a href="#" >Consultar</a>
+						<a href="#" >Pesquisar</a>
 						<ul>
 							<li class="borda-primeiro">
-								<?php print $html -> link('Cliente', "/clientes/consultar");?>
+								<?php print $html -> link('Cliente', "/clientes/pesquisar");?>
 							</li>
 							<li>
-								<?php print $html -> link('Produto', "/produtos/consultar");?>
+								<?php print $html -> link('Produto', "/produtos/pesquisar");?>
 							</li>
 							<li>
-								<?php print $html -> link('Equipamento', "/equipamentos/consultar");?>
+								<?php print $html -> link('Equipamento', "/equipamentos/pesquisar");?>
 							</li>
 							<li class="borda-ultimo">
-								<?php print $html -> link('Usuário', "/usuarios/consultar");?>
+								<?php print $html -> link('Usuário', "/usuarios/pesquisar");?>
 							</li>
 						</ul>
 					</li>

@@ -1,19 +1,21 @@
+<?php if (! isset($cliente) || ! $cliente) die; ?>
 
-<h2>Visualizar cliente</h2>
+<h2 class="descricao_cabecalho">Visualizar cliente</h2>
+
 Nome: <h1><?php print $cliente['Cliente']['nome'] ?></h1>
 Nome fantasia: <h1><?php  print $cliente['Cliente']['nome_fantasia'];?></h1>
 Tipo pessoa: <?php
 					if ( $cliente['Cliente']['tipo_pessoa'] == 'J'):
-						print 'Jurídica';
+						print '<h1>Jurídica</h1>';
 					elseif ( $cliente['Cliente']['tipo_pessoa'] == 'F' ):
-						print 'Física';
+						print '<h1>Física</h1>';
 					endif;
 				?>
 <p>
-	<small>Criado em: <?php print $cliente['Cliente']['data_cadastrado']; ?></small>
+	<small>Criado em: <?php print '<h1>'.$cliente['Cliente']['data_cadastrado'].'</h1>'; ?></small>
 </p>
 <p>
-	<small>Atualizado em: <?php print $cliente['Cliente']['atualizado']; ?></small>
+	<small>Atualizado em: <?php print '<h1>'.$cliente['Cliente']['atualizado'].'</h1>'; ?></small>
 </p>
 
 <table>

@@ -6,12 +6,23 @@ $html->css("jquery-ui/jquery-ui.css", null, array("inline"=>false));
 <script type="text/javascript">
 	$(document).ready(function() {
 		
+		//Para situações onde o formulario será carregado já populado
+		if ($("#ClienteTipoPessoaF").is(':checked') ) {
+			$('#ClienteCpf').removeAttr('disabled');
+			$('#ClienteRg').removeAttr('disabled');
+		}
+		else if ($("#ClienteTipoPessoaJ").is(':checked') ) {
+			$('#ClienteCnpj').removeAttr('disabled');
+			$('#ClienteInscricaoEstadual').removeAttr('disabled');
+		}
+		
 		$('#ClienteNome').focusout(function() {
 			if ($('#ClienteNomeFantasia').val() == '') {
 				$('#ClienteNomeFantasia').val($('#ClienteNome').val());
 			}
 		});
 		
+		//Ao ser setado, manualmente, o tipo do cliente
 		$('[name="data[Cliente][tipo_pessoa]"]').change(function(){
 			if ($("#ClienteTipoPessoaF").is(':checked') ) {
 				$('#ClienteCnpj')
@@ -27,7 +38,6 @@ $html->css("jquery-ui/jquery-ui.css", null, array("inline"=>false));
 				$('#ClienteRg')
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
-					
 			}
 			else if ($("#ClienteTipoPessoaJ").is(':checked') ) {
 				$('#ClienteCpf')
@@ -44,17 +54,39 @@ $html->css("jquery-ui/jquery-ui.css", null, array("inline"=>false));
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
 			}
-			
 		});
+		
+		$('input[value="Gravar"]').click(function () {
+			if ($("#ClienteTipoPessoaJ").is(':checked') ){
+				if ( ($('#ClienteCnpj').val() == "") || ($('#ClienteInscricaoEstadual').val() == "") ) {
+					alert ("Para pessoa jurídica os campos CNPJ e I.E. são obrigatórios.");
+					return false;
+				}
+			}
+			else if ($("#ClienteTipoPessoaF").is(':checked') ) {
+				if ( ($('#ClienteCpf').val() == "") || ( $('#ClienteRg').val() == "") ) {
+					alert ("Para pessoa física os campos CPF e RG são obrigatórios.");
+					return false;
+				} 
+			}
+			
+			r = confirm("Confirma o envio dos dados?");
+			if (! r) return false;
+		});
+		
 		
 	});
 </script>
 
-<h2>Adicionar cliente</h2>
-
+<h2 class="descricao_cabecalho">
+	<?php
+	if ($acao == "adicionar") print "Adicionar cliente";
+	else if ($acao == "editar") print "Editar cliente";
+	?>
+</h2>
 <?php
 
-print $form->create('Cliente');
+print $form->create('Cliente',array('autocomplete'=>'off'));
 
 print $form->radio('tipo_pessoa',
 array('F'=>'Física','J'=>'Jurídica'),
@@ -95,5 +127,5 @@ array('legend'=>'Tipo de pessoa:') );
 
 <?php
 print $form->input('observacao', array('label'=>'Observação') );
-print $form->end('Gravar');	
+print $form->end('Gravar');
 ?>

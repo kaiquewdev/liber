@@ -30,7 +30,11 @@ class AppController extends Controller {
 	 */
 	var $Auth;
 	
-	
+	/**
+	 * Componente de Sanitização
+	 * @var $Sanitizacao
+	 */
+	var $Sanitizacao;
 	
 }
 
