@@ -2,64 +2,64 @@
 	$(document).ready(function() {
 		
 		//Para situações onde o formulario será carregado já populado
-		if ($('[name="data[Cliente][tipo_pessoa]"]').val() == 'F' ) {
-			$('#ClienteCpf').removeAttr('disabled');
-			$('#ClienteRg').removeAttr('disabled');
+		if ($('[name="data[Fornecedor][tipo_pessoa]"]').val() == 'F' ) {
+			$('#FornecedorCpf').removeAttr('disabled');
+			$('#FornecedorRg').removeAttr('disabled');
 		}
-		else if ($('[name="data[Cliente][tipo_pessoa]"]').val() == 'J' ) {
-			$('#ClienteCnpj').removeAttr('disabled');
-			$('#ClienteInscricaoEstadual').removeAttr('disabled');
+		else if ($('[name="data[Fornecedor][tipo_pessoa]"]').val() == 'J' ) {
+			$('#FornecedorCnpj').removeAttr('disabled');
+			$('#FornecedorInscricaoEstadual').removeAttr('disabled');
 		}
 		
-		$('#ClienteNome').focusout(function() {
-			if ($('#ClienteNomeFantasia').val() == '') {
-				$('#ClienteNomeFantasia').val($('#ClienteNome').val());
+		$('#FornecedorNome').focusout(function() {
+			if ($('#FornecedorNomeFantasia').val() == '') {
+				$('#FornecedorNomeFantasia').val($('#FornecedorNome').val());
 			}
 		});
 		
-		//Ao ser setado, manualmente, o tipo do cliente
-		$('[name="data[Cliente][tipo_pessoa]"]').change(function(){
+		//Ao ser setado, manualmente, o tipo do fornecedor
+		$('[name="data[Fornecedor][tipo_pessoa]"]').change(function(){
 			if ($(this).val() == 'F' ) {
-				$('#ClienteCnpj')
+				$('#FornecedorCnpj')
 					.val("")
 					.attr("disabled", "disabled");
-				$('#ClienteInscricaoEstadual')
+				$('#FornecedorInscricaoEstadual')
 					.val("")
 					.attr("disabled", "disabled");
 				
-				$('#ClienteCpf')
+				$('#FornecedorCpf')
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
-				$('#ClienteRg')
+				$('#FornecedorRg')
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
 			}
 			else if ($(this).val() == 'J' ) {
-				$('#ClienteCpf')
+				$('#FornecedorCpf')
 					.val("")
 					.attr("disabled", "disabled");
-				$('#ClienteRg')
+				$('#FornecedorRg')
 					.val("")
 					.attr("disabled", "disabled");
 					
-				$('#ClienteCnpj')
+				$('#FornecedorCnpj')
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
-				$('#ClienteInscricaoEstadual')
+				$('#FornecedorInscricaoEstadual')
 					.removeAttr('disabled')
 					.effect("highlight", {}, 3000);
 			}
 		});
 		
 		$('input[value="Gravar"]').click(function () {
-			if ($('[name="data[Cliente][tipo_pessoa]"]').val() == 'J' ){
-				if ( ($('#ClienteCnpj').val() == "") || ($('#ClienteInscricaoEstadual').val() == "") ) {
+			if ($('[name="data[Fornecedor][tipo_pessoa]"]').val() == 'J' ){
+				if ( ($('#FornecedorCnpj').val() == "") || ($('#FornecedorInscricaoEstadual').val() == "") ) {
 					alert ("Para pessoa jurídica os campos CNPJ e I.E. são obrigatórios.");
 					return false;
 				}
 			}
-			else if ($('[name="data[Cliente][tipo_pessoa]"]').val() == 'F' ) {
-				if ( ($('#ClienteCpf').val() == "") || ( $('#ClienteRg').val() == "") ) {
+			else if ($('[name="data[Fornecedor][tipo_pessoa]"]').val() == 'F' ) {
+				if ( ($('#FornecedorCpf').val() == "") || ( $('#FornecedorRg').val() == "") ) {
 					alert ("Para pessoa física os campos CPF e RG são obrigatórios.");
 					return false;
 				} 
@@ -75,12 +75,12 @@
 
 <h2 class="descricao_cabecalho">
 	<?php
-	if ($acao == "adicionar") print "Adicionar cliente";
-	else if ($acao == "editar") print "Editar cliente";
+	if ($acao == "adicionar") print "Adicionar fornecedor";
+	else if ($acao == "editar") print "Editar fornecedor";
 	?>
 </h2>
 
-<?php print $form->create('Cliente',array('autocomplete'=>'off')); ?>
+<?php print $form->create('Fornecedor',array('autocomplete'=>'off')); ?>
 
 <div>
 	<div style="float: left; position: absolute;">
