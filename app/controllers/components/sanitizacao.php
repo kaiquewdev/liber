@@ -10,7 +10,7 @@ class SanitizacaoComponent {
 	 * Retorna $var sem acentos e Ç e com
 	 * caracteres maiusculos.
 	 */
-	function sanitizar ($var) {
+	function substitui_caracteres_especiais ($var) {
 		$acentos = array(
 		'A' => '/&Agrave;|&Aacute;|&Acirc;|&Atilde;|&Auml;|&Aring;/',
     	'a' => '/&agrave;|&aacute;|&acirc;|&atilde;|&auml;|&aring;/',
@@ -42,8 +42,33 @@ class SanitizacaoComponent {
 	    	return ($var);
 		}
 		else {
-			return array_map(array('SanitizacaoComponent','sanitizar'),$var);
+			return array_map(array('SanitizacaoComponent','substitui_caracteres_especiais'),$var);
 		}
+	}
+
+	/**
+	 * Retorna em maiusculo a primeira letra de cada palavra contida em $var
+	 */
+	function primeira_letra_maiuscula ($var) {
+		/**
+		 * $var cairá nesse if caso a função tenha sido chamada
+		 * com apenas um argumento
+		 * ou quando esta função for chamada recursivamente
+		 */
+		if ( ! is_array($var) ) {
+	    	$var = ucwords($var);
+	    	return ($var);
+		}
+		else {
+			return array_map(array('SanitizacaoComponent','primeira_letra_maiuscula'),$var);
+		}
+	}
+	
+	/**
+	 * Alias para uma funcao de sanitização que será utilizada
+	 */
+	function sanitizar ($var) {
+		return $this->primeira_letra_maiuscula($var);
 	}
 	
 }

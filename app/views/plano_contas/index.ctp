@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as contas cadastradas</h2>
+<h2 class="descricao_cabecalho">Exibindo plano de contas</h2>
 
 <div id="botoes">
 	<?php print $html->image('add24x24.png',array('title'=>'Cadastrar',
@@ -14,35 +14,44 @@
 		<tr>
 			<th><?php print $paginator->sort('Código','id'); ?></th>
 			<th><?php print $paginator->sort('Nome','nome'); ?></th>
-			<th><?php print $paginator->sort('Apelido','apelido'); ?></th>
-			<th><?php print $paginator->sort('Banco','banco'); ?></th>
-			<th><?php print $paginator->sort('Agência','agencia'); ?></th>
-			<th><?php print $paginator->sort('Conta','conta'); ?></th>
-			<th><?php print $paginator->sort('Titular','titular'); ?></th>
+			<th><?php print $paginator->sort('Tipo','tipo'); ?></th>
 			<th colspan="2">Funções</th>
 		</tr>
 	</thead>
 	
 	<tbody>
 		
-<?php foreach ($consulta_conta as $conta): ?>
+<?php foreach ($consulta_plano_contas as $consulta): ?>
 		
 		<tr>
-			<td><?php print $conta['Conta']['id'];?></td>
-			<td><?php print $html->link($conta['Conta']['nome'],'editar/' . $conta['Conta']['id']) ;?></td>
-			<td><?php print $conta['Conta']['apelido']; ?></td>
-			<td><?php print $conta['Conta']['banco']; ?></td>
-			<td><?php print $conta['Conta']['agencia']; ?></td>
-			<td><?php print $conta['Conta']['conta']; ?></td>
-			<td><?php print $conta['Conta']['titular']; ?></td>
+			<td><?php print $consulta['PlanoConta']['id'];?></td>
+			<td><?php print $html->link($consulta['PlanoConta']['nome'],'editar/' . $consulta['PlanoConta']['id']) ;?></td>
+			<td>
+				<?php
+				switch ($consulta['PlanoConta']['tipo']) {
+					case 'R':
+						print 'Receitas';
+						break;
+					case 'D':
+						print 'Despesas';
+						break;
+					case 'E':
+						print 'Especiais';
+						break;
+					default:
+						print 'Não informado';
+						break;
+				}
+				?>
+			</td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
-				href="'.$html->url(array('action'=>'excluir')).'/'.$conta['Conta']['id'].'">'.
+				href="'.$html->url(array('action'=>'excluir')).'/'.$consulta['PlanoConta']['id'].'">'.
 				$html->image('del24x24.png', array('alt'=>'Excluir'))
 				.'</a>';?>
 			</td>
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-			'alt'=>'Editar','url'=>array('action'=>'editar',$conta['Conta']['id']))) ?></td>
+			'alt'=>'Editar','url'=>array('action'=>'editar',$consulta['PlanoConta']['id']))) ?></td>
 		</tr>
 
 <?php endforeach ?>

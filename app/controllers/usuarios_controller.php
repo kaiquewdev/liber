@@ -2,7 +2,13 @@
 
 class UsuariosController extends AppController {
 	var $name = "Usuarios";
-	var $components = array('Auth');
+	var $components = array('Auth','Sanitizacao');
+	var $paginate = array (
+		'limit' => 10,
+		'order' => array (
+			'Usuario.id' => 'asc'
+		)
+	);
 	
 	function login() {
 		$this->layout = 'login';

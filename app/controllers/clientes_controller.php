@@ -10,20 +10,41 @@ class ClientesController extends AppController {
 			'Cliente.id' => 'asc'
 		)
 	);
+	var $opcoes_categoria_cliente = array();
+	var $opcoes_empresa = array();
 	
 	/**
-	 * Lista todos os clientes
+	 * Obtem dados do banco e popula as variaveis globais
+	 * $opcoes_categoria_cliente
+	 * $opcoes_empresa
 	 */
+	function _obter_opcoes() {
+		$this->loadModel('ClienteCategoria');
+		$consulta1 = $this->ClienteCategoria->find('all',array('fields'=>array('ClienteCategoria.id','ClienteCategoria.descricao')));
+		foreach ($consulta1 as $op)
+			$this->opcoes_categoria_cliente += array($op['ClienteCategoria']['id']=>$op['ClienteCategoria']['descricao']);
+		$this->set('opcoes_categoria_cliente',$this->opcoes_categoria_cliente);
+		
+		$this->loadModel('Empresa');
+		$consulta2 = $this->Empresa->find('all');
+		foreach ($consulta2 as $op)
+			$this->opcoes_empresa += array($op['Empresa']['id']=>$op['Empresa']['nome']);
+		$this->set('opcoes_empresa',$this->opcoes_empresa);
+		return null;
+	}
+	
 	function index() {
 		$dados = $this->paginate('Cliente');
 		$this->set('consulta_cliente',$dados);
 	}
 	
 	function cadastrar($id = null) {
+		$this->_obter_opcoes();
 		if (empty ($id)) { //cadastrando cliente
 			$this->set('acao','adicionar');
 			if (! empty($this->data)) {
 				$this->data['Cliente'] += array ('data_cadastrado' => date('Y-m-d H:i:s'));
+				$this->data['Cliente'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
 				if ($this->Cliente->save($this->data)) {
 					$this->Session->setFlash('Cliente cadastrado com sucesso.');
@@ -46,6 +67,7 @@ class ClientesController extends AppController {
 			}
 			else {
 				$this->data['Cliente'] += array ('atualizado' => date('Y-m-d H:i:s'));
+				$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
 				if ($this->Cliente->save($this->data)) {
 					$this->Session->setFlash('Cliente atualizado com sucesso.');

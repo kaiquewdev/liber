@@ -1,7 +1,14 @@
 <?php
 
-class ContasController extends  AppController {
+class ContasController extends AppController {
 	var $name = 'Contas';
+	var $components = array('Sanitizacao');
+	var $paginate = array (
+		'limit' => 10,
+		'order' => array (
+			'Conta.id' => 'asc'
+		)
+	);
 	
 	function index() {
 		$dados = $this->paginate('Conta');
@@ -10,6 +17,7 @@ class ContasController extends  AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
+			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Conta->save($this->data)) {
 				$this->Session->setFlash('Conta cadastrada com sucesso.');
 				$this->redirect(array('action'=>'index'));
@@ -30,6 +38,7 @@ class ContasController extends  AppController {
 			}
 		}
 		else {
+			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Conta->save($this->data)) {
 				$this->Session->setFlash('Conta atualizada com sucesso.');
 				$this->redirect(array('action'=>'index'));

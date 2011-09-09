@@ -66,7 +66,7 @@
 			}
 			
 			r = confirm("Confirma o envio dos dados?");
-			if (! r) return false;
+			return r;
 		});
 		
 		
@@ -103,6 +103,29 @@
 			));
 		?>
 	</div>
+	
+	<div>
+	<?php
+		print $form->label('cliente_categoria_id','Categoria do cliente',array('class'=>'required'));
+		print $form->input('cliente_categoria_id',array(
+			'div'=>false,
+			'label'=>false,
+			'options'=>$opcoes_categoria_cliente
+			));
+		?>
+	</div>
+	<div>
+	<?php
+		print $form->label('empresa_id','Empresa',array('class'=>'required'));
+		print $form->input('empresa_id',array(
+			'div'=>false,
+			'label'=>false,
+			'options'=>$opcoes_empresa
+			));
+		?>
+	</div>
+	
+	
 </div>
 
 <div id="divs_grupo_3">

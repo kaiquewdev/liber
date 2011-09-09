@@ -13,11 +13,11 @@
 			print $this->Html->meta('icon');
 			print $this->Html->css('estilo.css');
 			print $this->Html->css('jquery-ui/jquery-ui.css');
-			print $scripts_for_layout;
 		?>
 		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+		<?php print $scripts_for_layout;?>
 		<script type="text/javascript">
 			$( function() {
 				$('ul.sf-menu').superfish();
@@ -39,16 +39,23 @@
 						<a href="#">Compras</a>
 						<ul>
 							<li>
-								<a href="#">Cadastrar</a>
+								<a href="#">Fornecedores</a>
 								<ul>
-									<li><?php print $html -> link('Fornecedor', "/fornecedores/cadastrar");?></li>
-									<li><?php print $html -> link('Produto', "/produtos/cadastrar");?></li>
+									<li><?php print $html -> link('Cadastrar', "/fornecedores/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/fornecedores/pesquisar");?></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#">Produtos</a>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/produtos/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/produtos/pesquisar");?></li>
 								</ul>
 							</li>
 							<li>
 								<a href="#">Relatórios</a>
 								<ul>
-									<li><a href="#">XXXX</a></li>
+									<li><?php print $html -> link('Fornecedores cadastrados', "/relatorios/fornecedoresCadastrados");?></li>
 									<li><a href="#">XXXX</a></li>
 									<li><a href="#">XXXX</a></li>
 								</ul>
@@ -61,9 +68,10 @@
 						<a href="#">Vendas</a>
 						<ul>
 							<li>
-								<a href="#">Cadastrar</a>
+								<a href="#">Clientes</a>
 								<ul>
-									<li><?php print $html -> link('Cliente', "/clientes/cadastrar");?></li>
+									<li><?php print $html -> link('Cadastrar', "/clientes/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/clientes/pesquisar");?></li>
 								</ul>
 							</li>
 							<li>
@@ -75,25 +83,18 @@
 								</ul>
 							</li>
 							<li><a href="#">XXXX</a></li>
-							<li><?php print $html -> link('Formas de pagamento', "/formaPagamentos");?></li>
 						</ul>
 					</li>
 			
 					<li>
 						<a href="#" >Financeiro</a>
 						<ul>
-							<li>
-								<?php print $html -> link('Contas a receber', "/contasreceber/");?>
-							</li>
-							<li>
-								<?php print $html -> link('Contas a pagar', "/contaspagar/");?>
-							</li>
-							<li class="separador">
-								<?php print $html -> link('Plano de contas', "/planocontas/");?>
-							</li>
-							<li>
-								<?php print $html -> link('Contas', "/contas/");?>
-							</li>
+							<li><?php print $html -> link('Contas a receber', "/receberContas/");?></li>
+							<li><?php print $html -> link('Contas a pagar', "/pagarContas/");?></li>
+							<li><?php print $html -> link('Plano de contas', "/planoContas/");?></li>
+							<li class="separador"><?php print $html -> link('Tipo de documentos', "/tipoDocumentos/");?></li>
+							<li><?php print $html -> link('Formas de pagamento', "/formaPagamentos");?></li>
+							<li><?php print $html -> link('Contas', "/contas/");?></li>
 						</ul>
 					</li>
 			
@@ -101,18 +102,10 @@
 						<a href="#">Sistema</a>
 			
 						<ul>
-							<li>
-								<?php print $html -> link('Usuários', "/usuarios/");?>
-							</li>
-							<li>
-								<?php print $html -> link('Ajuda', "/sistema/ajuda");?>
-							</li>
-							<li>
-								<?php print $html -> link('Sobre', "/sistema/sobre");?>
-							</li>
-							<li>
-								<?php print $html -> link('Sair', "/usuarios/logout");?>
-							</li>
+							<li><?php print $html -> link('Usuários', "/usuarios/");?></li>
+							<li><?php print $html -> link('Ajuda', "/sistema/ajuda");?></li>
+							<li><?php print $html -> link('Sobre', "/sistema/sobre");?></li>
+							<li><?php print $html -> link('Sair', "/usuarios/logout");?></li>
 						</ul>
 					</li>
 				</ul>
