@@ -35,6 +35,8 @@
 
 /**
  * 	#FIXME a div 2_2 atualmente tem que ser maior que a 1_2
+ *  #FIXME o mesmo com a div de tres colunas
+ *  #FIXME o layout buga quando o cake retorna com erros em varios campos
  */
 #divs_grupo_2 {
 	background-color: white;
@@ -55,6 +57,7 @@
 }
 
 #divs_grupo_3 {
+	width: 100%;
 	background-color: white;
 	clear:both;
 }

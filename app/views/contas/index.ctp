@@ -19,7 +19,7 @@
 			<th><?php print $paginator->sort('Agência','agencia'); ?></th>
 			<th><?php print $paginator->sort('Conta','conta'); ?></th>
 			<th><?php print $paginator->sort('Titular','titular'); ?></th>
-			<th colspan="2">Funções</th>
+			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
 	

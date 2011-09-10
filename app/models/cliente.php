@@ -2,7 +2,23 @@
 
 class Cliente extends AppModel {
 	#FIXME corrigir o tipo de validação dos campos somente letras e numeros
-	var $name = 'Cliente'; // para compatibilidade com o PHP 4
+	var $name = 'Cliente';
+	var $belongsTo = array(
+		'ClienteCategoria' => array(
+			'className' => 'ClienteCategoria'
+		),
+		'Empresa' => array(
+			'className' => 'Empresa'
+		),
+		'Usuario' => array(
+			'className' => 'Usuario',
+			'foreignKey' => 'usuario_cadastrou',
+		),
+		'Usuario2' => array(
+			'className' => 'Usuario',
+			'foreignKey' => 'usuario_alterou',
+		)
+	);
 	var $validate = array(
 		'tipo_pessoa' => array (
 			'allowEmpty' => false,

@@ -39,17 +39,19 @@
 						<a href="#">Compras</a>
 						<ul>
 							<li>
-								<a href="#">Fornecedores</a>
+								<?php print $html -> link('Fornecedores', "/fornecedores");?>
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/fornecedores/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/fornecedores/pesquisar");?></li>
+									<li><?php print $html -> link('Listar todos', "/fornecedores/");?></li>
 								</ul>
 							</li>
 							<li>
-								<a href="#">Produtos</a>
+								<li><?php print $html -> link('Produtos', "/produtos/");?></li>
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/produtos/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/produtos/pesquisar");?></li>
+									<li><?php print $html -> link('Listar todos', "/produtos/");?></li>
 								</ul>
 							</li>
 							<li>
@@ -68,10 +70,11 @@
 						<a href="#">Vendas</a>
 						<ul>
 							<li>
-								<a href="#">Clientes</a>
+								<?php print $html -> link('Clientes', "/clientes");?>
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/clientes/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/clientes/pesquisar");?></li>
+									<li><?php print $html -> link('Listar todos', "/clientes/");?></li>
 								</ul>
 							</li>
 							<li>
@@ -99,9 +102,15 @@
 					</li>
 			
 					<li>
-						<a href="#">Sistema</a>
-			
+						<a href="#">Outros</a>
 						<ul>
+							<li>
+								<?php print $html -> link('Empresas', "/empresas");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/empresas/cadastrar");?></li>
+									<li><?php print $html -> link('Listar todas', "/empresas/");?></li>
+								</ul>
+							</li>
 							<li><?php print $html -> link('Usuários', "/usuarios/");?></li>
 							<li><?php print $html -> link('Ajuda', "/sistema/ajuda");?></li>
 							<li><?php print $html -> link('Sobre', "/sistema/sobre");?></li>

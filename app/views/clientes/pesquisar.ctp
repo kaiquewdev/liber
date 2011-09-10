@@ -54,13 +54,16 @@ print $form->create(null,array('controller'=>'clientes','action'=>'pesquisar','a
 				<tr>
 					<td><?php print $r['Cliente']['id']; ?></td>
 					<td><?php print $r['Cliente']['tipo_pessoa']; ?></td>
-					<td><?php print $html->link($r['Cliente']['nome'],'detalhar/' . $r['Cliente']['id']) ;?></td>
+					<td><?php print $html->link($r['Cliente']['nome'],'editar/' . $r['Cliente']['id']) ;?></td>
 					<td><?php print $r['Cliente']['nome_fantasia']; ?></td>
 					<td><?php print $r['Cliente']['cidade']; ?></td>
 					<td><?php print $r['Cliente']['cpf'].$r['Cliente']['cnpj']; ?></td>
 					<td><?php print $r['Cliente']['rg'].$r['Cliente']['inscricao_estadual']; ?></td>
-					<td><?php print $r['Cliente']['usuario_cadastrou']; ?></td>
-					<td><?php //print $r['Cliente']['']; ?></td>
+					<td><?php print $r['Usuario']['login']; ?></td>
+					<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
+					'alt'=>'Editar','url'=>array('action'=>'editar',$r['Cliente']['id']))) ?></td>
+					<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
+					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['Cliente']['id']))) ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

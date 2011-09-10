@@ -1,6 +1,6 @@
 <?php if (! isset($cliente) || ! $cliente) die; ?>
 
-<h2 class="descricao_cabecalho">Visualizar cliente</h2>
+<h2 class="descricao_cabecalho">Detalhar cliente</h2>
 
 Nome: <h1><?php print $cliente['Cliente']['nome'] ?></h1>
 Nome fantasia: <h1><?php  print $cliente['Cliente']['nome_fantasia'];?></h1>
@@ -12,10 +12,16 @@ Tipo pessoa: <?php
 					endif;
 				?>
 <p>
-	<small>Criado em: <?php print '<h1>'.$cliente['Cliente']['data_cadastrado'].'</h1>'; ?></small>
+	<small>
+		Criado em: <?php print '<h1>'.$cliente['Cliente']['data_cadastrado'].'</h1>'; ?>
+		por <?php print '<h1>'.$cliente['Usuario']['nome'].'</h1>'; ?>
+	</small>
 </p>
 <p>
-	<small>Atualizado em: <?php print '<h1>'.$cliente['Cliente']['atualizado'].'</h1>'; ?></small>
+	<small>
+		Atualizado em: <?php print '<h1>'.$cliente['Cliente']['atualizado'].'</h1>'; ?>
+		por <?php print '<h1>'.$cliente['Usuario2']['nome'].'</h1>'; ?>
+		</small>
 </p>
 
 <table>
@@ -29,7 +35,7 @@ Tipo pessoa: <?php
 			<th>Cidade</th>
 			<th>UF</th>
 			<th>CEP</th>
-			<?php if ( $cliente['Cliente']['tipo_pessoa'] = 'J'): ?>
+			<?php if ( strtoupper($cliente['Cliente']['tipo_pessoa']) == 'J'): ?>
 				<th>CNPJ</th>
 				<th>IE.</th>
 			<?php else: ?>
@@ -52,7 +58,7 @@ Tipo pessoa: <?php
 			<td><?php  print $cliente['Cliente']['cidade'];?></td>
 			<td><?php  print $cliente['Cliente']['uf'];?></td>
 			<td><?php  print $cliente['Cliente']['cep'];?></td>
-			<?php if ( $cliente['Cliente']['tipo_pessoa'] = 'J'): ?>
+			<?php if ( strtoupper($cliente['Cliente']['tipo_pessoa']) == 'J'): ?>
 				<td><?php  print $cliente['Cliente']['cnpj'];?></td>
 				<td><?php  print $cliente['Cliente']['inscricao_estadual'];?></td>
 			<?php else: ?>

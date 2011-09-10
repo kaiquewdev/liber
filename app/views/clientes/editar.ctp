@@ -74,7 +74,7 @@
 </script>
 
 <h2 class="descricao_cabecalho">
-	Cadastrar cliente
+	Editar cliente
 </h2>
 
 <?php print $form->create('Cliente',array('autocomplete'=>'off')); ?>

@@ -22,7 +22,7 @@
 			<th><?php print $paginator->sort('Conta origem','conta_origem'); ?></th>
 			<th><?php print $paginator->sort('Plano de contas','plano_conta_id'); ?></th>
 			<th><?php print $paginator->sort('Data do vencimento','data_vencimento'); ?></th>
-			<th colspan="2">Funções</th>
+			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
 	

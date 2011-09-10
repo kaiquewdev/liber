@@ -15,7 +15,7 @@
 			<th><?php print $paginator->sort('Código','id'); ?></th>
 			<th><?php print $paginator->sort('Nome','nome'); ?></th>
 			<th><?php print $paginator->sort('Tipo','tipo'); ?></th>
-			<th colspan="2">Funções</th>
+			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
 	

@@ -38,44 +38,42 @@ class ClientesController extends AppController {
 		$this->set('consulta_cliente',$dados);
 	}
 	
-	function cadastrar($id = null) {
+	function cadastrar() {
 		$this->_obter_opcoes();
-		if (empty ($id)) { //cadastrando cliente
-			$this->set('acao','adicionar');
-			if (! empty($this->data)) {
-				$this->data['Cliente'] += array ('data_cadastrado' => date('Y-m-d H:i:s'));
-				$this->data['Cliente'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
-				$this->data = $this->Sanitizacao->sanitizar($this->data);
-				if ($this->Cliente->save($this->data)) {
-					$this->Session->setFlash('Cliente cadastrado com sucesso.');
-					$this->redirect(array('controller'=>'clientes'));
-				}
-				else {
-					$this->Session->setFlash('Erro ao cadastrar o cliente.');
-				}
-			}
-		}
-		else { //atualizando cliente
-			$this->set('acao','editar');
-			$this->Cliente->id = $id;
-			if (empty ($this->data)) {
-				$this->data = $this->Cliente->read();
-				if ( ! $this->data) {
-					$this->Session->setFlash('Cliente não encontrado.');
-					$this->redirect(array('controller'=>'clientes','action'=>'cadastrar'));
-				}
+		if (! empty($this->data)) {
+			$this->data['Cliente'] += array ('data_cadastrado' => date('Y-m-d H:i:s'));
+			$this->data['Cliente'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
+			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			if ($this->Cliente->save($this->data)) {
+				$this->Session->setFlash('Cliente cadastrado com sucesso.');
+				$this->redirect(array('controller'=>'clientes'));
 			}
 			else {
-				$this->data['Cliente'] += array ('atualizado' => date('Y-m-d H:i:s'));
-				$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
-				$this->data = $this->Sanitizacao->sanitizar($this->data);
-				if ($this->Cliente->save($this->data)) {
-					$this->Session->setFlash('Cliente atualizado com sucesso.');
-					$this->redirect(array('controller'=>'clientes'));
-				}
-				else {
-					$this->Session->setFlash('Erro ao atualizar o cliente.');
-				}
+				$this->Session->setFlash('Erro ao cadastrar o cliente.');
+			}
+		}
+	}
+	
+	function editar($id=NULL) {
+		$this->_obter_opcoes();
+		$this->Cliente->id = $id;
+		if (empty ($this->data)) {
+			$this->data = $this->Cliente->read();
+			if ( ! $this->data) {
+				$this->Session->setFlash('Cliente não encontrado.');
+				$this->redirect(array('action'=>'pesquisar'));
+			}
+		}
+		else {
+			$this->data['Cliente'] += array ('atualizado' => date('Y-m-d H:i:s'));
+			$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
+			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			if ($this->Cliente->save($this->data)) {
+				$this->Session->setFlash('Cliente atualizado com sucesso.');
+				$this->redirect(array('controller'=>'clientes'));
+			}
+			else {
+				$this->Session->setFlash('Erro ao atualizar o cliente.');
 			}
 		}
 	}
@@ -102,14 +100,14 @@ class ClientesController extends AppController {
 			//a instrucao acima redirecionou para cá
 			$dados = $this->params['named'];
 			$condicoes=array();
-			if (! empty($dados['nome'])) $condicoes[] = array('nome LIKE'=>'%'.$dados['nome'].'%');
-			if (! empty($dados['nome_fantasia'])) $condicoes[] = array('nome_fantasia LIKE'=>'%'.$dados['nome_fantasia'].'%');
-			if (! empty($dados['bairro'])) $condicoes[] = array('bairro'=>$dados['bairro']);
-			if (! empty($dados['cidade'])) $condicoes[] = array('cidade'=>$dados['cidade']);
-			if (! empty($dados['cnpj'])) $condicoes[] = array('cnpj'=>$dados['cnpj']);
-			if (! empty($dados['inscricao_estadual'])) $condicoes[] = array('inscricao_estadual'=>$dados['inscricao_estadual']);
-			if (! empty($dados['cpf'])) $condicoes[] = array('cpf'=>$dados['cpf']);
-			if (! empty($dados['rg'])) $condicoes[] = array('rg'=>$dados['rg']);
+			if (! empty($dados['nome'])) $condicoes[] = array('Cliente.nome LIKE'=>'%'.$dados['nome'].'%');
+			if (! empty($dados['nome_fantasia'])) $condicoes[] = array('Cliente.nome_fantasia LIKE'=>'%'.$dados['nome_fantasia'].'%');
+			if (! empty($dados['bairro'])) $condicoes[] = array('Cliente.bairro'=>$dados['bairro']);
+			if (! empty($dados['cidade'])) $condicoes[] = array('Cliente.cidade'=>$dados['cidade']);
+			if (! empty($dados['cnpj'])) $condicoes[] = array('Cliente.cnpj'=>$dados['cnpj']);
+			if (! empty($dados['inscricao_estadual'])) $condicoes[] = array('Cliente.inscricao_estadual'=>$dados['inscricao_estadual']);
+			if (! empty($dados['cpf'])) $condicoes[] = array('Cliente.cpf'=>$dados['cpf']);
+			if (! empty($dados['rg'])) $condicoes[] = array('Cliente.rg'=>$dados['rg']);
 			if (! empty ($condicoes)) {
 				//$resultados = $this->Cliente->find('all',array('conditions'=>$condicoes));
 				$resultados = $this->paginate('Cliente',$condicoes);
@@ -133,7 +131,7 @@ class ClientesController extends AppController {
 			$this->set('cliente',$this->Cliente->read());
 		}
 		else {
-			$this->Session->setFlash('Erro: nenhum cliente informado.');
+			$this->Session->setFlash('Nenhum cliente informado.');
 		}
 	}
 	

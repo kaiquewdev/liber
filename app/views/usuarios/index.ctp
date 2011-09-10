@@ -20,7 +20,7 @@
 			<th><?php print $paginator->sort('E-mail','email'); ?></th>
 			<th><?php print $paginator->sort('Último login','ultimo_login'); ?></th>
 			<th><?php print $paginator->sort('Último logout','ultimo_logout'); ?></th>
-			<th colspan="2">Funções</th>
+			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
 	

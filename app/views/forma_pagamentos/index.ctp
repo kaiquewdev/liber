@@ -21,7 +21,7 @@
 			<th><?php print $paginator->sort('Valor de taxa fixa','valor_taxa_fixa'); ?></th>
 			<th><?php print $paginator->sort('Porcentagem de desconto a vista','porcentagem_desconto_a_vista'); ?></th>
 			<th><?php print $paginator->sort('Conta principal','conta_pricipal'); ?></th>
-			<th colspan="2">Funções</th>
+			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
 	
