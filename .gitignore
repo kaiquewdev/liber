@@ -1,4 +1,5 @@
-/app/config
-/app/tmp
-/plugins
-/vendors
+app/aptana_helpers.php
+bd.mwb
+app/tmp
+.project
+.project
