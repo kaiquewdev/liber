@@ -2,4 +2,7 @@ app/aptana_helpers.php
 bd.mwb
 app/tmp
 .project
-.project
+.settings
+bd.mwb
+bd.mwb.bak
+bd.mwb

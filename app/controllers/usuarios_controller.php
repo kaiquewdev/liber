@@ -62,7 +62,6 @@ class UsuariosController extends AppController {
 	}
 	
 	function editar($id = null) {
-		$this->Usuario->id = $id;
 		//popular o formulario, na primeira carga
 		if (empty ($this->data)) {
 			$this->data = $this->Usuario->read();
@@ -76,6 +75,7 @@ class UsuariosController extends AppController {
 		}
 		//formulario ja estava populado
 		else {
+			$this->data['Usuario']['id'] = $id;
 			if ($this->data['Usuario']['senha'] == $this->Auth->password($this->data['Usuario']['senha_confirma'])) {
 				/**
 				 * caso a senha não seja informada, pego a antiga

@@ -65,8 +65,6 @@
 				} 
 			}
 			
-			r = confirm("Confirma o envio dos dados?");
-			return r;
 		});
 		
 		

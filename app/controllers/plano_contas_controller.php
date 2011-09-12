@@ -29,7 +29,6 @@ class PlanoContasController extends AppController {
 	}
 	
 	function editar($id=NULL) {
-		$this->PlanoConta->id = $id;
 		if (empty ($this->data)) {
 			$this->data = $this->PlanoConta->read();
 			if ( ! $this->data) {
@@ -38,6 +37,7 @@ class PlanoContasController extends AppController {
 			}
 		}
 		else {
+			$this->data['PlanoConta']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->PlanoConta->save($this->data)) {
 				$this->Session->setFlash('Plano de contas atualizado com sucesso.');

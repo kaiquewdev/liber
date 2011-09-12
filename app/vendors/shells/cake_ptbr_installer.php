@@ -17,7 +17,7 @@ if (App::import('Vendor', 'PluginManager.Installer')) {
  */
 	class CakePtbrInstaller extends InstallerPM {
 /**
- * Instala a aplicaÁ„o
+ * Instala a aplica√ß√£o
  *
  * @return void
  * @access public
@@ -26,7 +26,7 @@ if (App::import('Vendor', 'PluginManager.Installer')) {
 			App::import('Core', 'File');
 			$bootstrap = new File(CONFIGS . 'bootstrap.php');
 			$conteudo = $bootstrap->read();
-			// Caso o plugin j· esteja instalado, ignora
+			// Caso o plugin j√° esteja instalado, ignora
 			if (strpos('cake_ptbr', $conteudo) !== false) {
 				return;
 			}

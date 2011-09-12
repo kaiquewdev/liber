@@ -3,6 +3,7 @@
 class ReceberContasController extends AppController {
 	var $name = 'ReceberContas';
 	var $components = array('Sanitizacao');
+	var $helpers = array('Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -56,7 +57,7 @@ class ReceberContasController extends AppController {
 						'Cliente.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
-			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
+			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
 				$this->loadModel('Fornecedor');
 				$r = $this->Fornecedor->find('first',
 					array('conditions'=>array(
@@ -64,11 +65,13 @@ class ReceberContasController extends AppController {
 						'Fornecedor.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
-			
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
 				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
 			}
+			
 			else {
+				#XXX se um 'esperto' usar . como separador de milhar?!
+				$this->data['ReceberConta']['valor'] = preg_replace('/,/', '.', $this->data['ReceberConta']['valor']);
 				$this->data['ReceberConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
 				if ($this->ReceberConta->save($this->data)) {
@@ -82,9 +85,8 @@ class ReceberContasController extends AppController {
 		}
 	}
 	
-	function editar($id=NULL) {
+	function editar($id=null) {
 		$this->_obter_opcoes();
-		$this->ReceberConta->id = $id;
 		if (empty ($this->data)) {
 			$this->data = $this->ReceberConta->read();
 			if ( ! $this->data) {
@@ -93,13 +95,37 @@ class ReceberContasController extends AppController {
 			}
 		}
 		else {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->ReceberConta->save($this->data)) {
-				$this->Session->setFlash('Conta a receber atualizada com sucesso.');
-				$this->redirect(array('action'=>'index'));
+			$this->data['ReceberConta']['id'] = $id;
+			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') {
+				$this->loadModel('Cliente');
+				$r = $this->Cliente->find('first',
+					array('conditions'=>array(
+						'Cliente.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Cliente.situacao' => 'A')));
+				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
+			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
+				$this->loadModel('Fornecedor');
+				$r = $this->Fornecedor->find('first',
+					array('conditions'=>array(
+						'Fornecedor.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Fornecedor.situacao' => 'A')));
+				if (! empty($r)) $cliente_fornecedor_encontrado = true;
+			}
+			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
+			}
+			
 			else {
-				$this->Session->setFlash('Erro ao atualizar a conta a receber.');
+				#XXX se um 'esperto' usar . como separador de milhar?! 
+				$this->data['ReceberConta']['valor'] = preg_replace('/,/', '.', $this->data['ReceberConta']['valor']);
+				if ($this->ReceberConta->save($this->data)) {
+					$this->Session->setFlash('Conta a receber atualizada com sucesso.');
+					$this->redirect(array('action'=>'index'));
+				}
+				else {
+					$this->Session->setFlash('Erro ao atualizar a conta a receber.');
+				}
 			}
 		}
 	}

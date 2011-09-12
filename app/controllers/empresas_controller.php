@@ -1,25 +1,26 @@
 <?php
 
-class ContasController extends AppController {
-	var $name = 'Contas';
+class EmpresasController extends AppController {
+	var $name = 'Empresas';
 	var $components = array('Sanitizacao');
+	var $helpers = array('Estados');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'Conta.id' => 'asc'
+			'Empresa.id' => 'asc'
 		)
 	);
 	
 	function index() {
-		$dados = $this->paginate('Conta');
-		$this->set('consulta_conta',$dados);
+		$dados = $this->paginate('Empresa');
+		$this->set('consulta_empresa',$dados);
 	}
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->Conta->save($this->data)) {
-				$this->Session->setFlash('Conta cadastrada com sucesso.');
+			if ($this->Empresa->save($this->data)) {
+				$this->Session->setFlash('Empresa cadastrada com sucesso.');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
@@ -30,17 +31,17 @@ class ContasController extends AppController {
 	
 	function editar($id=NULL) {
 		if (empty ($this->data)) {
-			$this->data = $this->Conta->read();
+			$this->data = $this->Empresa->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Conta não encontrada.');
+				$this->Session->setFlash('Empresa não encontrada.');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
 		else {
-			$this->data['Conta']['id'] = $id;
+			$this->data['Empresa']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->Conta->save($this->data)) {
-				$this->Session->setFlash('Conta atualizada com sucesso.');
+			if ($this->Empresa->save($this->data)) {
+				$this->Session->setFlash('Empresa atualizada com sucesso.');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
@@ -51,12 +52,12 @@ class ContasController extends AppController {
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->Conta->delete($id)) $this->Session->setFlash("Conta $id excluída com sucesso.");
-			else $this->Session->setFlash("Conta $id não pode ser excluída.");
+			if ($this->Empresa->delete($id)) $this->Session->setFlash("Empresa $id excluída com sucesso.");
+			else $this->Session->setFlash("Empresa $id não pode ser excluída.");
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Conta não informada.');
+			$this->Session->setFlash('Empresa não informada.');
 		}
 	}
 	

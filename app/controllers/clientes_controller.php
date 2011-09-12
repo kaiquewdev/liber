@@ -56,7 +56,6 @@ class ClientesController extends AppController {
 	
 	function editar($id=NULL) {
 		$this->_obter_opcoes();
-		$this->Cliente->id = $id;
 		if (empty ($this->data)) {
 			$this->data = $this->Cliente->read();
 			if ( ! $this->data) {
@@ -65,6 +64,7 @@ class ClientesController extends AppController {
 			}
 		}
 		else {
+			$this->data['Cliente']['id'] = $id;
 			$this->data['Cliente'] += array ('atualizado' => date('Y-m-d H:i:s'));
 			$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
@@ -87,11 +87,11 @@ class ClientesController extends AppController {
 			 * #XXX Quê isso faz?!
 			 * http://blog.bonetree.net/2010/03/cakephp-paginator-urls-and-post-forms/
 			 */
-			if (is_array($this->data['Cliente'])) {
+			/*if (is_array($this->data['Cliente'])) {
 				foreach($this->data['Cliente'] as &$cliente) {
 					$cliente = urlencode($cliente);
 				}
-			}
+			}*/
 			$params = array_merge($url,$this->data['Cliente']);
 			$this->redirect($params);
 		}
@@ -109,7 +109,6 @@ class ClientesController extends AppController {
 			if (! empty($dados['cpf'])) $condicoes[] = array('Cliente.cpf'=>$dados['cpf']);
 			if (! empty($dados['rg'])) $condicoes[] = array('Cliente.rg'=>$dados['rg']);
 			if (! empty ($condicoes)) {
-				//$resultados = $this->Cliente->find('all',array('conditions'=>$condicoes));
 				$resultados = $this->paginate('Cliente',$condicoes);
 				if (! empty($resultados)) {
 					$num_encontrados = count($resultados);
@@ -117,6 +116,7 @@ class ClientesController extends AppController {
 					$this->set('num_resultados',$num_encontrados);
 					$this->Session->setFlash("$num_encontrados cliente(s) encontrado(s)");
 				}
+				else $this->Session->setFlash("Nenhum cliente encontrado"); 
 			}
 			else {
 				$this->set('num_resultados','0');

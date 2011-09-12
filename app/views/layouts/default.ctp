@@ -17,6 +17,7 @@
 		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/auxiliares.js" type="text/javascript" charset="utf-8"></script>
 		<?php print $scripts_for_layout;?>
 		<script type="text/javascript">
 			$( function() {

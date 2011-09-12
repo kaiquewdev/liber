@@ -95,7 +95,6 @@ class FormaPagamentosController extends AppController {
 		);
 		$this->set('dias_intervalo_parcelas',$dias_intervalo_parcelas);
 			
-		$this->FormaPagamento->id = $id;
 		if (empty ($this->data)) {
 			$this->data = $this->FormaPagamento->read();
 			if ( ! $this->data) {
@@ -108,6 +107,7 @@ class FormaPagamentosController extends AppController {
 			}
 		}
 		else {
+			$this->data['FormaPagamento']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->FormaPagamento->save($this->data)) {
 				$this->Session->setFlash('Forma de pagamento atualizada com sucesso.');

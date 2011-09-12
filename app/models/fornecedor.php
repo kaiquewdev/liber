@@ -3,6 +3,22 @@
 class Fornecedor extends AppModel {
 	
 	var $name = 'Fornecedor'; // para compatibilidade com o PHP 4
+	var $belongsTo = array(
+		'FornecedorCategoria' => array(
+			'className' => 'FornecedorCategoria'
+		),
+		'Empresa' => array(
+			'className' => 'Empresa'
+		),
+		'Usuario' => array(
+			'className' => 'Usuario',
+			'foreignKey' => 'usuario_cadastrou',
+		),
+		'Usuario2' => array(
+			'className' => 'Usuario',
+			'foreignKey' => 'usuario_alterou',
+		)
+	);
 	var $validate = array(
 		'tipo_pessoa' => array (
 			'allowEmpty' => false,

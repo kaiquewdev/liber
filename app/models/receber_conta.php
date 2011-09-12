@@ -23,6 +23,10 @@ class ReceberConta extends AppModel {
 		)
 	);
 	var $validate = array(
+		'eh_fiscal' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
 		'eh_cliente_ou_fornecedor' => array(
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'

@@ -48,8 +48,10 @@ class CakePtbrFormatacaoCase extends CakeTestCase {
 	function testData() {
 		$this->assertEqual($this->Formatacao->data(), date('d/m/Y'));
 		$this->assertEqual($this->Formatacao->data(strtotime('2009-04-21')), '21/04/2009');
+		$this->assertEqual($this->Formatacao->data('2009-04-21'), '21/04/2009');
 		$this->assertEqual($this->Formatacao->data('errado', array('invalid' => 'Inválido')), 'Inválido');
 		$this->assertEqual($this->Formatacao->data(strtotime('2009-04-21 00:00:00 GMT'), array('userOffset' => '-1')), '20/04/2009');
+		$this->assertEqual($this->Formatacao->data('2009-04-21 00:00:00 GMT', array('userOffset' => '-1')), '20/04/2009');
 	}
 
 /**
@@ -63,9 +65,11 @@ class CakePtbrFormatacaoCase extends CakeTestCase {
 		$this->assertEqual($this->Formatacao->dataHora(null, false), date('d/m/Y H:i'));
 		$this->assertEqual($this->Formatacao->dataHora(strtotime('2009-04-21 10:20:30')), '21/04/2009 10:20:30');
 		$this->assertEqual($this->Formatacao->dataHora(strtotime('2009-04-21 10:20:30'), false), '21/04/2009 10:20');
+		$this->assertEqual($this->Formatacao->dataHora('2009-04-21 10:20:30', false), '21/04/2009 10:20');
 		$this->assertEqual($this->Formatacao->dataHora('errado', true, array('invalid' => 'Inválido')), 'Inválido');
 		$this->assertEqual($this->Formatacao->dataHora(strtotime('2009-04-21 10:20:30 GMT'), false, array('userOffset' => '+2')), '21/04/2009 12:20');
 		$this->assertEqual($this->Formatacao->dataHora(strtotime('2009-04-21 10:20:30 GMT'), false, array('userOffset' => '-2')), '21/04/2009 08:20');
+		$this->assertEqual($this->Formatacao->dataHora('2009-04-21 10:20:30 GMT', false, array('userOffset' => '-2')), '21/04/2009 08:20');
 	}
 
 /**
@@ -76,6 +80,19 @@ class CakePtbrFormatacaoCase extends CakeTestCase {
  */
 	function testDataCompleta() {
 		$this->assertEqual($this->Formatacao->dataCompleta(strtotime('2009-04-21 10:20:30')), 'Terça-feira, 21 de Abril de 2009, 10:20:30');
+		$this->assertEqual($this->Formatacao->dataCompleta('2009-04-21 10:20:30'), 'Terça-feira, 21 de Abril de 2009, 10:20:30');
+	}
+
+/**
+ * testTempo
+ *
+ * @return void
+ * @access public
+ */
+	function testTempo() {
+		$this->assertEqual($this->Formatacao->tempo(), 'menos de 1 minuto');
+		$this->assertEqual($this->Formatacao->tempo(strtotime('-1 hour')), '1 hora');
+		$this->assertEqual($this->Formatacao->tempo('-1 hour'), '1 hora');
 	}
 
 /**

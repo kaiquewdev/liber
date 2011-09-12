@@ -14,6 +14,7 @@
 		<tr>
 			<th><?php print $paginator->sort('Código','id'); ?></th>
 			<th><?php print $paginator->sort('Cadastrada em','data_hora_cadastrada'); ?></th>
+			<th><?php print $paginator->sort('É fiscal?','eh_fiscal'); ?></th>
 			<th><?php print $paginator->sort('Cliente ou fornecedor?','eh_cliente_ou_fornecedor'); ?></th>
 			<th><?php print $paginator->sort('Cliente/fornecedor','cliente_fornecedor_id'); ?></th>
 			<th><?php print $paginator->sort('Tipo documento','tipo_documento_id'); ?></th>
@@ -35,7 +36,13 @@
 		
 		<tr>
 			<td><?php print $c['ReceberConta']['id'];?></td>
-			<td><?php print $html->link($c['ReceberConta']['data_hora_cadastrada'],'editar/' . $c['ReceberConta']['id']) ;?></td>
+			<td><?php print $html->link($formatacao->dataHora($c['ReceberConta']['data_hora_cadastrada']),'editar/' . $c['ReceberConta']['id']) ;?></td>
+			<td>
+				<?php
+				if ($c['ReceberConta']['eh_fiscal'] == 1) print 'Sim';
+				else print 'Não';
+				?>
+			</td>
 			<td><?php print ucfirst($tipo); ?></td>
 			<td>
 				<?php
@@ -46,7 +53,7 @@
 			</td>
 			<td><?php print $c['ReceberConta']['tipo_documento_id'].' '.$c['TipoDocumento']['nome']; ?></td>
 			<td><?php print $c['ReceberConta']['numero_documento']; ?></td>
-			<td><?php print $c['ReceberConta']['valor']; ?></td>
+			<td><?php print $formatacao->moeda($c['ReceberConta']['valor']); ?></td>
 			<td><?php print $c['ReceberConta']['conta_origem'].' '.$c['Conta']['apelido']; ?></td>
 			<td><?php print $c['ReceberConta']['plano_conta_id'].' '.$c['PlanoConta']['nome']; ?></td>
 			<td><?php print $c['ReceberConta']['data_vencimento']; ?></td>

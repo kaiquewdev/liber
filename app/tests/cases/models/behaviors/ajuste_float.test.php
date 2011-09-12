@@ -34,6 +34,19 @@ class Produto extends CakeTestModel {
  * @access public
  */
 	var $actsAs = array('CakePtbr.AjusteFloat');
+
+/**
+ * Executa o beforeFind dos behaviors
+ *
+ * @param array $query
+ * @return mixed
+ * @access public
+ */
+	function beforeFindBehaviors($query) {
+		return $this->Behaviors->trigger($this, 'beforeFind', array($query), array(
+			'break' => true, 'breakOn' => false, 'modParams' => true
+		));
+	}
 }
 
 /**
@@ -100,6 +113,89 @@ class CakePtbrAjusteFloat extends CakeTestCase {
 			)
 		);
 		$this->assertEqual($result, $expected);
+	}
+
+/**
+ * testBeforeFind
+ *
+ * @return void
+ * @access public
+ */
+	function testBeforeFind() {
+		$query = array(
+			'conditions' => array(
+				'Produto.nome' => '1.000,00',
+				'Produto.valor' => '1.500,03'
+			)
+		);
+		$expected = array(
+			'conditions' => array(
+				'Produto.nome' => '1.000,00',
+				'Produto.valor' => '1500.03'
+			)
+		);
+		$result = $this->Produto->beforeFindBehaviors($query);
+		$this->assertEqual($result, $expected);
+
+		$query = array(
+			'conditions' => array(
+				'Produto.nome' => '1.000,00',
+				'Produto.valor' => '1500.03'
+			)
+		);
+		$result = $this->Produto->beforeFindBehaviors($query);
+		$this->assertEqual($result, $expected);
+
+		$query = array(
+			'conditions' => array(
+				'Produto.nome' => '1.000,00',
+				'Produto.valor' => 1500.03
+			)
+		);
+		$result = $this->Produto->beforeFindBehaviors($query);
+		$this->assertEqual($result, $expected);
+
+		$query = array(
+			'conditions' => array(
+				'`Produto`.`nome`' => '1.000,00',
+				'`Produto`.`valor`' => 1500.03
+			)
+		);
+		$expected = array(
+			'conditions' => array(
+				'`Produto`.`nome`' => '1.000,00',
+				'`Produto`.`valor`' => '1500.03'
+			)
+		);
+		$result = $this->Produto->beforeFindBehaviors($query);
+		$this->assertEqual($result, $expected);
+	}
+
+/**
+ * testeBeforeValidate
+ *
+ * @return void
+ * @access public
+ */
+	function testBeforeValidate() {
+		$this->Produto->validate = array(
+			'valor' => 'decimal'
+		);
+
+		$query = array('Produto' => array('valor' => 10.1));
+		$this->Produto->set($query);
+		$this->assertTrue($this->Produto->validates());
+
+		$query = array('Produto' => array('valor' => '10.1'));
+		$this->Produto->set($query);
+		$this->assertTrue($this->Produto->validates());
+
+		$query = array('Produto' => array('valor' => '10.000,01'));
+		$this->Produto->set($query);
+		$this->assertTrue($this->Produto->validates());
+		$this->assertEqual($this->Produto->data['Produto']['valor'], 10000.01);
+
+		$this->Produto->validate = array();
 	}
 
 /**

@@ -29,7 +29,6 @@ class TipoDocumentosController extends AppController {
 	}
 	
 	function editar($id=NULL) {
-		$this->TipoDocumento->id = $id;
 		if (empty ($this->data)) {
 			$this->data = $this->TipoDocumento->read();
 			if ( ! $this->data) {
@@ -38,6 +37,7 @@ class TipoDocumentosController extends AppController {
 			}
 		}
 		else {
+			$this->data['TipoDocumento']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->TipoDocumento->save($this->data)) {
 				$this->Session->setFlash('Tipo de documento atualizado com sucesso.');
