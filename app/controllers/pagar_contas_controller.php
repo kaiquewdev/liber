@@ -1,13 +1,13 @@
 <?php
 
-class ReceberContasController extends AppController {
-	var $name = 'ReceberContas';
+class PagarContasController extends AppController {
+	var $name = 'PagarContas';
 	var $components = array('Sanitizacao');
 	var $helpers = array('Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'ReceberConta.id' => 'desc'
+			'PagarConta.id' => 'desc'
 		)
 	);
 	var $opcoes_tipo_documento = array(''=>'');
@@ -42,42 +42,42 @@ class ReceberContasController extends AppController {
 	}
 	
 	function index() {
-		$dados = $this->paginate('ReceberConta');
-		$this->set('consulta_conta_receber',$dados);
+		$dados = $this->paginate('PagarConta');
+		$this->set('consulta_conta_pagar',$dados);
 	}
 	
 	function cadastrar() {
 		$this->_obter_opcoes();
 		if (! empty($this->data)) {
-			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') {
-				$this->loadModel('ReceberConta');
-				$r = $this->ReceberConta->find('first',
+			if (strtoupper($this->data['PagarConta']['eh_cliente_ou_fornecedor']) == 'C') {
+				$this->loadModel('Cliente');
+				$r = $this->Cliente->find('first',
 					array('conditions'=>array(
-						'ReceberConta.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
-						'ReceberConta.situacao' => 'A')));
+						'Cliente.id' => $this->data['PagarConta']['cliente_fornecedor_id'],
+						'Cliente.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
-			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
+			else if (strtoupper($this->data['PagarConta']['eh_cliente_ou_fornecedor']) == 'F') {
 				$this->loadModel('Fornecedor');
 				$r = $this->Fornecedor->find('first',
 					array('conditions'=>array(
-						'Fornecedor.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Fornecedor.id' => $this->data['PagarConta']['cliente_fornecedor_id'],
 						'Fornecedor.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
 			}
 			
 			else {
-				$this->data['ReceberConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
+				$this->data['PagarConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
-				if ($this->ReceberConta->save($this->data)) {
-					$this->Session->setFlash('Conta a receber cadastrada com sucesso.');
+				if ($this->PagarConta->save($this->data)) {
+					$this->Session->setFlash('Conta a pagar cadastrada com sucesso.');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao cadastrar a conta a receber.');
+					$this->Session->setFlash('Erro ao cadastrar a conta a pagar.');
 				}
 			}
 		}
@@ -86,41 +86,41 @@ class ReceberContasController extends AppController {
 	function editar($id=null) {
 		$this->_obter_opcoes();
 		if (empty ($this->data)) {
-			$this->data = $this->ReceberConta->read();
+			$this->data = $this->PagarConta->read();
 			if ( ! $this->data) {
 				$this->Session->setFlash('Conta a receber não encontrada.');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
 		else {
-			$this->data['ReceberConta']['id'] = $id;
-			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') {
-				$this->loadModel('ReceberConta');
-				$r = $this->ReceberConta->find('first',
+			$this->data['PagarConta']['id'] = $id;
+			if (strtoupper($this->data['PagarConta']['eh_cliente_ou_fornecedor']) == 'C') {
+				$this->loadModel('Cliente');
+				$r = $this->Cliente->find('first',
 					array('conditions'=>array(
-						'ReceberConta.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
-						'ReceberConta.situacao' => 'A')));
+						'Cliente.id' => $this->data['PagarConta']['cliente_fornecedor_id'],
+						'Cliente.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
-			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
+			else if (strtoupper($this->data['PagarConta']['eh_cliente_ou_fornecedor']) == 'F') {
 				$this->loadModel('Fornecedor');
 				$r = $this->Fornecedor->find('first',
 					array('conditions'=>array(
-						'Fornecedor.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Fornecedor.id' => $this->data['PagarConta']['cliente_fornecedor_id'],
 						'Fornecedor.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
 			}
 			
 			else {
-				if ($this->ReceberConta->save($this->data)) {
-					$this->Session->setFlash('Conta a receber atualizada com sucesso.');
+				if ($this->PagarConta->save($this->data)) {
+					$this->Session->setFlash('Conta a pagar atualizada com sucesso.');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao atualizar a conta a receber.');
+					$this->Session->setFlash('Erro ao atualizar a conta a pagar.');
 				}
 			}
 		}
@@ -128,12 +128,12 @@ class ReceberContasController extends AppController {
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->ReceberConta->delete($id)) $this->Session->setFlash("Conta a receber $id excluída com sucesso.");
-			else $this->Session->setFlash("Conta a receber $id não pode ser excluída.");
+			if ($this->PagarConta->delete($id)) $this->Session->setFlash("Conta a pagar $id excluída com sucesso.");
+			else $this->Session->setFlash("Conta a pagar $id não pode ser excluída.");
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Conta a receber não informada.');
+			$this->Session->setFlash('Conta a pagar não informada.');
 		}
 	}
 
@@ -142,8 +142,8 @@ class ReceberContasController extends AppController {
 		$this->_obter_opcoes();
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
-			$url = array('controller'=>'receberContas','action'=>'pesquisar');
-			$params = array_merge($url,$this->data['ReceberConta']);
+			$url = array('controller'=>'pagarContas','action'=>'pesquisar');
+			$params = array_merge($url,$this->data['PagarConta']);
 			$this->redirect($params);
 		}
 		
@@ -151,23 +151,23 @@ class ReceberContasController extends AppController {
 			//a instrucao acima redirecionou para cá
 			$dados = $this->params['named'];
 			$condicoes=array();
-			if (! empty($dados['numero_documento'])) $condicoes[] = array('ReceberConta.numero_documento'=>$dados['numero_documento']);
-			if (! empty($dados['valor'])) $condicoes[] = array('ReceberConta.valor'=>$dados['valor']);
-			if (! empty($dados['eh_cliente_ou_fornecedor'])) $condicoes[] = array('ReceberConta.eh_cliente_ou_fornecedor'=>$dados['eh_cliente_ou_fornecedor']);
-			if (! empty($dados['cliente_fornecedor_id'])) $condicoes[] = array('ReceberConta.cliente_fornecedor_id'=>$dados['cliente_fornecedor_id']);
-			if (! empty($dados['id'])) $condicoes[] = array('ReceberConta.id'=>$dados['id']);
-			if (! empty($dados['tipo_documento'])) $condicoes[] = array('ReceberConta.tipo_documento'=>$dados['tipo_documento']);
-			if (! empty($dados['conta_origem'])) $condicoes[] = array('ReceberConta.conta_origem'=>$dados['conta_origem']);
-			if (! empty($dados['plano_conta_id'])) $condicoes[] = array('ReceberConta.rg'=>$dados['plano_conta_id']);
+			if (! empty($dados['numero_documento'])) $condicoes[] = array('PagarConta.numero_documento'=>$dados['numero_documento']);
+			if (! empty($dados['valor'])) $condicoes[] = array('PagarConta.valor'=>$dados['valor']);
+			if (! empty($dados['eh_cliente_ou_fornecedor'])) $condicoes[] = array('PagarConta.eh_cliente_ou_fornecedor'=>$dados['eh_cliente_ou_fornecedor']);
+			if (! empty($dados['cliente_fornecedor_id'])) $condicoes[] = array('PagarConta.cliente_fornecedor_id'=>$dados['cliente_fornecedor_id']);
+			if (! empty($dados['id'])) $condicoes[] = array('PagarConta.id'=>$dados['id']);
+			if (! empty($dados['tipo_documento'])) $condicoes[] = array('PagarConta.tipo_documento'=>$dados['tipo_documento']);
+			if (! empty($dados['conta_origem'])) $condicoes[] = array('PagarConta.conta_origem'=>$dados['conta_origem']);
+			if (! empty($dados['plano_conta_id'])) $condicoes[] = array('PagarConta.rg'=>$dados['plano_conta_id']);
 			if (! empty ($condicoes)) {
-				$resultados = $this->paginate('ReceberConta',$condicoes);
+				$resultados = $this->paginate('PagarConta',$condicoes);
 				if (! empty($resultados)) {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados conta(s) a receber encontrada(s)");
+					$this->Session->setFlash("$num_encontrados conta(s) a pagar encontrada(s)");
 				}
-				else $this->Session->setFlash("Nenhuma conta a receber encontrada"); 
+				else $this->Session->setFlash("Nenhuma conta a pagar encontrada"); 
 			}
 			else {
 				$this->set('num_resultados','0');

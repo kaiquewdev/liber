@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as contas a receber</h2>
+<h2 class="descricao_cabecalho">Exibindo todas as contas a pagar</h2>
 
 <div id="botoes">
 	<?php print $html->image('add24x24.png',array('title'=>'Cadastrar',
@@ -29,42 +29,42 @@
 	
 	<tbody>
 		
-<?php foreach ($consulta_conta_receber as $c):
-	if (strtoupper($c['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') $tipo = 'cliente';
+<?php foreach ($consulta_conta_pagar as $c):
+	if (strtoupper($c['PagarConta']['eh_cliente_ou_fornecedor']) == 'C') $tipo = 'cliente';
 	else $tipo = 'fornecedor';
 ?>
 		
 		<tr>
-			<td><?php print $c['ReceberConta']['id'];?></td>
-			<td><?php print $html->link($formatacao->dataHora($c['ReceberConta']['data_hora_cadastrada']),'editar/' . $c['ReceberConta']['id']) ;?></td>
+			<td><?php print $c['PagarConta']['id'];?></td>
+			<td><?php print $html->link($formatacao->dataHora($c['PagarConta']['data_hora_cadastrada']),'editar/' . $c['PagarConta']['id']) ;?></td>
 			<td>
 				<?php
-				if ($c['ReceberConta']['eh_fiscal'] == 1) print 'Sim';
+				if ($c['PagarConta']['eh_fiscal'] == 1) print 'Sim';
 				else print 'Não';
 				?>
 			</td>
 			<td><?php print ucfirst($tipo); ?></td>
 			<td>
 				<?php
-				print $c['ReceberConta']['cliente_fornecedor_id'].' ';
+				print $c['PagarConta']['cliente_fornecedor_id'].' ';
 				if ($tipo == 'cliente') print $c['Cliente']['nome'];
 				else if ($tipo == 'fornecedor') print $c['Fornecedor']['nome'];
 				?>
 			</td>
-			<td><?php print $c['ReceberConta']['tipo_documento_id'].' '.$c['TipoDocumento']['nome']; ?></td>
-			<td><?php print $c['ReceberConta']['numero_documento']; ?></td>
-			<td><?php print $c['ReceberConta']['valor']; ?></td>
-			<td><?php print $c['ReceberConta']['conta_origem'].' '.$c['Conta']['apelido']; ?></td>
-			<td><?php print $c['ReceberConta']['plano_conta_id'].' '.$c['PlanoConta']['nome']; ?></td>
-			<td><?php print $c['ReceberConta']['data_vencimento']; ?></td>
+			<td><?php print $c['PagarConta']['tipo_documento_id'].' '.$c['TipoDocumento']['nome']; ?></td>
+			<td><?php print $c['PagarConta']['numero_documento']; ?></td>
+			<td><?php print $c['PagarConta']['valor']; ?></td>
+			<td><?php print $c['PagarConta']['conta_origem'].' '.$c['Conta']['apelido']; ?></td>
+			<td><?php print $c['PagarConta']['plano_conta_id'].' '.$c['PlanoConta']['nome']; ?></td>
+			<td><?php print $c['PagarConta']['data_vencimento']; ?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
-				href="'.$html->url(array('action'=>'excluir')).'/'.$c['ReceberConta']['id'].'">'.
+				href="'.$html->url(array('action'=>'excluir')).'/'.$c['PagarConta']['id'].'">'.
 				$html->image('del24x24.png', array('alt'=>'Excluir'))
 				.'</a>';?>
 			</td>
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-			'alt'=>'Editar','url'=>array('action'=>'editar',$c['ReceberConta']['id']))) ?></td>
+			'alt'=>'Editar','url'=>array('action'=>'editar',$c['PagarConta']['id']))) ?></td>
 		</tr>
 
 <?php endforeach ?>

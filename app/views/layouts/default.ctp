@@ -45,6 +45,13 @@
 									<li><?php print $html -> link('Cadastrar', "/fornecedores/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/fornecedores/pesquisar");?></li>
 									<li><?php print $html -> link('Listar todos', "/fornecedores/");?></li>
+									<li>
+										<?php print $html -> link('Categorias', "/fornecedorCategorias");?>
+										<ul>
+											<li><?php print $html -> link('Cadastrar', "/fornecedorCategorias/cadastrar");?></li>
+											<li><?php print $html -> link('Listar todas', "/fornecedorCategorias");?></li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 							<li>
@@ -76,6 +83,13 @@
 									<li><?php print $html -> link('Cadastrar', "/clientes/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/clientes/pesquisar");?></li>
 									<li><?php print $html -> link('Listar todos', "/clientes/");?></li>
+									<li>
+										<?php print $html -> link('Categorias', "/clienteCategorias");?>
+										<ul>
+											<li><?php print $html -> link('Cadastrar', "/clienteCategorias/cadastrar");?></li>
+											<li><?php print $html -> link('Listar todas', "/clienteCategorias");?></li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 							<li>
@@ -93,8 +107,22 @@
 					<li>
 						<a href="#" >Financeiro</a>
 						<ul>
-							<li><?php print $html -> link('Contas a receber', "/receberContas/");?></li>
-							<li><?php print $html -> link('Contas a pagar', "/pagarContas/");?></li>
+							<li>
+								<?php print $html -> link('Contas a receber', "/receberContas/");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/receberContas/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/receberContas/pesquisar");?></li>
+									<li><?php print $html -> link('Listar todas', "/receberContas/");?></li>
+								</ul>
+							</li>
+							<li>
+								<?php print $html -> link('Contas a pagar', "/pagarContas/");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/pagarContas/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/pagarContas/pesquisar");?></li>
+									<li><?php print $html -> link('Listar todas', "/pagarContas/");?></li>
+								</ul>
+							</li>
 							<li><?php print $html -> link('Plano de contas', "/planoContas/");?></li>
 							<li class="separador"><?php print $html -> link('Tipo de documentos', "/tipoDocumentos/");?></li>
 							<li><?php print $html -> link('Formas de pagamento', "/formaPagamentos");?></li>

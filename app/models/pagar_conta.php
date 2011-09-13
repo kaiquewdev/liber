@@ -1,7 +1,7 @@
 <?php
 
-class ReceberConta extends AppModel {
-	var $name = 'ReceberConta';
+class PagarConta extends AppModel {
+	var $name = 'PagarConta';
 	var $actsAs = array('AjusteFloat');
 	var $belongsTo = array(
 		'PlanoConta' => array(
