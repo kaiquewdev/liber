@@ -4,8 +4,8 @@
 
 print $form->create('FormaPagamento',array('autocomplete'=>'off'));
 ?>
-<div id="divs_grupo_2">
-	<div id="div1_2">
+<div class="divs_grupo_2">
+	<div class="div1_2">
 		<?php
 		print $form->input('nome',array('label'=>'Nome'));
 		print $form->input('numero_maximo_parcelas',array('label'=>'Número máximo de parcelas','options'=>$numero_maximo_parcelas));
@@ -13,7 +13,7 @@ print $form->create('FormaPagamento',array('autocomplete'=>'off'));
 		print $form->input('conta_principal',array('label'=>'Conta principal','options'=>$opcoes_contas));
 		?>
 	</div>
-	<div id="div2_2">
+	<div class="div2_2">
 		<?php
 		print $form->input('valor_taxa_fixa',array('label'=>'Valor para taxa fixa'));
 		print $form->input('porcentagem_juros',array('label'=>'Porcentagem de juros'));

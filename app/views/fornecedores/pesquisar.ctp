@@ -7,9 +7,9 @@
  */
 print $form->create(null,array('controller'=>'fornecedores','action'=>'pesquisar','autocomplete'=>'off'));
 ?>
-<div id="divs_grupo_2">
+<div class="divs_grupo_2">
 	
-	<div id="div1_2">
+	<div class="div1_2">
 		<?php
 		print '<div>'.$form->input('nome', array('label'=>'Nome','div'=>false)).'</div>';
 		print '<div>'.$form->input('nome_fantasia', array('label'=>'Nome fantasia','div'=>false)).'</div>';
@@ -18,7 +18,7 @@ print $form->create(null,array('controller'=>'fornecedores','action'=>'pesquisar
 		?>
 	</div>
 	
-	<div id="div2_2">
+	<div class="div2_2">
 		<?php
 		print '<div>'.$form->input('cnpj',array('label'=>'CNPJ','div'=>false)).'</div>';
 		print '<div>'.$form->input('inscricao_estadual',array('label'=>'Inscrição estadual','div'=>false)).'</div>';

@@ -1,7 +1,7 @@
 
 <h2 class="descricao_cabecalho">Exibindo plano de contas</h2>
 
-<div id="botoes">
+<div class="botoes">
 	<?php print $html->image('add24x24.png',array('title'=>'Cadastrar',
 		'alt'=>'Cadastrar','url'=>array('action'=>'cadastrar')));
 	print '<a title="Imprimir" onclick="javascript: window.print();" href="#">'.

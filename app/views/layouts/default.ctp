@@ -14,16 +14,6 @@
 			print $this->Html->css('estilo.css');
 			print $this->Html->css('jquery-ui/jquery-ui.css');
 		?>
-		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php print $html->url('/', true )?>js/auxiliares.js" type="text/javascript" charset="utf-8"></script>
-		<?php print $scripts_for_layout;?>
-		<script type="text/javascript">
-			$( function() {
-				$('ul.sf-menu').superfish();
-			});
-		</script>
 	</head>
 	
 	<body>
@@ -32,7 +22,7 @@
 			&nbsp;
 			<div id="menu" name="menu">
 				<ul class="sf-menu">
-					<li class="current borda-primeiro borda-ultimo">
+					<li>
 						<?php print $html -> link('Início', "/");?>
 					</li>
 					
@@ -44,22 +34,37 @@
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/fornecedores/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/fornecedores/pesquisar");?></li>
-									<li><?php print $html -> link('Listar todos', "/fornecedores/");?></li>
+									<li><?php print $html -> link('Listar', "/fornecedores/");?></li>
 									<li>
 										<?php print $html -> link('Categorias', "/fornecedorCategorias");?>
 										<ul>
 											<li><?php print $html -> link('Cadastrar', "/fornecedorCategorias/cadastrar");?></li>
-											<li><?php print $html -> link('Listar todas', "/fornecedorCategorias");?></li>
+											<li><?php print $html -> link('Listar', "/fornecedorCategorias");?></li>
 										</ul>
 									</li>
 								</ul>
 							</li>
 							<li>
-								<li><?php print $html -> link('Produtos', "/produtos/");?></li>
+								<?php print $html -> link('Produtos', "/produtos/");?>
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/produtos/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/produtos/pesquisar");?></li>
-									<li><?php print $html -> link('Listar todos', "/produtos/");?></li>
+									<li><?php print $html -> link('Listar', "/produtos/");?></li>
+									<li>
+										<?php print $html -> link('Categorias', "/categoriaProdutos");?>
+										<ul>
+											<li><?php print $html -> link('Cadastrar', "/categoriaProdutos/cadastrar");?></li>
+											<li><?php print $html -> link('Listar', "/categoriaProdutos");?></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<?php print $html -> link('Pedido de compra', "/pedidoCompras");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/pedidoCompras/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/pedidoCompras/pesquisar");?></li>
+									<li><?php print $html -> link('Listar', "/pedidoCompras/");?></li>
 								</ul>
 							</li>
 							<li>
@@ -82,14 +87,22 @@
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/clientes/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/clientes/pesquisar");?></li>
-									<li><?php print $html -> link('Listar todos', "/clientes/");?></li>
+									<li><?php print $html -> link('Listar', "/clientes/");?></li>
 									<li>
 										<?php print $html -> link('Categorias', "/clienteCategorias");?>
 										<ul>
 											<li><?php print $html -> link('Cadastrar', "/clienteCategorias/cadastrar");?></li>
-											<li><?php print $html -> link('Listar todas', "/clienteCategorias");?></li>
+											<li><?php print $html -> link('Listar', "/clienteCategorias");?></li>
 										</ul>
 									</li>
+								</ul>
+							</li>
+							<li>
+								<?php print $html -> link('Pedido de venda', "/pedidoVendas");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/pedidoVendas/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/pedidoVendas/pesquisar");?></li>
+									<li><?php print $html -> link('Listar', "/pedidoVendas/");?></li>
 								</ul>
 							</li>
 							<li>
@@ -112,7 +125,7 @@
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/receberContas/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/receberContas/pesquisar");?></li>
-									<li><?php print $html -> link('Listar todas', "/receberContas/");?></li>
+									<li><?php print $html -> link('Listar', "/receberContas/");?></li>
 								</ul>
 							</li>
 							<li>
@@ -120,7 +133,7 @@
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/pagarContas/cadastrar");?></li>
 									<li><?php print $html -> link('Pesquisar', "/pagarContas/pesquisar");?></li>
-									<li><?php print $html -> link('Listar todas', "/pagarContas/");?></li>
+									<li><?php print $html -> link('Listar', "/pagarContas/");?></li>
 								</ul>
 							</li>
 							<li><?php print $html -> link('Plano de contas', "/planoContas/");?></li>
@@ -137,7 +150,7 @@
 								<?php print $html -> link('Empresas', "/empresas");?>
 								<ul>
 									<li><?php print $html -> link('Cadastrar', "/empresas/cadastrar");?></li>
-									<li><?php print $html -> link('Listar todas', "/empresas/");?></li>
+									<li><?php print $html -> link('Listar', "/empresas/");?></li>
 								</ul>
 							</li>
 							<li><?php print $html -> link('Usuários', "/usuarios/");?></li>
@@ -171,6 +184,16 @@
 		
 		
 		<?php echo $this->element('sql_dump'); ?>
+		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="<?php print $html->url('/', true )?>js/auxiliares.js" type="text/javascript" charset="utf-8"></script>
+		<?php print $scripts_for_layout;?>
+		<script type="text/javascript">
+			$( function() {
+				$('ul.sf-menu').superfish();
+			});
+		</script>
 	</body>
 	
 </html>

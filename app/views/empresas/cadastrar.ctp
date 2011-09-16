@@ -1,8 +1,8 @@
 <h2 class="descricao_cabecalho">Cadastrar empresa</h2>
 
 <?php print $form->create('Empresa',array('autocomplete'=>'off')); ?>
-<div id="divs_grupo_3">
-	<div id="div1_3">
+<div class="divs_grupo_3">
+	<div class="div1_3">
 		<?php
 		print $form->input('nome',array('label'=>'Nome'));
 		print $form->input('cnpj',array('label'=>'CNPJ'));
@@ -11,7 +11,7 @@
 		print $form->input('fax',array('label'=>'Número de fax'));
 		?>
 	</div>
-	<div id="div2_3">
+	<div class="div2_3">
 		<?php
 		print $form->input('site',array('label'=>'Site da empresa'));
 		print $form->input('endereco_email_principal',array('label'=>'Endereço de e-mail principal'));
@@ -19,7 +19,7 @@
 		print $form->input('logradouro',array('label'=>'Logradouro'));
 		?>
 	</div>
-	<div id="div3_3">
+	<div class="div3_3">
 		<?php
 		print $form->input('numero',array('label'=>'Número'));
 		print $form->input('bairro',array('label'=>'Bairro'));

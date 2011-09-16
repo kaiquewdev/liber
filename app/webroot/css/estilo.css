@@ -38,55 +38,55 @@
  *  #FIXME o mesmo com a div de tres colunas
  *  #FIXME o layout buga quando o cake retorna com erros em varios campos
  */
-#divs_grupo_2 {
+.divs_grupo_2 {
 	background-color: white;
 	clear:both;
 }
 
-#div1_2 {
+.div1_2 {
 	width: 45%;
 	float:left;
 	position: absolute;
 	clear:both;
 }
 
-#div2_2 {
+.div2_2 {
 	width: 45%;
 	float:right;
 	clear:both;
 }
 
-#divs_grupo_3 {
+.divs_grupo_3 {
 	width: 100%;
 	background-color: white;
 	clear:both;
 }
 
-#div1_3 {
+.div1_3 {
 	width: 30%;
 	float:left;
 	position: absolute;
 	clear:both;
 }
 
-#div2_3 {
+.div2_3 {
 	width: 30%;
 	position: absolute;
 	margin-left: 31%;
 	clear:both;
 }
 
-#div3_3 {
+.div3_3 {
 	width: 30%;
 	float:right;
 	clear:both;
 }
 
-#botoes {
+.botoes {
 	float:right;
 	margin-right: 30px;
 }
-#botoes a{
+.botoes a{
 	padding: 5px;
 }
 

@@ -24,8 +24,8 @@
 </div>
 <div class="limpar">&nbsp;</div>
 
-<div id="divs_grupo_2">
-	<div id="div1_2">
+<div class="divs_grupo_2">
+	<div class="div1_2">
 		
 		<?php
 		print $form->input('cliente_fornecedor_id',array('label'=>'Código cliente/fornecedor','type'=>'text'));
@@ -33,7 +33,7 @@
 		print $form->input('numero_documento',array('label'=>'Número documento'));
 		?>
 	</div>
-	<div id="div2_2">
+	<div class="div2_2">
 		<?php
 		print $form->input('valor',array('label'=>'Valor'));
 		print $form->input('conta_origem',array('label'=>'Conta de origem','options'=>$opcoes_conta_origem));

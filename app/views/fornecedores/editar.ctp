@@ -121,8 +121,8 @@
 
 <div class="limpar">&nbsp;</div>
 
-<div id="divs_grupo_3">
-	<div id="div1_3">
+<div class="divs_grupo_3">
+	<div class="div1_3">
 		<?php
 		print $form->input('nome', array('label'=>'Nome'));
 		print $form->input('nome_fantasia', array('label'=>'Nome fantasia'));
@@ -132,7 +132,7 @@
 		?>
 	</div>
 	
-	<div id="div2_3">
+	<div class="div2_3">
 		<?php
 		print $form->input('bairro');
 		print $form->input('cidade');
@@ -142,7 +142,7 @@
 		?>
 	</div>
 	
-	<div id="div3_3">
+	<div class="div3_3">
 		<?php
 		print $form->input('endereco_email', array('label'=>'Endereço de e-mail'));
 		print $form->input('cnpj',array('label'=>'CNPJ', 'disabled'=>'disabled'));

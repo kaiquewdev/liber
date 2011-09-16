@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as categorias de clientes</h2>
+<h2 class="descricao_cabecalho">Exibindo todas as categorias de produtos</h2>
 
 <div class="botoes">
 	<?php print $html->image('add24x24.png',array('title'=>'Cadastrar',
@@ -23,16 +23,16 @@
 <?php foreach ($consulta as $c): ?>
 		
 		<tr>
-			<td><?php print $c['ClienteCategoria']['id'];?></td>
-			<td><?php print $html->link($c['ClienteCategoria']['descricao'],'editar/' . $c['ClienteCategoria']['id']) ;?></td>
+			<td><?php print $c['CategoriaProduto']['id'];?></td>
+			<td><?php print $html->link($c['CategoriaProduto']['nome'],'editar/' . $c['CategoriaProduto']['id']) ;?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
-				href="'.$html->url(array('action'=>'excluir')).'/'.$c['ClienteCategoria']['id'].'">'.
+				href="'.$html->url(array('action'=>'excluir')).'/'.$c['CategoriaProduto']['id'].'">'.
 				$html->image('del24x24.png', array('alt'=>'Excluir'))
 				.'</a>';?>
 			</td>
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-			'alt'=>'Editar','url'=>array('action'=>'editar',$c['ClienteCategoria']['id']))) ?></td>
+			'alt'=>'Editar','url'=>array('action'=>'editar',$c['CategoriaProduto']['id']))) ?></td>
 		</tr>
 
 <?php endforeach ?>

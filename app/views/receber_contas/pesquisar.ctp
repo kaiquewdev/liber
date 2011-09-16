@@ -7,9 +7,9 @@
  */
 print $form->create(null,array('action'=>'pesquisar','autocomplete'=>'off'));
 ?>
-<div id="divs_grupo_2">
+<div class="divs_grupo_2">
 	
-	<div id="div1_2">
+	<div class="div1_2">
 		<?php
 		
 		print '<div>'.$form->input('numero_documento',array('label'=>'Número do documento','div'=>false)).'</div>';
@@ -20,7 +20,7 @@ print $form->create(null,array('action'=>'pesquisar','autocomplete'=>'off'));
 		?>
 	</div>
 	
-	<div id="div2_2">
+	<div class="div2_2">
 		<?php
 		print '<div>'.$form->input('id', array('label'=>'Código','div'=>false)).'</div>';
 		print '<div>'.$form->input('tipo_documento_id',array('label'=>'Tipo do documento','div'=>false,'options'=>$opcoes_tipo_documento)).'</div>';
