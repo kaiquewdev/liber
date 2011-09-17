@@ -19,11 +19,11 @@ class ClienteCategoriasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->ClienteCategoria->save($this->data)) {
-				$this->Session->setFlash('Categoria de cliente cadastrada com sucesso.');
+				$this->Session->setFlash('Categoria de cliente cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a categoria de cliente.');
+				$this->Session->setFlash('Erro ao cadastrar a categoria de cliente.','flash_erro');
 			}
 		}
 	}
@@ -32,7 +32,7 @@ class ClienteCategoriasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->ClienteCategoria->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Categoria de cliente não encontrada.');
+				$this->Session->setFlash('Categoria de cliente não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -40,23 +40,23 @@ class ClienteCategoriasController extends AppController {
 			$this->data['ClienteCategoria']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->ClienteCategoria->save($this->data)) {
-				$this->Session->setFlash('Categoria de cliente atualizada com sucesso.');
+				$this->Session->setFlash('Categoria de cliente atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a categoria de cliente.');
+				$this->Session->setFlash('Erro ao atualizar a categoria de cliente.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->ClienteCategoria->delete($id)) $this->Session->setFlash("Categoria de cliente $id excluída com sucesso.");
-			else $this->Session->setFlash("Categoria de cliente $id não pode ser excluída.");
+			if ($this->ClienteCategoria->delete($id)) $this->Session->setFlash("Categoria de cliente $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Categoria de cliente $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Categoria de cliente não informada.');
+			$this->Session->setFlash('Categoria de cliente não informada.','flash_erro');
 		}
 	}
 	

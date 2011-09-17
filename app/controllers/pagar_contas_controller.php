@@ -66,18 +66,18 @@ class PagarContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {
 				$this->data['PagarConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
 				if ($this->PagarConta->save($this->data)) {
-					$this->Session->setFlash('Conta a pagar cadastrada com sucesso.');
+					$this->Session->setFlash('Conta a pagar cadastrada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao cadastrar a conta a pagar.');
+					$this->Session->setFlash('Erro ao cadastrar a conta a pagar.','flash_erro');
 				}
 			}
 		}
@@ -88,7 +88,7 @@ class PagarContasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->PagarConta->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Conta a receber não encontrada.');
+				$this->Session->setFlash('Conta a receber não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -111,16 +111,16 @@ class PagarContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {
 				if ($this->PagarConta->save($this->data)) {
-					$this->Session->setFlash('Conta a pagar atualizada com sucesso.');
+					$this->Session->setFlash('Conta a pagar atualizada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao atualizar a conta a pagar.');
+					$this->Session->setFlash('Erro ao atualizar a conta a pagar.','flash_erro');
 				}
 			}
 		}
@@ -128,12 +128,12 @@ class PagarContasController extends AppController {
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->PagarConta->delete($id)) $this->Session->setFlash("Conta a pagar $id excluída com sucesso.");
-			else $this->Session->setFlash("Conta a pagar $id não pode ser excluída.");
+			if ($this->PagarConta->delete($id)) $this->Session->setFlash("Conta a pagar $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Conta a pagar $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Conta a pagar não informada.');
+			$this->Session->setFlash('Conta a pagar não informada.','flash_erro');
 		}
 	}
 
@@ -165,13 +165,13 @@ class PagarContasController extends AppController {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados conta(s) a pagar encontrada(s)");
+					$this->Session->setFlash("$num_encontrados conta(s) a pagar encontrada(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhuma conta a pagar encontrada"); 
+				else $this->Session->setFlash("Nenhuma conta a pagar encontrada",'flash_erro'); 
 			}
 			else {
 				$this->set('num_resultados','0');
-				$this->Session->setFlash("Nenhum resultado encontrado");
+				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
 		}
 	}

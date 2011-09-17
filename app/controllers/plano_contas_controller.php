@@ -19,11 +19,11 @@ class PlanoContasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->PlanoConta->save($this->data)) {
-				$this->Session->setFlash('Item do plano de contas cadastrado com sucesso.');
+				$this->Session->setFlash('Item do plano de contas cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar item do plano de contas.');
+				$this->Session->setFlash('Erro ao cadastrar item do plano de contas.','flash_erro');
 			}
 		}
 	}
@@ -32,7 +32,7 @@ class PlanoContasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->PlanoConta->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Item do plano de contas não encontrado.');
+				$this->Session->setFlash('Item do plano de contas não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -40,23 +40,23 @@ class PlanoContasController extends AppController {
 			$this->data['PlanoConta']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->PlanoConta->save($this->data)) {
-				$this->Session->setFlash('Plano de contas atualizado com sucesso.');
+				$this->Session->setFlash('Plano de contas atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar o plano de contas.');
+				$this->Session->setFlash('Erro ao atualizar o plano de contas.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->PlanoConta->delete($id)) $this->Session->setFlash("Item $id do plano de contas excluído com sucesso.");
-			else $this->Session->setFlash("Item $id do plano de contas não pode ser excluída.");
+			if ($this->PlanoConta->delete($id)) $this->Session->setFlash("Item $id do plano de contas excluído com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Item $id do plano de contas não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Item do plano de contas não informado.');
+			$this->Session->setFlash('Item do plano de contas não informado.','flash_erro');
 		}
 	}
 	

@@ -19,11 +19,11 @@ class ContasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Conta->save($this->data)) {
-				$this->Session->setFlash('Conta cadastrada com sucesso.');
+				$this->Session->setFlash('Conta cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a conta.');
+				$this->Session->setFlash('Erro ao cadastrar a conta.','flash_erro');
 			}
 		}
 	}
@@ -32,7 +32,7 @@ class ContasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->Conta->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Conta não encontrada.');
+				$this->Session->setFlash('Conta não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -40,23 +40,23 @@ class ContasController extends AppController {
 			$this->data['Conta']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Conta->save($this->data)) {
-				$this->Session->setFlash('Conta atualizada com sucesso.');
+				$this->Session->setFlash('Conta atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a conta.');
+				$this->Session->setFlash('Erro ao atualizar a conta.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->Conta->delete($id)) $this->Session->setFlash("Conta $id excluída com sucesso.");
-			else $this->Session->setFlash("Conta $id não pode ser excluída.");
+			if ($this->Conta->delete($id)) $this->Session->setFlash("Conta $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Conta $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Conta não informada.');
+			$this->Session->setFlash('Conta não informada.','flash_erro');
 		}
 	}
 	

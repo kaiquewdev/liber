@@ -49,11 +49,11 @@ class FornecedoresController extends AppController {
 			$this->data['Fornecedor'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Fornecedor->save($this->data)) {
-				$this->Session->setFlash('Fornecedor cadastrado com sucesso.');
+				$this->Session->setFlash('Fornecedor cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Fornecedores'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar o Fornecedor.');
+				$this->Session->setFlash('Erro ao cadastrar o Fornecedor.','flash_erro');
 			}
 		}
 	}
@@ -63,7 +63,7 @@ class FornecedoresController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->Fornecedor->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Fornecedor não encontrado.');
+				$this->Session->setFlash('Fornecedor não encontrado.','flash_erro');
 				$this->redirect(array('controller'=>'Fornecedores','action'=>'cadastrar'));
 			}
 		}
@@ -73,11 +73,11 @@ class FornecedoresController extends AppController {
 			$this->data['Fornecedor'] += array ('usuario_alterou' => $this->Auth->user('id'));
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Fornecedor->save($this->data)) {
-				$this->Session->setFlash('Fornecedor atualizado com sucesso.');
+				$this->Session->setFlash('Fornecedor atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Fornecedores'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar o Fornecedor.');
+				$this->Session->setFlash('Erro ao atualizar o Fornecedor.','flash_erro');
 			}
 		}
 	}
@@ -109,13 +109,13 @@ class FornecedoresController extends AppController {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados Fornecedor(s) encontrado(s)");
+					$this->Session->setFlash("$num_encontrados Fornecedor(s) encontrado(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhum fornecedor encontrado");
+				else $this->Session->setFlash("Nenhum fornecedor encontrado",'flash_erro');
 			}
 			else {
 				$this->set('num_resultados','0');
-				$this->Session->setFlash("Nenhum resultado encontrado");
+				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
 		}
 	}
@@ -126,7 +126,7 @@ class FornecedoresController extends AppController {
 			$this->set('fornecedor',$this->Fornecedor->read());
 		}
 		else {
-			$this->Session->setFlash('Erro: nenhum Fornecedor informado.');
+			$this->Session->setFlash('Erro: nenhum Fornecedor informado.','flash_erro');
 		}
 	}
 	

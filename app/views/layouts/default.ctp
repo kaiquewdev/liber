@@ -137,7 +137,8 @@
 								</ul>
 							</li>
 							<li><?php print $html -> link('Plano de contas', "/planoContas/");?></li>
-							<li class="separador"><?php print $html -> link('Tipo de documentos', "/tipoDocumentos/");?></li>
+							<li><?php print $html -> link('Tipo de documentos', "/tipoDocumentos/");?></li>
+							<li class="separador"></li>
 							<li><?php print $html -> link('Formas de pagamento', "/formaPagamentos");?></li>
 							<li><?php print $html -> link('Contas', "/contas/");?></li>
 						</ul>
@@ -171,7 +172,6 @@
 				print $this->Session->flash();
 				print $this->Session->flash('auth');
 				?>
-				
 			</div>
 			
 			<?php print $content_for_layout ?>
@@ -182,8 +182,6 @@
 			
 		</div>
 		
-		
-		<?php echo $this->element('sql_dump'); ?>
 		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
@@ -194,6 +192,8 @@
 				$('ul.sf-menu').superfish();
 			});
 		</script>
+		
+		<?php echo $this->element('sql_dump'); ?>
 	</body>
 	
 </html>

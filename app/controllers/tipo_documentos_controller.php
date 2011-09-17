@@ -19,11 +19,11 @@ class TipoDocumentosController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->TipoDocumento->save($this->data)) {
-				$this->Session->setFlash('Tipo de documento cadastrado com sucesso.');
+				$this->Session->setFlash('Tipo de documento cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar tipo de documento.');
+				$this->Session->setFlash('Erro ao cadastrar tipo de documento.','flash_erro');
 			}
 		}
 	}
@@ -32,7 +32,7 @@ class TipoDocumentosController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->TipoDocumento->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Tipo de documento não encontrado.');
+				$this->Session->setFlash('Tipo de documento não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -40,23 +40,23 @@ class TipoDocumentosController extends AppController {
 			$this->data['TipoDocumento']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->TipoDocumento->save($this->data)) {
-				$this->Session->setFlash('Tipo de documento atualizado com sucesso.');
+				$this->Session->setFlash('Tipo de documento atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar o Tipo de documento.');
+				$this->Session->setFlash('Erro ao atualizar o Tipo de documento.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->TipoDocumento->delete($id)) $this->Session->setFlash("Tipo de documento $id excluído com sucesso.");
-			else $this->Session->setFlash("Tipo de documento $id não pode ser excluído.");
+			if ($this->TipoDocumento->delete($id)) $this->Session->setFlash("Tipo de documento $id excluído com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Tipo de documento $id não pode ser excluído.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Tipo de documento não informado.');
+			$this->Session->setFlash('Tipo de documento não informado.','flash_erro');
 		}
 	}
 	

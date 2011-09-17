@@ -52,11 +52,11 @@ class FormaPagamentosController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->FormaPagamento->save($this->data)) {
-				$this->Session->setFlash('Forma de pagamento cadastrada com sucesso.');
+				$this->Session->setFlash('Forma de pagamento cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a forma de pagamento.');
+				$this->Session->setFlash('Erro ao cadastrar a forma de pagamento.','flash_erro');
 			}
 		}
 	}
@@ -98,7 +98,7 @@ class FormaPagamentosController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->FormaPagamento->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Forma de pagamento não encontrada.');
+				$this->Session->setFlash('Forma de pagamento não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
@@ -110,23 +110,23 @@ class FormaPagamentosController extends AppController {
 			$this->data['FormaPagamento']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->FormaPagamento->save($this->data)) {
-				$this->Session->setFlash('Forma de pagamento atualizada com sucesso.');
+				$this->Session->setFlash('Forma de pagamento atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a forma de pagamento.');
+				$this->Session->setFlash('Erro ao atualizar a forma de pagamento.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->FormaPagamento->delete($id)) $this->Session->setFlash("Forma de pagamento $id excluída com sucesso.");
-			else $this->Session->setFlash("Forma de pagamento $id não pode ser excluída.");
+			if ($this->FormaPagamento->delete($id)) $this->Session->setFlash("Forma de pagamento $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Forma de pagamento $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Forma de pagamento não informada.');
+			$this->Session->setFlash('Forma de pagamento não informada.','flash_erro');
 		}
 	}
 	

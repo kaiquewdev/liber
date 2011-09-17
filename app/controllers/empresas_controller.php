@@ -20,11 +20,11 @@ class EmpresasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Empresa->save($this->data)) {
-				$this->Session->setFlash('Empresa cadastrada com sucesso.');
+				$this->Session->setFlash('Empresa cadastrada com sucesso.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a conta.');
+				$this->Session->setFlash('Erro ao cadastrar a conta.','flash_sucesso');
 			}
 		}
 	}
@@ -33,7 +33,7 @@ class EmpresasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->Empresa->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Empresa não encontrada.');
+				$this->Session->setFlash('Empresa não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -41,23 +41,23 @@ class EmpresasController extends AppController {
 			$this->data['Empresa']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Empresa->save($this->data)) {
-				$this->Session->setFlash('Empresa atualizada com sucesso.');
+				$this->Session->setFlash('Empresa atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a conta.');
+				$this->Session->setFlash('Erro ao atualizar a conta.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->Empresa->delete($id)) $this->Session->setFlash("Empresa $id excluída com sucesso.");
-			else $this->Session->setFlash("Empresa $id não pode ser excluída.");
+			if ($this->Empresa->delete($id)) $this->Session->setFlash("Empresa $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Empresa $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Empresa não informada.');
+			$this->Session->setFlash('Empresa não informada.','flash_erro');
 		}
 	}
 	

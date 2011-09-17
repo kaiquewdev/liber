@@ -2,6 +2,24 @@
 
 class Usuario extends AppModel {
 	var $name = "usuario";
+	var $hasMany = array(
+		'Cliente_usuario_cadastrou' => array(
+			'className' => 'Cliente',
+			'foreignKey' => 'usuario_cadastrou'
+		),
+		'Cliente_usuario_alterou' => array(
+			'className' => 'Cliente',
+			'foreignKey' => 'usuario_alterou'
+		),
+		'Fornecedor_usuario_cadastrou' => array(
+			'className' => 'Fornecedor',
+			'foreignKey' => 'usuario_cadastrou'
+		),
+		'Fornecedor_usuario_alterou' => array(
+			'className' => 'Fornecedor',
+			'foreignKey' => 'usuario_alterou'
+		)
+	);
 	var $validate = array(
 		'nome' => array(
 			'allowEmpty' => false,

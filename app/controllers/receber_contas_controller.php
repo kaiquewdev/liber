@@ -66,18 +66,18 @@ class ReceberContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {
 				$this->data['ReceberConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
 				$this->data = $this->Sanitizacao->sanitizar($this->data);
 				if ($this->ReceberConta->save($this->data)) {
-					$this->Session->setFlash('Conta a receber cadastrada com sucesso.');
+					$this->Session->setFlash('Conta a receber cadastrada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao cadastrar a conta a receber.');
+					$this->Session->setFlash('Erro ao cadastrar a conta a receber.','flash_erro');
 				}
 			}
 		}
@@ -88,7 +88,7 @@ class ReceberContasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->ReceberConta->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Conta a receber não encontrada.');
+				$this->Session->setFlash('Conta a receber não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -111,16 +111,16 @@ class ReceberContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado');
+				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {
 				if ($this->ReceberConta->save($this->data)) {
-					$this->Session->setFlash('Conta a receber atualizada com sucesso.');
+					$this->Session->setFlash('Conta a receber atualizada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
-					$this->Session->setFlash('Erro ao atualizar a conta a receber.');
+					$this->Session->setFlash('Erro ao atualizar a conta a receber.','flash_erro');
 				}
 			}
 		}
@@ -128,12 +128,12 @@ class ReceberContasController extends AppController {
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->ReceberConta->delete($id)) $this->Session->setFlash("Conta a receber $id excluída com sucesso.");
-			else $this->Session->setFlash("Conta a receber $id não pode ser excluída.");
+			if ($this->ReceberConta->delete($id)) $this->Session->setFlash("Conta a receber $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Conta a receber $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Conta a receber não informada.');
+			$this->Session->setFlash('Conta a receber não informada.','flash_erro');
 		}
 	}
 
@@ -165,13 +165,13 @@ class ReceberContasController extends AppController {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados conta(s) a receber encontrada(s)");
+					$this->Session->setFlash("$num_encontrados conta(s) a receber encontrada(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhuma conta a receber encontrada"); 
+				else $this->Session->setFlash("Nenhuma conta a receber encontrada",'flash_erro');
 			}
 			else {
 				$this->set('num_resultados','0');
-				$this->Session->setFlash("Nenhum resultado encontrado");
+				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
 		}
 	}

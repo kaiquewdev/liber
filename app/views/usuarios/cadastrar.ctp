@@ -18,7 +18,13 @@ print $form->create('Usuario', array('autocomplete'=>'off'));
 	
 	<div class="div2_2">
 		<?php
-		print $form->input('permissao', array('label'=>'Permissão','options'=>array('0'=>'Administrador','1'=>'Usuário comum')));
+		print $form->input('permissao', array('label'=>'Permissão','options'=>
+		array(
+		'0'=>'Administrador',
+		'1'=>'Usuário comum',
+		'2' => 'Vendedor',
+		'3' => 'Técnico'
+		)));
 		print $form->input('email', array('label'=>'Endereço de e-mail'));
 		print $form->input('ativo', array('label'=>'Ativo?','checked'=>'checked'));
 		?>

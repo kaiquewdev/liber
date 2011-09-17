@@ -33,11 +33,11 @@ class ProdutosController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Produto->save($this->data)) {
-				$this->Session->setFlash('Produto cadastrado com sucesso.');
+				$this->Session->setFlash('Produto cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar o produto.');
+				$this->Session->setFlash('Erro ao cadastrar o produto.','flash_erro');
 			}
 		}
 	}
@@ -47,7 +47,7 @@ class ProdutosController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->Produto->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash("Produto $id não encontrado.");
+				$this->Session->setFlash("Produto $id não encontrado.",'flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -55,23 +55,23 @@ class ProdutosController extends AppController {
 			$this->data['Produto']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Produto->save($this->data)) {
-				$this->Session->setFlash("Produto $id atualizado com sucesso.");
+				$this->Session->setFlash("Produto $id atualizado com sucesso.",'flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar o produto.');
+				$this->Session->setFlash('Erro ao atualizar o produto.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->Produto->delete($id)) $this->Session->setFlash("Produto $id excluído com sucesso.");
-			else $this->Session->setFlash("Produto $id não pode ser excluído.");
+			if ($this->Produto->delete($id)) $this->Session->setFlash("Produto $id excluído com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Produto $id não pode ser excluído.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Produto não informado.');
+			$this->Session->setFlash('Produto não informado.','flash_erro');
 		}
 	}
 
@@ -102,13 +102,13 @@ class ProdutosController extends AppController {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados produto(s) encontrado(s)");
+					$this->Session->setFlash("$num_encontrados produto(s) encontrado(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhum produto encontrado"); 
+				else $this->Session->setFlash("Nenhum produto encontrado",'flash_erro');
 			}
 			else {
 				$this->set('num_resultados','0');
-				$this->Session->setFlash("Nenhum resultado encontrado");
+				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
 		}
 	}

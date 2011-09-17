@@ -44,19 +44,19 @@ class UsuariosController extends AppController {
 			if ($this->data['Usuario']['senha'] == $this->Auth->password($this->data['Usuario']['senha_confirma'])) {
 				$this->Usuario->create();
 				if ($this->Usuario->save($this->data)) {
-					$this->Session->setFlash('Usuário cadastrado com sucesso.');
+					$this->Session->setFlash('Usuário cadastrado com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {
 					$this->data['Usuario']['senha'] = NULL;
 					$this->data['Usuario']['senha_confirma'] = NULL;
-					$this->Session->setFlash('Erro ao cadastrar o usuário.');
+					$this->Session->setFlash('Erro ao cadastrar o usuário.','flash_erro');
 				}
 			}
 			else {
 				$this->data['Usuario']['senha'] = NULL;
 				$this->data['Usuario']['senha_confirma'] = NULL;
-				$this->Session->setFlash('As senhas digitadas não conferem.');
+				$this->Session->setFlash('As senhas digitadas não conferem.','flash_erro');
 			}
 		}
 	}
@@ -69,7 +69,7 @@ class UsuariosController extends AppController {
 			unset($this->data['Usuario']['senha']);
 			unset($this->data['Usuario']['senha_confirma']);
 			if ( ! $this->data) {
-				$this->Session->setFlash('Usuário não encontrado.');
+				$this->Session->setFlash('Usuário não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -94,13 +94,13 @@ class UsuariosController extends AppController {
 				else {
 					$this->data['Usuario']['senha'] = NULL;
 					$this->data['Usuario']['senha_confirma'] = NULL;
-					$this->Session->setFlash('Erro ao atualizar o usuário.');
+					$this->Session->setFlash('Erro ao atualizar o usuário.','flash_erro');
 				}
 			}
 			else {
 				$this->data['Usuario']['senha'] = NULL;
 				$this->data['Usuario']['senha_confirma'] = NULL;
-				$this->Session->setFlash('As senhas digitadas não conferem.');
+				$this->Session->setFlash('As senhas digitadas não conferem.','flash_erro');
 			}
 		}
 	}
@@ -108,17 +108,17 @@ class UsuariosController extends AppController {
 	function excluir($id=NULL) {
 		if (! empty($id)) {
 			if ($id == 1) {
-				$this->Session->setFlash("O usuário administrador não pode ser excluído.");
+				$this->Session->setFlash("O usuário administrador não pode ser excluído.",'flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				if ($this->Usuario->delete($id)) $this->Session->setFlash("Usuário $id excluído com sucesso.");
-				else $this->Session->setFlash("Usuário $id não pode ser excluído.");
+				if ($this->Usuario->delete($id)) $this->Session->setFlash("Usuário $id excluído com sucesso.",'flash_sucesso');
+				else $this->Session->setFlash("Usuário $id não pode ser excluído.",'flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
 		else {
-			$this->Session->setFlash('Usuário não informado.');
+			$this->Session->setFlash('Usuário não informado.','flash_erro');
 		}
 	}
 	

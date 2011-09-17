@@ -19,11 +19,11 @@ class FornecedorCategoriasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->FornecedorCategoria->save($this->data)) {
-				$this->Session->setFlash('Categoria de fornecedor cadastrada com sucesso.');
+				$this->Session->setFlash('Categoria de fornecedor cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a categoria de fornecedor.');
+				$this->Session->setFlash('Erro ao cadastrar a categoria de fornecedor.','flash_erro');
 			}
 		}
 	}
@@ -32,7 +32,7 @@ class FornecedorCategoriasController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->FornecedorCategoria->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Categoria de fornecedor não encontrada.');
+				$this->Session->setFlash('Categoria de fornecedor não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
 		}
@@ -40,23 +40,23 @@ class FornecedorCategoriasController extends AppController {
 			$this->data['FornecedorCategoria']['id'] = $id;
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->FornecedorCategoria->save($this->data)) {
-				$this->Session->setFlash('Categoria de fornecedor atualizada com sucesso.');
+				$this->Session->setFlash('Categoria de fornecedor atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a categoria de fornecedor.');
+				$this->Session->setFlash('Erro ao atualizar a categoria de fornecedor.','flash_erro');
 			}
 		}
 	}
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->FornecedorCategoria->delete($id)) $this->Session->setFlash("Categoria de fornecedor $id excluída com sucesso.");
-			else $this->Session->setFlash("Categoria de fornecedor $id não pode ser excluída.");
+			if ($this->FornecedorCategoria->delete($id)) $this->Session->setFlash("Categoria de fornecedor $id excluída com sucesso.",'flash_sucesso');
+			else $this->Session->setFlash("Categoria de fornecedor $id não pode ser excluída.",'flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
-			$this->Session->setFlash('Categoria de fornecedor não informada.');
+			$this->Session->setFlash('Categoria de fornecedor não informada.','flash_erro');
 		}
 	}
 	

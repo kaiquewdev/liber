@@ -45,11 +45,11 @@ class ClientesController extends AppController {
 			$this->data['Cliente'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Cliente->save($this->data)) {
-				$this->Session->setFlash('Cliente cadastrado com sucesso.');
+				$this->Session->setFlash('Cliente cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'clientes'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar o cliente.');
+				$this->Session->setFlash('Erro ao cadastrar o cliente.','flash_erro');
 			}
 		}
 	}
@@ -59,7 +59,7 @@ class ClientesController extends AppController {
 		if (empty ($this->data)) {
 			$this->data = $this->Cliente->read();
 			if ( ! $this->data) {
-				$this->Session->setFlash('Cliente não encontrado.');
+				$this->Session->setFlash('Cliente não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'pesquisar'));
 			}
 		}
@@ -69,11 +69,11 @@ class ClientesController extends AppController {
 			$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Cliente->save($this->data)) {
-				$this->Session->setFlash('Cliente atualizado com sucesso.');
+				$this->Session->setFlash('Cliente atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'clientes'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar o cliente.');
+				$this->Session->setFlash('Erro ao atualizar o cliente.','flash_erro');
 			}
 		}
 	}
@@ -114,13 +114,13 @@ class ClientesController extends AppController {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados cliente(s) encontrado(s)");
+					$this->Session->setFlash("$num_encontrados cliente(s) encontrado(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhum cliente encontrado"); 
+				else $this->Session->setFlash("Nenhum cliente encontrado",'flash_erro'); 
 			}
 			else {
 				$this->set('num_resultados','0');
-				$this->Session->setFlash("Nenhum resultado encontrado");
+				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
 		}
 	}
@@ -131,7 +131,7 @@ class ClientesController extends AppController {
 			$this->set('cliente',$this->Cliente->read());
 		}
 		else {
-			$this->Session->setFlash('Nenhum cliente informado.');
+			$this->Session->setFlash('Nenhum cliente informado.','flash_erro');
 		}
 	}
 	
