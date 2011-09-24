@@ -3,7 +3,7 @@
 	Adicionar fornecedor
 </h2>
 
-<?php print $form->create('Fornecedor',array('autocomplete'=>'off')); ?>
+<?php print $form->create('Fornecedor',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 
 	<div style="float: left; position: absolute;">
 		<?php

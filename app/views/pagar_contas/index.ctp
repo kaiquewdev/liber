@@ -56,7 +56,7 @@
 			<td><?php print $c['PagarConta']['valor']; ?></td>
 			<td><?php print $c['PagarConta']['conta_origem'].' '.$c['Conta']['apelido']; ?></td>
 			<td><?php print $c['PagarConta']['plano_conta_id'].' '.$c['PlanoConta']['nome']; ?></td>
-			<td><?php print $c['PagarConta']['data_vencimento']; ?></td>
+			<td><?php print $formatacao->data($c['PagarConta']['data_vencimento']); ?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
 				href="'.$html->url(array('action'=>'excluir')).'/'.$c['PagarConta']['id'].'">'.

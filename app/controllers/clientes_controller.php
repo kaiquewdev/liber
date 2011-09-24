@@ -33,6 +33,10 @@ class ClientesController extends AppController {
 		return null;
 	}
 	
+	
+	/**
+	 * Lista todos os Clientees
+	 */
 	function index() {
 		$dados = $this->paginate('Cliente');
 		$this->set('consulta_cliente',$dados);
@@ -46,7 +50,7 @@ class ClientesController extends AppController {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Cliente->save($this->data)) {
 				$this->Session->setFlash('Cliente cadastrado com sucesso.','flash_sucesso');
-				$this->redirect(array('controller'=>'clientes'));
+				$this->redirect(array('controller'=>'Clientes'));
 			}
 			else {
 				$this->Session->setFlash('Erro ao cadastrar o cliente.','flash_erro');
@@ -60,7 +64,7 @@ class ClientesController extends AppController {
 			$this->data = $this->Cliente->read();
 			if ( ! $this->data) {
 				$this->Session->setFlash('Cliente não encontrado.','flash_erro');
-				$this->redirect(array('action'=>'pesquisar'));
+				$this->redirect(array('controller'=>'Clientes','action'=>'pesquisar'));
 			}
 		}
 		else {
@@ -70,7 +74,7 @@ class ClientesController extends AppController {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Cliente->save($this->data)) {
 				$this->Session->setFlash('Cliente atualizado com sucesso.','flash_sucesso');
-				$this->redirect(array('controller'=>'clientes'));
+				$this->redirect(array('controller'=>'Clientes'));
 			}
 			else {
 				$this->Session->setFlash('Erro ao atualizar o cliente.','flash_erro');
@@ -82,16 +86,7 @@ class ClientesController extends AppController {
 		
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
-			$url = array('controller'=>'clientes','action'=>'pesquisar');
-			/**
-			 * #XXX Quê isso faz?!
-			 * http://blog.bonetree.net/2010/03/cakephp-paginator-urls-and-post-forms/
-			 */
-			/*if (is_array($this->data['Cliente'])) {
-				foreach($this->data['Cliente'] as &$cliente) {
-					$cliente = urlencode($cliente);
-				}
-			}*/
+			$url = array('controller'=>'Clientees','action'=>'pesquisar');
 			$params = array_merge($url,$this->data['Cliente']);
 			$this->redirect($params);
 		}
@@ -116,7 +111,7 @@ class ClientesController extends AppController {
 					$this->set('num_resultados',$num_encontrados);
 					$this->Session->setFlash("$num_encontrados cliente(s) encontrado(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhum cliente encontrado",'flash_erro'); 
+				else $this->Session->setFlash("Nenhum cliente encontrado",'flash_erro');
 			}
 			else {
 				$this->set('num_resultados','0');
@@ -128,10 +123,10 @@ class ClientesController extends AppController {
 	function detalhar($id = NULL) {
 		if ($id) {
 			$this->Cliente->id = $id;
-			$this->set('cliente',$this->Cliente->read());
+			$this->set('fornecedor',$this->Cliente->read());
 		}
 		else {
-			$this->Session->setFlash('Nenhum cliente informado.','flash_erro');
+			$this->Session->setFlash('Erro: nenhum cliente informado.','flash_erro');
 		}
 	}
 	

@@ -2,7 +2,7 @@
 
 <?php
 
-print $form->create('FormaPagamento',array('autocomplete'=>'off'));
+print $form->create('FormaPagamento',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;'));
 ?>
 <div class="divs_grupo_2">
 	<div class="div1_2">

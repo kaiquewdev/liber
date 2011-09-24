@@ -8,6 +8,14 @@ class FormaPagamento extends AppModel {
 			'foreignKey' => 'conta_principal'
 		)
 	);
+	var $hasMany = array(
+		'ServicoOrdem' => array(
+			'className' => 'ServicoOrdem'
+		),
+		'PedidoVenda' => array(
+			'className' => 'PedidoVenda'
+		)
+	);
 	var $validate = array(
 		'nome' => array(
 			'rule' => 'notEmpty',

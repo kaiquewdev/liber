@@ -19,6 +19,14 @@ class Cliente extends AppModel {
 			'foreignKey' => 'usuario_alterou',
 		)
 	);
+	var $hasMany = array(
+		'ServicoOrdem' => array(
+			'className' => 'ServicoOrdem'
+		),
+		'PedidoVenda' => array(
+			'className' => 'PedidoVenda'
+		)
+	);
 	var $validate = array(
 		'tipo_pessoa' => array (
 			'allowEmpty' => false,

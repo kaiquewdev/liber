@@ -64,7 +64,7 @@ class FornecedoresController extends AppController {
 			$this->data = $this->Fornecedor->read();
 			if ( ! $this->data) {
 				$this->Session->setFlash('Fornecedor não encontrado.','flash_erro');
-				$this->redirect(array('controller'=>'Fornecedores','action'=>'cadastrar'));
+				$this->redirect(array('controller'=>'Fornecedores','action'=>'pesquisar'));
 			}
 		}
 		else {

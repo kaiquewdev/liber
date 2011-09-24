@@ -1,6 +1,6 @@
 <h2 class="descricao_cabecalho">Editar produto</h2>
 
-<?php print $form->create('Produto',array('autocomplete'=>'off')); ?>
+<?php print $form->create('Produto',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 	<div style="float: left; position: absolute;">
 		<?php
 		print $form->label('categoria_produto_id','Categoria',array('class'=>'required'));

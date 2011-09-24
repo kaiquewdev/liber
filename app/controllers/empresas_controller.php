@@ -20,11 +20,11 @@ class EmpresasController extends AppController {
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Empresa->save($this->data)) {
-				$this->Session->setFlash('Empresa cadastrada com sucesso.','flash_erro');
+				$this->Session->setFlash('Empresa cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao cadastrar a conta.','flash_sucesso');
+				$this->Session->setFlash('Erro ao cadastrar a empresa.','flash_erro');
 			}
 		}
 	}
@@ -45,7 +45,7 @@ class EmpresasController extends AppController {
 				$this->redirect(array('action'=>'index'));
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a conta.','flash_erro');
+				$this->Session->setFlash('Erro ao atualizar a empresa.','flash_erro');
 			}
 		}
 	}

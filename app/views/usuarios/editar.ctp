@@ -3,7 +3,7 @@
 </h2>
 
 <?php
-print $form->create('Usuario', array('autocomplete'=>'off'));
+print $form->create('Usuario', array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;'));
 ?>
 <div class="divs_grupo_2">
 	

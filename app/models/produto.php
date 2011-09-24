@@ -3,7 +3,7 @@
 class Produto extends AppModel {
 	var $name = 'Produto';
 	var $belongsTo = array('CategoriaProduto');
-	var $hasMany = array('LogEstoqueProduto');
+	var $hasMany = array('ProdutoEstoqueLog');
 	var $actsAs = array('AjusteFloat');
 	var $validate = array(
 		'nome' => array(

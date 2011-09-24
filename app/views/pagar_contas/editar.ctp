@@ -1,6 +1,6 @@
 <h2 class="descricao_cabecalho">Editar conta a pagar</h2>
 
-<?php print $form->create('PagarConta',array('autocomplete'=>'off')); ?>
+<?php print $form->create('PagarConta',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 <div style="float: left; position: absolute;">
 	<?php
 	print $form->label('eh_cliente_ou_fornecedor','É cliente ou fornecedor?',array('class'=>'required'));

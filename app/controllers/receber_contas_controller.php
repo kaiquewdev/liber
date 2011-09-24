@@ -50,11 +50,11 @@ class ReceberContasController extends AppController {
 		$this->_obter_opcoes();
 		if (! empty($this->data)) {
 			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') {
-				$this->loadModel('ReceberConta');
-				$r = $this->ReceberConta->find('first',
+				$this->loadModel('Cliente');
+				$r = $this->Cliente->find('first',
 					array('conditions'=>array(
-						'ReceberConta.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
-						'ReceberConta.situacao' => 'A')));
+						'Cliente.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Cliente.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
@@ -66,7 +66,7 @@ class ReceberContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado','flash_erro');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {
@@ -95,11 +95,11 @@ class ReceberContasController extends AppController {
 		else {
 			$this->data['ReceberConta']['id'] = $id;
 			if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'C') {
-				$this->loadModel('ReceberConta');
-				$r = $this->ReceberConta->find('first',
+				$this->loadModel('Cliente');
+				$r = $this->Cliente->find('first',
 					array('conditions'=>array(
-						'ReceberConta.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
-						'ReceberConta.situacao' => 'A')));
+						'Cliente.id' => $this->data['ReceberConta']['cliente_fornecedor_id'],
+						'Cliente.situacao' => 'A')));
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			else if (strtoupper($this->data['ReceberConta']['eh_cliente_ou_fornecedor']) == 'F') {
@@ -111,7 +111,7 @@ class ReceberContasController extends AppController {
 				if (! empty($r)) $cliente_fornecedor_encontrado = true;
 			}
 			if ((! isset($cliente_fornecedor_encontrado)) || (! $cliente_fornecedor_encontrado)) {
-				$this->Session->setFlash('Erro. ReceberConta/fornecedor não encontrado','flash_erro');
+				$this->Session->setFlash('Erro. Cliente/fornecedor não encontrado','flash_erro');
 			}
 			
 			else {

@@ -1,6 +1,6 @@
 <h2 class="descricao_cabecalho">Editar conta</h2>
 
-<?php print $form->create('Conta',array('autocomplete'=>'off')); ?>
+<?php print $form->create('Conta',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 <div class="divs_grupo_2">
 	<div class="div1_2">
 		<?php

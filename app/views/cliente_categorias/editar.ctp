@@ -1,6 +1,6 @@
 <h2 class="descricao_cabecalho">Editar categoria de cliente</h2>
 
-<?php print $form->create('ClienteCategoria',array('autocomplete'=>'off'));
+<?php print $form->create('ClienteCategoria',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;'));
 print $form->input('descricao',array('label'=>'Descrição'));
 print $form->end('Gravar');
 ?>

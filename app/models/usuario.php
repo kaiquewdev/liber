@@ -2,6 +2,10 @@
 
 class Usuario extends AppModel {
 	var $name = "usuario";
+	/**
+	 * Usuários sãos associados a diversas tabelas para
+	 * fins de log
+	 */
 	var $hasMany = array(
 		'Cliente_usuario_cadastrou' => array(
 			'className' => 'Cliente',
@@ -18,7 +22,24 @@ class Usuario extends AppModel {
 		'Fornecedor_usuario_alterou' => array(
 			'className' => 'Fornecedor',
 			'foreignKey' => 'usuario_alterou'
+		),
+		'Pedidos_usuario_vendeu' => array(
+			'className' => 'PedidoVenda',
+			'foreignKey' => 'usuario_vendeu'
+		),
+		'Pedidos_usuario_alterou' => array(
+			'className' => 'PedidoVenda',
+			'foreignKey' => 'usuario_alterou'
+		),
+		'ServicoOrdens_cadastrou' => array(
+			'className' => 'ServicoOrdem',
+			'foreignKey' => 'usuario_id'
+		),
+		'ServicoOrdens_alterou' => array(
+			'className' => 'ServicoOrdem',
+			'foreignKey' => 'usuario_alterou'
 		)
+		
 	);
 	var $validate = array(
 		'nome' => array(

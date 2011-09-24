@@ -14,6 +14,7 @@
 			print $this->Html->css('estilo.css');
 			print $this->Html->css('jquery-ui/jquery-ui.css');
 		?>
+		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	
 	<body>
@@ -116,6 +117,22 @@
 							<li><a href="#">XXXX</a></li>
 						</ul>
 					</li>
+					
+					<li>
+						<a href="#">Serviços</a>
+						<ul>
+							<li>
+								<?php print $html -> link('Ordens de serviço', "/servicoOrdens");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/servicoOrdens/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/servicoOrdens/pesquisar");?></li>
+									<li><?php print $html -> link('Listar', "/servicoOrdens");?></li>
+								</ul>
+							</li>
+							<li><?php print $html -> link('Serviços', "/servicos/");?></li>
+							<li><?php print $html -> link('Categorias de serviços', "/servicoCategorias");?></li>
+						</ul>
+					</li>
 			
 					<li>
 						<a href="#" >Financeiro</a>
@@ -182,7 +199,6 @@
 			
 		</div>
 		
-		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php print $html->url('/', true )?>js/auxiliares.js" type="text/javascript" charset="utf-8"></script>

@@ -1,6 +1,6 @@
-<h2 class="descricao_cabecalho">Cadastrar empresa</h2>
+<h2 class="descricao_cabecalho">Editar empresa</h2>
 
-<?php print $form->create('Empresa',array('autocomplete'=>'off')); ?>
+<?php print $form->create('Empresa',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;'));?>
 <div class="divs_grupo_3">
 	<div class="div1_3">
 		<?php
