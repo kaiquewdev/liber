@@ -64,11 +64,26 @@ class SanitizacaoComponent {
 		}
 	}
 	
+	function string_maiuscula ($var) {
+		/**
+		 * $var cairá nesse if caso a função tenha sido chamada
+		 * com apenas um argumento
+		 * ou quando esta função for chamada recursivamente
+		 */
+		if ( ! is_array($var) ) {
+	    	$var = mb_strtoupper($var,'UTF-8');
+	    	return ($var);
+		}
+		else {
+			return array_map(array('SanitizacaoComponent','string_maiuscula'),$var);
+		}
+	}
+	
 	/**
 	 * Alias para uma funcao de sanitização que será utilizada
 	 */
 	function sanitizar ($var) {
-		return $this->primeira_letra_maiuscula($var);
+		return $this->string_maiuscula($var);
 	}
 	
 }

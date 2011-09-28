@@ -28,7 +28,7 @@ $(function() {
 	});
 	
 	$('.remover_linha').live('click',function(evento){
-		//passo a referencia da linha da tabela
+		//passo a referencia a linha da tabela
 		remover_linha($(this).parent().parent());
 	});
 	

@@ -35,7 +35,7 @@ class ClientesController extends AppController {
 	
 	
 	/**
-	 * Lista todos os Clientees
+	 * Lista todos os Clientes
 	 */
 	function index() {
 		$dados = $this->paginate('Cliente');
@@ -86,7 +86,7 @@ class ClientesController extends AppController {
 		
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
-			$url = array('controller'=>'Clientees','action'=>'pesquisar');
+			$url = array('controller'=>'Clientes','action'=>'pesquisar');
 			$params = array_merge($url,$this->data['Cliente']);
 			$this->redirect($params);
 		}
@@ -123,7 +123,7 @@ class ClientesController extends AppController {
 	function detalhar($id = NULL) {
 		if ($id) {
 			$this->Cliente->id = $id;
-			$this->set('fornecedor',$this->Cliente->read());
+			$this->set('cliente',$this->Cliente->read());
 		}
 		else {
 			$this->Session->setFlash('Erro: nenhum cliente informado.','flash_erro');

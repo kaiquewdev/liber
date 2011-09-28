@@ -1,7 +1,7 @@
 <h2 class="descricao_cabecalho">Editar conta a pagar</h2>
 
 <?php print $form->create('PagarConta',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
-<div style="float: left; position: absolute;">
+<div class="grupo_horizontal">
 	<?php
 	print $form->label('eh_cliente_ou_fornecedor','É cliente ou fornecedor?',array('class'=>'required'));
 	print $form->input('eh_cliente_ou_fornecedor', array(
@@ -12,7 +12,7 @@
 	?>
 </div>
 		
-<div style="float: left; position: absolute; margin-left: 250px">
+<div class="grupo_horizontal">
 	<?php
 	print $form->label('eh_fical','É fiscal?',array('class'=>'required'));
 	print $form->input('eh_fiscal', array(
@@ -22,7 +22,7 @@
 		));
 	?>
 </div>
-<div class="limpar">&nbsp;</div>
+<div class="limpar"></div>
 
 <div class="divs_grupo_2">
 	<div class="div1_2">

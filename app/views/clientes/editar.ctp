@@ -5,7 +5,7 @@
 
 <?php print $form->create('Cliente',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 
-	<div style="float: left; position: absolute;">
+	<div class="grupo_horizontal">
 		<?php
 		print $form->label('tipo_pessoa','Tipo pessoa',array('class'=>'required'));
 		print $form->input('tipo_pessoa', array(
@@ -15,7 +15,7 @@
 			));
 		?>
 	</div>
-	<div style="position: absolute; float: left; margin-left: 150px;">
+	<div class="grupo_horizontal">
 	<?php
 		print $form->label('situacao','Situação',array('class'=>'required'));
 		print $form->input('situacao',array(
@@ -26,28 +26,28 @@
 		?>
 	</div>
 
-<div style="position: absolute; float: left; margin-left: 300px;">
-<?php
-	print $form->label('cliente_categoria_id','Categoria do cliente',array('class'=>'required'));
-	print $form->input('cliente_categoria_id',array(
-		'div'=>false,
-		'label'=>false,
-		'options'=>$opcoes_categoria_cliente
-		));
-	?>
-</div>
-<div style="position: absolute; float: left; margin-left: 500px;">
-<?php
-	print $form->label('empresa_id','Empresa',array('class'=>'required'));
-	print $form->input('empresa_id',array(
-		'div'=>false,
-		'label'=>false,
-		'options'=>$opcoes_empresa
-		));
-	?>
-</div>
+	<div class="grupo_horizontal">
+	<?php
+		print $form->label('cliente_categoria_id','Categoria do cliente',array('class'=>'required'));
+		print $form->input('cliente_categoria_id',array(
+			'div'=>false,
+			'label'=>false,
+			'options'=>$opcoes_categoria_cliente
+			));
+		?>
+	</div>
+	<div class="grupo_horizontal">
+	<?php
+		print $form->label('empresa_id','Empresa',array('class'=>'required'));
+		print $form->input('empresa_id',array(
+			'div'=>false,
+			'label'=>false,
+			'options'=>$opcoes_empresa
+			));
+		?>
+	</div>
 
-<div class="limpar">&nbsp;</div>
+<div class="limpar"></div>
 <div class="divs_grupo_3">
 	<div class="div1_3">
 		<?php

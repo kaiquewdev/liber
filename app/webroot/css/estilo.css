@@ -27,59 +27,49 @@
 	border-radius: 10px;
 }
 
+#banner {
+	
+}
+
+#banner .logo {
+	
+}
+
 #rodape {
 	font-size: 80%;
 	font-style: italic;
 	text-align: center;
 }
 
-/**
- * 	#FIXME a div 2_2 atualmente tem que ser maior que a 1_2
- *  #FIXME o mesmo com a div de tres colunas
- *  #FIXME o layout buga quando o cake retorna com erros em varios campos
- */
 .divs_grupo_2 {
 	background-color: white;
-	clear:both;
 }
 
-.div1_2 {
-	width: 45%;
-	float:left;
-	position: absolute;
-	clear:both;
-}
-
-.div2_2 {
-	width: 45%;
-	float:right;
-	clear:both;
+.div1_2, .div2_2 {
+	margin: 0;
+	padding: 0;
+	float: left;
+	margin-right: 1%;
+	width: 49%;
 }
 
 .divs_grupo_3 {
-	width: 100%;
-	background-color: white;
-	clear:both;
+	background-color: #FFFFFF;
 }
 
-.div1_3 {
-	width: 30%;
-	float:left;
-	position: absolute;
-	clear:both;
+.div1_3, .div2_3, .div3_3 {
+	margin: 0;
+	padding: 0;
+	float: left;
+	margin-right: 1%;
+	width: 32%;
 }
 
-.div2_3 {
-	width: 30%;
-	position: absolute;
-	margin-left: 31%;
-	clear:both;
-}
-
-.div3_3 {
-	width: 30%;
-	float:right;
-	clear:both;
+.grupo_horizontal {
+	margin: 0;
+	padding: 0;
+	float: left;
+	margin-right: 1%;
 }
 
 .botoes {
@@ -104,9 +94,7 @@
 }
 
 .datepicker {
-	/**
-	 * 	para o icone do jquery ui datepicker
-	 */
+	/* para o icone do jquery ui datepicker */
 	width: 95%;
 }
 
@@ -438,12 +426,6 @@ table td.actions a {
 }
 
 /** Formulários **/
-form {
-	clear: both;
-	margin-right: 20px;
-	padding: 0;
-	width: 95%;
-}
 fieldset {
 	border: 1px solid #ccc;
 	margin-bottom: 1em;
@@ -467,8 +449,6 @@ fieldset fieldset div {
 	margin: 0 20px;
 }
 form div {
-	clear: both;
-	margin-bottom: 1em;
 	padding: .5em;
 	vertical-align: text-top;
 }

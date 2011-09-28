@@ -72,11 +72,8 @@
 								<a href="#">Relatórios</a>
 								<ul>
 									<li><?php print $html -> link('Fornecedores cadastrados', "/relatorios/fornecedoresCadastrados");?></li>
-									<li><a href="#">XXXX</a></li>
-									<li><a href="#">XXXX</a></li>
 								</ul>
 							</li>
-							<li><a href="#">XXXX</a></li>
 						</ul>
 					</li>
 					
@@ -109,12 +106,9 @@
 							<li>
 								<a href="#">Relatórios</a>
 								<ul>
-									<li><a href="#">XXXX</a></li>
-									<li><a href="#">XXXX</a></li>
-									<li><a href="#">XXXX</a></li>
+									<li><?php print $html -> link('ABC de vendas', "/relatorios/abcvendas");?></li>
 								</ul>
 							</li>
-							<li><a href="#">XXXX</a></li>
 						</ul>
 					</li>
 					
@@ -179,7 +173,10 @@
 					</li>
 				</ul>
 			</div>
-
+			
+			<div id="banner">
+				<div class="logo">Gfreedom</div>
+			</div>
 		</div>
 		
 		<div id="conteudo">
