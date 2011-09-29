@@ -12,3 +12,4 @@ app/cake.sh
 app/vendors/simpletest
 app/tests
 outros
+app/config/database.php
