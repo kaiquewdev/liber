@@ -4,8 +4,7 @@
 		<?php print $this->Html->charset()."\n"; ?>
 		<title>
 			<?php
-			Configure::load('configuracoes');
-			__(Configure::read('app.nome').' - ');
+			__('Liber - ');
 			print $title_for_layout."\n";
 			?>
 		</title>
@@ -13,8 +12,8 @@
 			print $this->Html->meta('icon');
 			print $this->Html->css('estilo.css');
 			print $this->Html->css('jquery-ui/jquery-ui.css');
+			print $this->Html->script('jquery');
 		?>
-		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
 	</head>
 	
 	<body>
@@ -196,17 +195,22 @@
 			
 		</div>
 		
-		<script src="<?php print $html->url('/', true )?>js/menu.superfish.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php print $html->url('/', true )?>js/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
-		<script src="<?php print $html->url('/', true )?>js/auxiliares.js" type="text/javascript" charset="utf-8"></script>
-		<?php print $scripts_for_layout;?>
+		<?php 
+		print $this->Html->script('menu.superfish.js');
+		print $this->Html->script('jquery-ui.js');
+		print $this->Html->script('auxiliares.js');
+		print $scripts_for_layout;
+		?>
 		<script type="text/javascript">
 			$( function() {
 				$('ul.sf-menu').superfish();
 			});
 		</script>
 		
-		<?php echo $this->element('sql_dump'); ?>
+		<?php
+		print $this->element('sql_dump');
+		$js->writeBuffer(); // Escreve o conteudo em cache dos scripts
+		?>
 	</body>
 	
 </html>

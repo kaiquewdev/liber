@@ -42,7 +42,6 @@ $(function() {
 			adicionar_servico();
 		}
 	});
-
 	
 });
 
@@ -102,16 +101,18 @@ function adicionar_servico() {
 			}
 		});
 		
-		numero_campo = $('#numero_itens_incluidos').val();
+		numero_campo = parseInt($('#numero_itens_incluidos').val());
 		
-		novo_campo = $('<tr>'+
-		'<td><input type="text" class="noinput item_id" name="data[ServicoOrdemItem]['+numero_campo+'][servico_id]" value="'+id+'" /></td>'+
-		'<td><input type="text" class="noinput item_nome" value="'+nome+'" /></td>'+
-		'<td><input type="text" class="noinput item_qtd" name="data[ServicoOrdemItem]['+numero_campo+'][quantidade" value="'+quantidade+'" /></td>'+
-		'<td><input type="text" class="noinput item_val" name="data[ServicoOrdemItem]['+numero_campo+'][valor]" value="'+valor+'" /></td>'+
-		'<td><img src="../img/del24x24.png" class="remover_linha"/></td>'+
-		'</tr>');
-		novo_campo.insertAfter($('#servicos_incluidos tr:last'));
+		novo_campo =
+		'<tr>'+
+			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][servico_id]" value="'+id+'" class="noinput item_id" /> </td>'+
+			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][servico_nome]" value="'+nome+'" class="noinput item_nome" /> </td>'+
+			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][quantidade]" value="'+quantidade+'" class="noinput item_qtd" /> </td>'+
+			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][valor]" value="'+valor+'" class="noinput item_val" /> </td>'+
+			'<td> <img src="../img/del24x24.png" class="remover_linha"/> </td>'+
+		'</tr>'+"\n";
+		
+		$('#servicos_incluidos').append(novo_campo);
 		$('#numero_itens_incluidos').val(numero_campo+1);
 		
 		valor_total = sub_vir_ponto($('#valor_total').html());

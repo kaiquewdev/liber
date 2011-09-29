@@ -2,6 +2,8 @@
 
 <h2 class="descricao_cabecalho">Cadastrar ordem de serviço</h2>
 
+<?php print $form->create('ServicoOrdem',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
+
 <div id="servico_ordem_abas">
 	<ul>
 		<li><a href="#informacoes">Informações</a></li>
@@ -10,7 +12,6 @@
 	</ul>
 	
 	<div id="informacoes">
-		<?php print $form->create('ServicoOrdem',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 		<div class="divs_grupo_2">
 			<div class="div1_2">
 				<?php
@@ -55,7 +56,7 @@
 						</thead>
 						<input type="hidden" id="numero_itens_incluidos" value="0" />
 						<tbody id="servicos_incluidos">
-							<tr><!-- servicos incluidos sao inseridos apos esta linha da tabela --></tr>
+							<!-- aqui ficam os itens incluidos -->
 						</tbody>
 					</table>
 					<b>Valor total: </b> R$<span id="valor_total">0,00</span>
@@ -102,10 +103,10 @@
 		print $form->input('laudo_tecnico',array('label'=>'Laudo técnico'));
 		print $form->input('observacao',array('label'=>'Observação'));
 		?>
+	<div class="limpar">&nbsp;</div>
 	</id> <!-- fim de outros -->
 	
 </div>
-
 <br/>
 
 <?php print $form->end('Gravar'); ?>

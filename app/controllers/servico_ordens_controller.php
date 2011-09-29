@@ -43,10 +43,11 @@ class ServicoOrdensController extends AppController {
 	function cadastrar() {
 		$this->_obter_opcoes();
 		if (! empty($this->data)) {
+			debug ($this->data['data_hora_inicio']);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->ServicoOrdem->saveAll($this->data,array('validate'=>'first'))) {
 				$this->Session->setFlash('Ordem de serviço cadastrada com sucesso.','flash_sucesso');
-				//$this->redirect(array('action'=>'index'));
+				$this->redirect(array('action'=>'index'));
 			}
 			else {
 				$this->Session->setFlash('Erro ao cadastrar a ordem de serviço.','flash_erro');
