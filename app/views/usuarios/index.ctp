@@ -9,7 +9,7 @@
 			<th><?php print $paginator->sort('Cód','id'); ?></th>
 			<th><?php print $paginator->sort('Nome','nome'); ?></th>
 			<th><?php print $paginator->sort('Login','login'); ?></th>
-			<th><?php print $paginator->sort('Permissão','permissao'); ?></th>
+			<th><?php print $paginator->sort('Tipo','tipo'); ?></th>
 			<th><?php print $paginator->sort('Ativo','ativo'); ?></th>
 			<th><?php print $paginator->sort('E-mail','email'); ?></th>
 			<th><?php print $paginator->sort('Último login','ultimo_login'); ?></th>
@@ -26,7 +26,7 @@
 			<td><?php print $usuario['Usuario']['id'];?></td>
 			<td><?php print $html->link($usuario['Usuario']['nome'],'editar/' . $usuario['Usuario']['id']) ;?></td>
 			<td><?php print $usuario['Usuario']['login']; ?></td>
-			<td><?php print $usuario['Usuario']['permissao']; ?></td>
+			<td><?php print $usuario['Usuario']['tipo']; ?></td>
 			<td>
 				<?php
 				if ($usuario['Usuario']['ativo'] == 1) print "Sim";

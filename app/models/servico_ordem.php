@@ -2,7 +2,6 @@
 class ServicoOrdem extends AppModel {
 	var $name = 'ServicoOrdem';
 	var $actsAs = array('AjusteFloat');
-
 	var $belongsTo = array(
 		'Cliente' => array(
 			'className' => 'Cliente',
@@ -16,12 +15,15 @@ class ServicoOrdem extends AppModel {
 			'className' => 'FormaPagamento',
 			'foreignKey' => 'forma_pagamento_id',
 		),
+		'usuario_cadastrou' => array(
+			'className' => 'Usuario',
+			'foreignKey' => 'usuario_cadastrou'
+		),
 		'usuario_alterou' => array(
 			'className' => 'Usuario',
 			'foreignKey' => 'usuario_alterou'
 		)
 	);
-
 	var $hasMany = array(
 		'ServicoOrdemItem' => array(
 			'className' => 'ServicoOrdemItem',
@@ -29,5 +31,28 @@ class ServicoOrdem extends AppModel {
 			//'dependent' => true
 		)
 	);
+	var $validate = array(
+		'cliente_id'  => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório. Somente números'
+		),
+		'usuario_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
+		'forma_pagamento_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
+		'situacao' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
+		'data_hora_inicio' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		)
+	);
+	
 
 }

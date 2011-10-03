@@ -16,6 +16,7 @@ class UsuariosController extends AppController {
 			$this->Usuario->id = $this->Auth->user('id');
 			$h = array('ultimo_login'=>date('Y-m-d H:i:s'));
 			$this->Usuario->save($h);
+			$this->Session->write('Usuario.tipo',$this->Auth->user('tipo'));
 			/* no app_controller desabilitei o redirecionamento automatico
 			 * para que o metodo login fosse executado, redireciono aqui
 			 */
@@ -28,6 +29,7 @@ class UsuariosController extends AppController {
 			$this->Usuario->id = $this->Auth->user('id');
 			$h = array('ultimo_logout'=>date('Y-m-d H:i:s'));
 			$this->Usuario->save($h);
+			$this->Session->destroy();
 		}
 		$this->layout = 'login';
 		// Redireciona o usuário para o action do logoutRedirect
@@ -88,7 +90,7 @@ class UsuariosController extends AppController {
 					$this->data['Usuario']['senha_confirma'] = $old['Usuario']['senha'];
 				}
 				if ($this->Usuario->save($this->data)) {
-					$this->Session->setFlash('Usuário alterado com sucesso.');
+					$this->Session->setFlash('Usuário alterado com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else {

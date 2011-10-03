@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as ordens de serviço cadastradas</h2>
+<h2 class="descricao_cabecalho">Exibindo as ordens de serviço cadastradas</h2>
 
 <?php print $this->element('painel_index'); ?>
 
@@ -11,27 +11,47 @@
 			<th><?php print $paginator->sort('Cliente','cliente_id'); ?></th>
 			<th><?php print $paginator->sort('Usuário cadastrou','usuario_id'); ?></th>
 			<th><?php print $paginator->sort('Situação','situacao'); ?></th>
+			<th><?php print $paginator->sort('Início','data_hora_inicio'); ?></th>
 			<th><?php print $paginator->sort('Fim','data_hora_fim'); ?></th>
 			<th><?php print $paginator->sort('Laudo técnico','laudo_tecnico'); ?></th>
-			<th colspan="1">Ações</th>
+			<th colspan="3">Ações</th>
 		</tr>
 	</thead>
 	
 	<tbody>
 		
-<?php foreach ($consulta as $c): ?>
+<?php
+$s = array(
+'O' => 'Orçamento',
+'E' => 'Em espera',
+'X' => 'Em execução',
+'F' => 'Finalizada',
+'E' => 'Entregue',
+'C' => 'Cancelada');
+foreach ($consulta as $c): ?>
 		
 		<tr>
 			<td><?php print $c['ServicoOrdem']['id'];?></td>
-			<td><?php print $html->link($c['ServicoOrdem']['data_hora_cadastrada'],'editar/' . $c['ServicoOrdem']['id']) ;?></td>
+			<td><?php print $html->link($formatacao->dataHora($c['ServicoOrdem']['data_hora_cadastrada']),'editar/' . $c['ServicoOrdem']['id']) ;?></td>
 			<td><?php print $c['ServicoOrdem']['cliente_id'].' '.$c['Cliente']['nome']; ?></td>
 			<td><?php print $c['ServicoOrdem']['usuario_id'].' '.$c['Usuario']['nome']; ?></td>
-			<td><?php print $c['ServicoOrdem']['situacao']; ?></td>
-			<td><?php print $c['ServicoOrdem']['data_hora_fim']; ?></td>
+			<td><?php print $s[$c['ServicoOrdem']['situacao']]; ?></td>
+			<td><?php print $formatacao->dataHora($c['ServicoOrdem']['data_hora_inicio']); ?></td>
+			<td><?php if (!empty($c['ServicoOrdem']['data_hora_fim'])) print $formatacao->dataHora($c['ServicoOrdem']['data_hora_fim']); ?></td>
 			<td><?php print $c['ServicoOrdem']['laudo_tecnico']; ?></td>
 			
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
 			'alt'=>'Editar','url'=>array('action'=>'editar',$c['ServicoOrdem']['id']))) ?></td>
+			
+			<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
+			'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$c['ServicoOrdem']['id']))) ?></td>
+			
+			<td>
+				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
+				href="'.$html->url(array('action'=>'excluir')).'/'.$c['ServicoOrdem']['id'].'">'.
+				$html->image('del24x24.png', array('alt'=>'Excluir'))
+				.'</a>';?>
+			</td>
 		</tr>
 
 <?php endforeach ?>

@@ -1,24 +1,74 @@
 $(function() {
+
 	$(".datepicker").datetimepicker({
 		showOn: "button",
-		buttonImage: "../img/calendario_icone.gif",
+		buttonImage: "../../img/calendario_icone.gif",
 		buttonImageOnly: true
 	});
 		
 	$('#servico_ordem_abas').tabs();
 	
+	$('#ServicoValor').priceFormat();
+	
 	//pesquisa cliente
-	$("#ServicoOrdemClienteId").autocomplete({
-		source: "pesquisaAjaxCliente/",
+	//autocomplete
+	$("#pesquisar_cliente").autocomplete({
+		source: "../../Clientes/pesquisaAjaxCliente/nome",
 		minLength: 3,
 		select: function(event, ui) {
-			$("#ServicoOrdemClienteId").val(ui.item.codigo);
+			if (ui.item.bloqueado) {
+				alert ('Cliente está bloqueado!');
+				$('#pesquisar_cliente').val('');
+				$("#ServicoOrdemClienteId").val('');
+				event.preventDefault();
+				return null;
+			}
+			if (ui.item.inativo) {
+				alert ('Cliente está inativo!');
+				$('#pesquisar_cliente').val('');
+				$("#ServicoOrdemClienteId").val('');
+				event.preventDefault();
+				return null;
+			}
+			$("#ServicoOrdemClienteId").val(ui.item.id);
+			$('#pesquisar_cliente').val(ui.item.nome);
 		}
+	});
+	// ao digitar o codigo
+	$('#ServicoOrdemClienteId').blur(function(){
+		codigo = $(this).val();
+		if (codigo == null || codigo == '') return null;
+		$.getJSON('../../Clientes/pesquisaAjaxCliente/codigo', {'term': codigo}, function(data) {
+			if (data == null) {
+				alert ('Cliente com o código '+codigo+' não foi encontrado!');
+				$('#pesquisar_cliente').val('');
+				$("#ServicoOrdemClienteId")
+					.val('')
+					.focus();
+			}
+			else { //encontrou resultados
+				data = data[0];
+				if (data.bloqueado) {
+					alert ('Cliente está bloqueado!');
+					$('#pesquisar_cliente').val('');
+					$("#ServicoOrdemClienteId").val('')
+					return null;
+				}
+				if (data.inativo) {
+					alert ('Cliente está inativo!');
+					$('#pesquisar_cliente').val('');
+					$("#ServicoOrdemClienteId").val('')
+					return null;
+				}
+				$("#ServicoOrdemClienteId").val(data.id);
+				$('#pesquisar_cliente').val(data.nome);
+			}
+		});
 	});
 	
 	//a partir daqui refere-se a aba de Serviços
 	$("#ServicoNome").autocomplete({
-		source: "pesquisaAjaxServico/nome",
+		source: "../pesquisaAjaxServico/nome",
 		minLength: 3,
 		select: function(event, ui) {
 			$("#ServicoId").val(ui.item.id);
@@ -36,11 +86,23 @@ $(function() {
 		procurar_por_codigo($(this).val());
 	});
 	
-	$('#servicos_pesquisar').bind('keypress', function(e){
+	$('#servicos_pesquisar input').bind('keypress', function(e){
 		if ( e.keyCode == 13 ) {
 			e.preventDefault();
 			adicionar_servico();
 		}
+	});
+	
+	// verificacoes ao submeter o formulario
+	$('input[type="submit"]').click(function(){
+		registro = 0;
+		$('#servicos_incluidos tr').each(function() {
+			registro++;
+		});
+		if (registro < 1) {
+			alert('É necessário incluir ao menos um serviço!');
+			return false;
+		} 
 	});
 	
 });
@@ -50,7 +112,7 @@ function procurar_por_codigo(codigo) {
 	
 	$(function(){
 		
-		$.getJSON('pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
+		$.getJSON('../pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
 			if (data == null) {
 				alert ('Serviço com o código '+codigo+' não foi encontrado!');
 				$('#ServicoNome').val('');
@@ -115,11 +177,11 @@ function adicionar_servico() {
 		$('#servicos_incluidos').append(novo_campo);
 		$('#numero_itens_incluidos').val(numero_campo+1);
 		
-		valor_total = sub_vir_ponto($('#valor_total').html());
+		valor_total = moeda2numero($('#valor_total').html());
 		valor_total = parseFloat(valor_total);
-		valor_total += quantidade * (sub_vir_ponto(valor));
+		valor_total += quantidade * (moeda2numero(valor));
 		valor_total = arredonda_float(valor_total);
-		$('#valor_total').html(sub_ponto_vir(valor_total));
+		$('#valor_total').html(numero2moeda(valor_total));
 		
 		limpar_pesquisa();
 		$('#ServicoId').focus();
@@ -134,16 +196,16 @@ function remover_linha(objeto_jquery) {
 		quantidade = linha.find('.item_qtd').val();
 		valor = linha.find('.item_val').val();
 		
-		valor_total = sub_vir_ponto($('#valor_total').html());
+		valor_total = moeda2numero($('#valor_total').html());
 		valor_total = parseFloat(valor_total);
-		valor_total -= quantidade * (sub_vir_ponto(valor));
+		valor_total -= quantidade * (moeda2numero(valor));
 		valor_total = arredonda_float(valor_total);
 		
 		if (valor_total == 0) {
 			$('#valor_total').html('0,0');
 		}
 		else {
-			$('#valor_total').html(sub_ponto_vir(valor_total));
+			$('#valor_total').html(numero2moeda(valor_total));
 		}
 		
 		linha.remove();

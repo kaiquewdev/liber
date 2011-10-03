@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as categorias de serviços cadastradas</h2>
+<h2 class="descricao_cabecalho">Exibindo as categorias de serviços cadastradas</h2>
 
 <?php print $this->element('painel_index'); ?>
 

@@ -2,12 +2,12 @@
 
 class FornecedoresController extends AppController {
 	var $name = 'Fornecedores'; // PHP 4
-	var $helpers = array('Estados','Javascript');
-	var $components = array('Sanitizacao');
+	var $helpers = array('Estados','Javascript','Ajax');
+	var $components = array('Sanitizacao','RequestHandler');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'Fornecedor.id' => 'asc'
+			'Fornecedor.id' => 'desc'
 		)
 	);
 	var $opcoes_categoria_fornecedor = array();
@@ -87,6 +87,12 @@ class FornecedoresController extends AppController {
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
 			$url = array('controller'=>'Fornecedores','action'=>'pesquisar');
+			//convertendo caracteres especiais
+			if( is_array($this->data['Fornecedor']) ) {
+				foreach($this->data['Fornecedor'] as &$fornecedor) {
+					$fornecedor = urlencode($fornecedor);
+				}
+			}
 			$params = array_merge($url,$this->data['Fornecedor']);
 			$this->redirect($params);
 		}
@@ -127,6 +133,41 @@ class FornecedoresController extends AppController {
 		}
 		else {
 			$this->Session->setFlash('Erro: nenhum Fornecedor informado.','flash_erro');
+		}
+	}
+
+	function pesquisaAjaxFornecedor($campo_a_pesquisar,$termo = null) {
+		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
+		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
+		else return null;
+		if (! isset($termo)) $termo = $this->params['url']['term'];
+		if ( $this->RequestHandler->isAjax() ) {
+			$i=0;
+			$resultados=array();
+			$retorno=array();
+			$r = array();
+   			Configure::write ('debug',0);
+   			$this->autoRender=false;
+			if ($campo == 'id') {
+				$condicoes = array('Fornecedor.id'=>$termo);
+			}
+			else {
+				$condicoes = array("Fornecedor.$campo LIKE" => '%'.$termo.'%');
+			}
+			$resultados = $this->Fornecedor->find('all',array('fields' => array('id','nome','situacao'),'conditions'=>$condicoes));
+			if (!empty($resultados)) {
+				foreach ($resultados as $r) {
+					$retorno[$i]['label'] = $r['Fornecedor']['nome'];
+					$retorno[$i]['value'] = $r['Fornecedor'][$campo];
+					$retorno[$i]['id'] = $r['Fornecedor']['id'];
+					$retorno[$i]['nome'] = $r['Fornecedor']['nome'];
+					$retorno[$i]['bloqueado'] = ($r['Fornecedor']['situacao'] == 'B') ? 1 : 0;
+					$retorno[$i]['inativo'] = ($r['Fornecedor']['situacao'] == 'I') ? 1 : 0;
+					$retorno[$i]['situacao'] = $r['Fornecedor']['situacao'];
+					$i++; 
+				}
+				print json_encode($retorno);
+			}
 		}
 	}
 	

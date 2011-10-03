@@ -9,14 +9,14 @@
  * C = Cancelada
  */
 
-class ServicoOrdensController extends AppController {
-	var $name = 'ServicoOrdens';
+class PedidoVendasController extends AppController {
+	var $name = 'PedidoVendas';
 	var $components = array('Sanitizacao','RequestHandler');
 	var $helpers = array('Estados','Ajax', 'Javascript','Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'ServicoOrdem.id' => 'desc'
+			'PedidoVenda.id' => 'desc'
 		)
 	);
 	
@@ -61,7 +61,7 @@ class ServicoOrdensController extends AppController {
 	}	
 	
 	function index() {
-		$dados = $this->paginate('ServicoOrdem');
+		$dados = $this->paginate('PedidoVenda');
 		$this->set('consulta',$dados);
 	}
 	
@@ -70,15 +70,15 @@ class ServicoOrdensController extends AppController {
 	* o insiro na pagina
 	*/
 	function _recupera_servicos_inseridos() {
-		if ($this->data['ServicoOrdemItem']) {
-			$itens = $this->data['ServicoOrdemItem'];
+		if ($this->data['PedidoVendaItem']) {
+			$itens = $this->data['PedidoVendaItem'];
 			$i = 0;
 			$valor_total = 0;
 			$campos_ja_inseridos = array();
 			foreach ($itens as $item) {
-				$this->loadModel('Servico');
-				$ret = $this->Servico->findById($item['servico_id']);
-				$n = $ret['Servico']['nome'];
+				$this->loadModel('Produto');
+				$ret = $this->Produto->findById($item['servico_id']);
+				$n = $ret['Produto']['nome'];
 				$campos_ja_inseridos[$i] = array('servico_id'=>$item['servico_id']);
 				$campos_ja_inseridos[$i] += array('servico_nome'=>$n);
 				$campos_ja_inseridos[$i] += array('quantidade'=>$item['quantidade']);
@@ -93,7 +93,7 @@ class ServicoOrdensController extends AppController {
 	
 	function _calcula_valor_total($data) {
 		$valor_total = 0;
-		foreach ($data['ServicoOrdemItem'] as $c) {
+		foreach ($data['PedidoVendaItem'] as $c) {
 			$valor_total += ($c['quantidade']) * ( preg_replace('/,/', '.', $c['valor']) );
 		}
 		return $valor_total;
@@ -107,18 +107,18 @@ class ServicoOrdensController extends AppController {
 			$this->loadModel('Cliente');
 			$r = $this->Cliente->find('first',
 				array('conditions'=>array(
-					'Cliente.id' => $this->data['ServicoOrdem']['cliente_id'],
+					'Cliente.id' => $this->data['PedidoVenda']['cliente_id'],
 					'Cliente.situacao' => 'A')));
 			if (empty($r)) {
 				$this->Session->setFlash('Erro. Cliente não existe ou não está ativo.','flash_erro');
 				return null;
 			}
-			$this->data['ServicoOrdem'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
-			$this->data['ServicoOrdem'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
+			$this->data['PedidoVenda'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
+			$this->data['PedidoVenda'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
 			$valor_total = $this->_calcula_valor_total($this->data);
-			$this->data['ServicoOrdem'] += array ('valor_total' => $valor_total);
+			$this->data['PedidoVenda'] += array ('valor_total' => $valor_total);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->ServicoOrdem->saveAll($this->data,array('validate'=>'first'))) {
+			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
 				$this->Session->setFlash('Ordem de serviço cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
@@ -132,7 +132,7 @@ class ServicoOrdensController extends AppController {
 		$this->set("title_for_layout","Ordem de serviço"); 
 		$this->_obter_opcoes();
 		if (empty ($this->data)) {
-			$this->data = $this->ServicoOrdem->read();
+			$this->data = $this->PedidoVenda->read();
 			if ( ! $this->data) {
 				$this->Session->setFlash('Ordem de serviço não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
@@ -143,30 +143,30 @@ class ServicoOrdensController extends AppController {
 			$this->loadModel('Cliente');
 			$r = $this->Cliente->find('first',
 				array('conditions'=>array(
-					'Cliente.id' => $this->data['ServicoOrdem']['cliente_id'],
+					'Cliente.id' => $this->data['PedidoVenda']['cliente_id'],
 					'Cliente.situacao' => 'A')));
 			if (empty($r)) {
 				$this->Session->setFlash('Erro. Cliente não existe ou não está ativo.','flash_erro');
 				return null;
 			}
 			//a ordem de serviço pode ser editada apenas se nao tiver sido cancelada ou entregue
-			$s = strtoupper($this->ServicoOrdem->field('situacao'));
+			$s = strtoupper($this->PedidoVenda->field('situacao'));
 			if ( ($s == 'E') || ($s == 'C') ) {
 				$this->Session->setFlash('A situação desta ordem de serviço impede que seja editada','flash_erro');
 				return false;
 			}
 			$this->_recupera_servicos_inseridos();
-			$this->data['ServicoOrdem']['id'] = $id;
-			$this->data['ServicoOrdem'] += array ('usuario_alterou' => $this->Auth->user('id'));
+			$this->data['PedidoVenda']['id'] = $id;
+			$this->data['PedidoVenda'] += array ('usuario_alterou' => $this->Auth->user('id'));
 			$valor_total = $this->_calcula_valor_total($this->data);
-			$this->data['ServicoOrdem'] += array ('valor_total' => $valor_total);
+			$this->data['PedidoVenda'] += array ('valor_total' => $valor_total);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->ServicoOrdem->save($this->data)) {
+			if ($this->PedidoVenda->save($this->data)) {
 				if ($s == 'F' || $s == 'E') { //se a situacao for Finalizada ou Entregue
-				$fim = $this->ServicoOrdem->field('data_hora_fim');
+				$fim = $this->PedidoVenda->field('data_hora_fim');
 					if (empty($fim)) {
 						// se a data final nao foi preenchida
-						$this->ServicoOrdem->save(array('data_hora_fim'=>date('Y-m-d H:i:s')));
+						$this->PedidoVenda->save(array('data_hora_fim'=>date('Y-m-d H:i:s')));
 					}
 				}
 				$this->Session->setFlash('Ordem de serviço atualizada com sucesso.','flash_sucesso');
@@ -180,18 +180,18 @@ class ServicoOrdensController extends AppController {
 	
 	function detalhar($id = null) {
 		$this->set("title_for_layout","Ordem de serviço");
-		$consulta = $this->ServicoOrdem->findById($id);
+		$consulta = $this->PedidoVenda->findById($id);
 		if (empty($consulta)) {
 			$this->Session->setFlash('Ordem de serviço não encontrada','flash_erro');
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
 			// adiciono, no array resultante, o nome do servico correspondente
-			$this->loadModel('Servico');
+			$this->loadModel('Produto');
 			$i = 0;
-			foreach ($consulta['ServicoOrdemItem'] as $x) {
-				$nome = $this->Servico->field('nome',array('Servico.id'=>$x['servico_id']));
-				$consulta['ServicoOrdemItem'][$i]['servico_nome'] = $nome;
+			foreach ($consulta['PedidoVendaItem'] as $x) {
+				$nome = $this->Produto->field('nome',array('Produto.id'=>$x['servico_id']));
+				$consulta['PedidoVendaItem'][$i]['servico_nome'] = $nome;
 				$i++;
 			}
 			$this->set('c',$consulta);
@@ -200,8 +200,8 @@ class ServicoOrdensController extends AppController {
 
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			$this->ServicoOrdem->id = $id;
-			$r = $this->ServicoOrdem->field('situacao');
+			$this->PedidoVenda->id = $id;
+			$r = $this->PedidoVenda->field('situacao');
 			if (empty ($r)) {
 				$this->Session->setFlash('Ordem de serviço não encontrada','flash_erro');
 				$this->redirect(array('action'=>'pesquisar'));
@@ -214,8 +214,8 @@ class ServicoOrdensController extends AppController {
 				$this->redirect(array('action'=>'index'));
 				return false;
 			}
-			if ($this->ServicoOrdem->ServicoOrdemItem->deleteAll(array('ServicoOrdemItem.servico_ordem_id'=>$id))) {
-				if ($this->ServicoOrdem->delete($id)) {
+			if ($this->PedidoVenda->PedidoVendaItem->deleteAll(array('PedidoVendaItem.servico_ordem_id'=>$id))) {
+				if ($this->PedidoVenda->delete($id)) {
 					$this->Session->setFlash("Ordem de serviço número $id foi excluída com sucesso.",'flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
@@ -235,18 +235,18 @@ class ServicoOrdensController extends AppController {
 		$this->_obter_opcoes_pesquisa();
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
-			$url = array('controller'=>'ServicoOrdens','action'=>'pesquisar');
+			$url = array('controller'=>'PedidoVendas','action'=>'pesquisar');
 			//trocandos as barras dos campos de data, pois estes parametros, caso existam, vou para a url
-			if (!empty($this->data['ServicoOrdem']['data_hora_cadastrada'])) $this->data['ServicoOrdem']['data_hora_cadastrada'] = preg_replace('/\//', '-', $this->data['ServicoOrdem']['data_hora_cadastrada']);
-			if (!empty($this->data['ServicoOrdem']['data_hora_inicio'])) $this->data['ServicoOrdem']['data_hora_inicio'] = preg_replace('/\//', '-', $this->data['ServicoOrdem']['data_hora_inicio']);
-			if (!empty($this->data['ServicoOrdem']['data_hora_fim'])) $this->data['ServicoOrdem']['data_hora_fim'] = preg_replace('/\//', '-', $this->data['ServicoOrdem']['data_hora_fim']);
+			if (!empty($this->data['PedidoVenda']['data_hora_cadastrada'])) $this->data['PedidoVenda']['data_hora_cadastrada'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_cadastrada']);
+			if (!empty($this->data['PedidoVenda']['data_hora_inicio'])) $this->data['PedidoVenda']['data_hora_inicio'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_inicio']);
+			if (!empty($this->data['PedidoVenda']['data_hora_fim'])) $this->data['PedidoVenda']['data_hora_fim'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_fim']);
 			// codificando os parametros
-			if( is_array($this->data['ServicoOrdem']) ) {
-				foreach($this->data['ServicoOrdem'] as &$servico_ordem) {
+			if( is_array($this->data['PedidoVenda']) ) {
+				foreach($this->data['PedidoVenda'] as &$servico_ordem) {
 					$servico_ordem = urlencode($servico_ordem);
 				}
 			}
-			$params = array_merge($url,$this->data['ServicoOrdem']);
+			$params = array_merge($url,$this->data['PedidoVenda']);
 			$this->redirect($params);
 		}
 		
@@ -254,33 +254,33 @@ class ServicoOrdensController extends AppController {
 			//a instrucao acima redirecionou para cá
 			$dados = $this->params['named'];
 			$condicoes=array();
-			if (! empty($dados['id'])) $condicoes[] = array('ServicoOrdem.id'=>$dados['id']);
-			if (! empty($dados['cliente_id'])) $condicoes[] = array('ServicoOrdem.cliente_id'=>$dados['cliente_id']);
+			if (! empty($dados['id'])) $condicoes[] = array('PedidoVenda.id'=>$dados['id']);
+			if (! empty($dados['cliente_id'])) $condicoes[] = array('PedidoVenda.cliente_id'=>$dados['cliente_id']);
 			if (! empty($dados['cliente_nome'])) $condicoes[] = array('Cliente.nome LIKE'=>'%'.$dados['cliente_nome'].'%');
-			if (! empty($dados['tecnico'])) $condicoes[] = array('ServicoOrdem.usuario_id'=>$dados['tecnico']);
-			if (! empty($dados['situacao'])) $condicoes[] = array('ServicoOrdem.situacao'=>$dados['situacao']);
-			if (! empty($dados['valor_total'])) $condicoes[] = array('ServicoOrdem.valor_total'=>$dados['valor_total']);
-			if (! empty($dados['usuario_cadastrou'])) $condicoes[] = array('ServicoOrdem.usuario_cadastrou'=>$dados['usuario_cadastrou']);
+			if (! empty($dados['tecnico'])) $condicoes[] = array('PedidoVenda.usuario_id'=>$dados['tecnico']);
+			if (! empty($dados['situacao'])) $condicoes[] = array('PedidoVenda.situacao'=>$dados['situacao']);
+			if (! empty($dados['valor_total'])) $condicoes[] = array('PedidoVenda.valor_total'=>$dados['valor_total']);
+			if (! empty($dados['usuario_cadastrou'])) $condicoes[] = array('PedidoVenda.usuario_cadastrou'=>$dados['usuario_cadastrou']);
 			if (! empty($dados['data_hora_cadastrada'])) {
 				$ret = explode('-', $dados['data_hora_cadastrada']);
 				$dados['data_hora_cadastrada'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
 				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
-				$condicoes[] = array('ServicoOrdem.data_hora_cadastrada BETWEEN ? AND ?'=>array($dados['data_hora_cadastrada'].' 00:00:00',$dados['data_hora_cadastrada'].' 23:59:59'));
+				$condicoes[] = array('PedidoVenda.data_hora_cadastrada BETWEEN ? AND ?'=>array($dados['data_hora_cadastrada'].' 00:00:00',$dados['data_hora_cadastrada'].' 23:59:59'));
 			}
 			if (! empty($dados['data_hora_inicio'])) {
 				$ret = explode('-', $dados['data_hora_inicio']);
 				$dados['data_hora_inicio'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
 				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
-				$condicoes[] = array('ServicoOrdem.data_hora_inicio BETWEEN ? AND ?'=>array($dados['data_hora_inicio'].' 00:00:00',$dados['data_hora_inicio'].' 23:59:59'));
+				$condicoes[] = array('PedidoVenda.data_hora_inicio BETWEEN ? AND ?'=>array($dados['data_hora_inicio'].' 00:00:00',$dados['data_hora_inicio'].' 23:59:59'));
 			}
 			if (! empty($dados['data_hora_fim'])) {
 				 $ret = explode('-', $dados['data_hora_fim']);
 				$dados['data_hora_fim'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
 				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
-				$condicoes[] = array('ServicoOrdem.data_hora_fim BETWEEN ? AND ?'=>array($dados['data_hora_fim'].' 00:00:00',$dados['data_hora_fim'].' 23:59:59'));
+				$condicoes[] = array('PedidoVenda.data_hora_fim BETWEEN ? AND ?'=>array($dados['data_hora_fim'].' 00:00:00',$dados['data_hora_fim'].' 23:59:59'));
 			}
 			if (! empty ($condicoes)) {
-				$resultados = $this->paginate('ServicoOrdem',$condicoes);
+				$resultados = $this->paginate('PedidoVenda',$condicoes);
 				if (! empty($resultados)) {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
@@ -296,7 +296,7 @@ class ServicoOrdensController extends AppController {
 		}
 	}
 	
-	function pesquisaAjaxServico($campo_a_pesquisar,$termo = null) {
+	function pesquisaAjaxProduto($campo_a_pesquisar,$termo = null) {
 		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
 		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
 		else return null;
@@ -308,20 +308,20 @@ class ServicoOrdensController extends AppController {
 			$r = array();
    			Configure::write ('debug',0);
    			$this->autoRender=false;
-			$this->loadModel('Servico');
+			$this->loadModel('Produto');
 			if ($campo == 'id') {
-				$condicoes = array('Servico.id'=>$termo);
+				$condicoes = array('Produto.id'=>$termo);
 			}
 			else {
-				$condicoes = array("Servico.$campo LIKE" => '%'.$termo.'%');
+				$condicoes = array("Produto.$campo LIKE" => '%'.$termo.'%');
 			}
-			$resultados = $this->Servico->find('all',array('fields' => array('id','nome','valor'),'conditions'=>$condicoes));
+			$resultados = $this->Produto->find('all',array('fields' => array('id','nome','valor'),'conditions'=>$condicoes));
 			if (!empty($resultados)) {
 				foreach ($resultados as $r) {
-					$retorno[$i]['label'] = $r['Servico']['nome'];
-					$retorno[$i]['value'] = $r['Servico'][$campo];
-					$retorno[$i]['id'] = $r['Servico']['id'];
-					$retorno[$i]['valor'] = $r['Servico']['valor'];
+					$retorno[$i]['label'] = $r['Produto']['nome'];
+					$retorno[$i]['value'] = $r['Produto'][$campo];
+					$retorno[$i]['id'] = $r['Produto']['id'];
+					$retorno[$i]['valor'] = $r['Produto']['valor'];
 					$i++; 
 				}
 				print json_encode($retorno);

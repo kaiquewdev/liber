@@ -5,12 +5,12 @@
 	<div class="div1_2">
 		<?php
 		print $form->input('nome',array('label'=>'Nome'));
+		print $form->input('valor',array('label'=>'Valor'));
 		?>
 	</div>
 	<div class="div2_2">
 		<?php
 		print $form->input('servico_categoria_id',array('label'=>'Categoria','options'=>$opcoes_servico_categoria));
-		print $form->input('valor',array('label'=>'Valor'));
 		?>
 	</div>
 </div>

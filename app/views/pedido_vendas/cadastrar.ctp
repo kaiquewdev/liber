@@ -1,11 +1,11 @@
 <?php
-$javascript->link('servico_ordem-editar.js',false);
+$javascript->link('servico_ordem-cadastrar.js',false);
 $javascript->link('formatar_moeda.js',false);
 ?>
 
-<h2 class="descricao_cabecalho">Editar ordem de serviço</h2>
+<h2 class="descricao_cabecalho">Cadastrar ordem de serviço</h2>
 
-<?php print $form->create('ServicoOrdem',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
+<?php print $form->create('PedidoVenda',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 
 <div id="servico_ordem_abas">
 	<ul>
@@ -41,9 +41,9 @@ $javascript->link('formatar_moeda.js',false);
 				'O' => 'Orçamento',
 				'E' => 'Em espera',
 				'X' => 'Em execução',
-				'F' => 'Finalizada',
+				/*'F' => 'Finalizada',
 				'E' => 'Entregue',
-				'C' => 'Cancelada'
+				'C' => 'Cancelada',*/
 				)));
 				print $form->input('usuario_id',array('label'=>'Técnico','options'=>$opcoes_tecnico));
 				?>
@@ -70,18 +70,20 @@ $javascript->link('formatar_moeda.js',false);
 						</thead>
 						<tbody id="servicos_incluidos">
 							<?php //aqui ficam os itens incluidos
-							$i = 0;
-							$valor_total = 0;
-							foreach ($campos_ja_inseridos as $item) {
-								print '<tr>'.
-								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][servico_id]" value="'.$item['servico_id'].'" class="noinput item_id" /> </td>'.
-								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][servico_nome]" value="'.$item['servico_nome'].'" class="noinput item_nome" /> </td>'.
-								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][quantidade]" value="'.$item['quantidade'].'" class="noinput item_qtd" /> </td>'.
-								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][valor]" value="'.$item['valor'].'" class="noinput item_val" /> </td>'.
-								'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
-								'</tr>'."\n";
-								$i++;
-								$valor_total += $item['quantidade'] * (preg_replace('/,/', '.', $item['valor']));
+							if (isset($campos_ja_inseridos)) {
+								$i = 0;
+								$valor_total = 0;
+								foreach ($campos_ja_inseridos as $item) {
+									print '<tr>'.
+									'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][servico_id]" value="'.$item['servico_id'].'" class="noinput item_id" /> </td>'.
+									'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][servico_nome]" value="'.$item['servico_nome'].'" class="noinput item_nome" /> </td>'.
+									'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][quantidade]" value="'.$item['quantidade'].'" class="noinput item_qtd" /> </td>'.
+									'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][valor]" value="'.$item['valor'].'" class="noinput item_val" /> </td>'.
+									'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
+									'</tr>'."\n";
+									$i++;
+									$valor_total += $item['quantidade'] * (preg_replace('/,/', '.', $item['valor']));
+								}
 							}
 							?>
 						</tbody>

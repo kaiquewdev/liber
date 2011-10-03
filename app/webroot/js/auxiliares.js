@@ -47,7 +47,7 @@ function submissaoFormulario(objeto) {
 }
 
 function dialogoDeletar(objeto) {
-	// #FIXME tá bugado, similar o click
+	// #FIXME tá bugado, simular o click
 	$(function() {
 		var $dialogo = $('<div title="Excluir" style="display:none"><p><span class="ui-icon ui-icon-alert"'+
 		'style="float:left; margin:0 7px 20px 0;"></span>'+
@@ -86,29 +86,32 @@ function arredonda_float(x,n){
 	return Math.round(x*Math.pow(10,n))/Math.pow(10,n);
 }
 
-/** 
- * Retorna variavel com as virgulas substituidas por pontos
- * @param variavel
- * @return variavel
+/**
+ * converte uma string no formato 5.123,34 para um numero (int ou float)
+ * que possa ser utilizado em calculos
  */
-function sub_vir_ponto(variavel) {
-	if (variavel != null && variavel != '') {
-		return variavel.replace(',','.');
-	}
+function moeda2numero (variavel) {
+	variavel = variavel.replace('.','');
+	variavel = variavel.replace(',','.');
+	variavel = parseFloat (variavel);
+	return variavel;
 }
 
-/** 
- * Retorna variavel com os pontos substituidos por virgulas
- * @param variavel
- * @return variavel
+/**
+ * converte uma variavel int ou float para a representação brasileira
+ * de moeda
  */
-function sub_ponto_vir(variavel) {
+function numero2moeda (variavel) {
 	if (variavel != null && variavel != '') {
 		variavel = variavel + ''; //converte para string
 		return variavel.replace('.',',');
 	}
 }
 
+/**
+ * Retorna true se variavel é numero inteiro,
+ * false caso contrario
+ */
 function eh_inteiro(variavel) {
 	if((parseFloat(variavel) == parseInt(variavel)) && !isNaN(variavel)){
 		return true;
@@ -126,6 +129,27 @@ $(function() {
 		
 	});
 	*/
+	
+	/**
+	 * Enter emulando TAB
+	 */
+	/*textboxes = $("input, select, textarea");
+	if ($.browser.mozilla) {
+		$(textboxes).keypress (checkForEnter);
+	} else {
+		$(textboxes).keydown (checkForEnter);
+	}
+	function checkForEnter (event) {
+		if (event.keyCode == 13) {
+			currentBoxNumber = textboxes.index(this);
+			if (textboxes[currentBoxNumber + 1] != null) {
+				nextBox = textboxes[currentBoxNumber + 1]
+				nextBox.focus();
+				event.preventDefault();
+				return false;
+			}
+		}
+	}*/
 
 });
 

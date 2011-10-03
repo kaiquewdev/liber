@@ -1,3 +1,36 @@
+<script type="text/javascript">
+		$(function(){
+			//pesquisa cliente
+			//autocomplete
+			$("#ClienteNome").autocomplete({
+				source: "<?php print $html->url('/',true); ?>/Clientes/pesquisaAjaxCliente/nome",
+				minLength: 3,
+				select: function(event, ui) {
+					$("#ClienteId").val(ui.item.id);
+					$('#ClienteNome').val(ui.item.nome);
+				}
+			});
+			// ao digitar o codigo
+			$('#ClienteId').blur(function(){
+				codigo = $(this).val();
+				if (codigo == null || codigo == '') return null;
+				$.getJSON('<?php print $html->url('/',true); ?>/Clientes/pesquisaAjaxCliente/codigo', {'term': codigo}, function(data) {
+					if (data == null) {
+						alert ('Cliente com o código '+codigo+' não foi encontrado!');
+						$('#ClienteNome').val('');
+						$("#ClienteId")
+							.val('')
+							.focus();
+					}
+					else { //encontrou resultados
+						data = data[0];
+						$("#ClienteId").val(data.id);
+						$('#ClienteNome').val(data.nome);
+					}
+				});
+			});
+		});
+</script>
 <h2 class="descricao_cabecalho">Pesquisar cliente</h2>
 
 <?php
@@ -10,8 +43,12 @@ print $form->create(null,array('controller'=>'clientes','action'=>'pesquisar','a
 <div class="divs_grupo_2">
 	
 	<div class="div1_2">
+		<div>
+			<label style="">Código / nome</label>
+			<input style="float:left; width: 10%;" id="ClienteId" type="text" name="data[Cliente][id]" />
+			<input style="margin-left: 1%; width: 80%" id="ClienteNome" type="text" name="data[Cliente][nome]" />
+		</div>
 		<?php
-		print '<div>'.$form->input('nome', array('label'=>'Nome','div'=>false)).'</div>';
 		print '<div>'.$form->input('nome_fantasia', array('label'=>'Nome fantasia','div'=>false)).'</div>';
 		print '<div>'.$form->input('bairro',array('div'=>false)).'</div>';
 		print '<div>'.$form->input('cidade',array('div'=>false)).'</div>';

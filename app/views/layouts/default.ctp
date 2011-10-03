@@ -174,7 +174,7 @@
 			</div>
 			
 			<div id="banner">
-				<div class="logo">Gfreedom</div>
+				<div class="logo">Liber</div>
 			</div>
 		</div>
 		
@@ -190,7 +190,7 @@
 			<?php print $content_for_layout ?>
 		
 			<div id="rodape">
-				<?php print Configure::read('app.nome') ?> - criado por <a href="mailto:tobias@gnu.eti.br?subject=Gfreedom">Tobias</a>
+				
 			</div>
 			
 		</div>
@@ -209,7 +209,8 @@
 		
 		<?php
 		print $this->element('sql_dump');
-		$js->writeBuffer(); // Escreve o conteudo em cache dos scripts
+		//#TODO no cakebook diz que é preciso usar isto, verificar
+		//$js->writeBuffer(); // Escreve o conteudo em cache dos scripts
 		?>
 	</body>
 	

@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as empresas cadastradas</h2>
+<h2 class="descricao_cabecalho">Exibindo as empresas cadastradas</h2>
 
 <?php print $this->element('painel_index'); ?>
 

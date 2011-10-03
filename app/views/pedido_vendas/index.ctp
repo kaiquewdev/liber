@@ -1,0 +1,78 @@
+
+<h2 class="descricao_cabecalho">Exibindo os últimos pedidos de venda</h2>
+
+<?php print $this->element('painel_index'); ?>
+
+<table>
+	<thead>
+		<tr>
+			<th><?php print $paginator->sort('Código','id'); ?></th>
+			<th><?php print $paginator->sort('Cadastrado','data_hora_cadastrado'); ?></th>
+			<th><?php print $paginator->sort('Cliente','cliente_id'); ?></th>
+			<th><?php print $paginator->sort('Usuário vendeu','usuario_vendeu'); ?></th>
+			<th><?php print $paginator->sort('Forma de pagamento','forma_pagamento_id'); ?></th>
+			<th><?php print $paginator->sort('Data venda','data_venda'); ?></th>
+			<th><?php print $paginator->sort('Frete','custo_frete'); ?></th>
+			<th><?php print $paginator->sort('Seguro','custo_seguro'); ?></th>
+			<th><?php print $paginator->sort('Outros custos','custo_outros'); ?></th>
+			<th><?php print $paginator->sort('Desconto','Desconto'); ?></th>
+			<th><?php print $paginator->sort('Valor total','valor_total'); ?></th>
+			<th><?php print $paginator->sort('Situação','situacao'); ?></th>
+			<th colspan="3">Ações</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+		
+<?php
+$s = array(
+'A' => 'Aberto',
+'O' => 'Orçamento',
+'C' => 'Cancelado',
+'V' => 'Vendido');
+foreach ($consulta as $c): ?>
+		
+		<tr>
+			<td><?php print $c['PedidoVenda']['id'];?></td>
+			<td><?php print $html->link($formatacao->dataHora($c['PedidoVenda']['data_hora_cadastrado']),'editar/' . $c['PedidoVenda']['id']) ;?></td>
+			<td><?php print $c['PedidoVenda']['cliente_id'].' '.$c['Cliente']['nome']; ?></td>
+			<td><?php print $c['PedidoVenda']['usuario_vendeu'].' '.$c['Usuario']['nome']; ?></td>
+			<td><?php print $c['PedidoVenda']['forma_pagamento_id'].' '.$c['FormaPagamento']['nome']; ?></td>
+			<td><?php print $formatacao->dataHora($c['PedidoVenda']['data_venda']); ?></td>
+			<td><?php print $c['PedidoVenda']['custo_frete']; ?></td>
+			<td><?php print $c['PedidoVenda']['custo_seguro']; ?></td>
+			<td><?php print $c['PedidoVenda']['custo_outros']; ?></td>
+			<td><?php print $c['PedidoVenda']['desconto']; ?></td>
+			<td><?php print $c['PedidoVenda']['valor_total']; ?></td>
+			<td><?php print $s[$c['PedidoVenda']['situacao']]; ?></td>
+			
+			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
+			'alt'=>'Editar','url'=>array('action'=>'editar',$c['PedidoVenda']['id']))) ?></td>
+			
+			<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
+			'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$c['PedidoVenda']['id']))) ?></td>
+			
+			<td>
+				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
+				href="'.$html->url(array('action'=>'excluir')).'/'.$c['PedidoVenda']['id'].'">'.
+				$html->image('del24x24.png', array('alt'=>'Excluir'))
+				.'</a>';?>
+			</td>
+		</tr>
+
+<?php endforeach; ?>
+
+	</tbody>
+</table>
+
+<?php
+print $paginator->counter(array(
+	'format' => 'Exibindo %current% registros de um total de %count% registros. Página %page% de %pages%.'
+)); 
+
+print '<br/>';
+
+print $paginator->prev('« Anterior ', null, null, array('class' => 'disabled'));
+print $paginator->next(' Próximo »', null, null, array('class' => 'disabled'));
+
+?>

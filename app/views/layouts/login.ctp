@@ -3,14 +3,15 @@
 	<head>
 		<?php print $this->Html->charset()."\n"; ?>
 		<title>
-			Gfreedom - login
+			Liber - login
 		</title>
 		<?php
 			print $this->Html->meta('icon');
 			print $this->Html->css('login.css');
 			print $scripts_for_layout;
+			print $this->Html->script('jquery');
 		?>
-		<script src="<?php print $html->url('/', true )?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
+		
 		<script type="text/javascript">
 			$(document).ready(function() {
 				if ($('#UsuarioLogin').val() == undefined || $('#UsuarioLogin').val() == "") {

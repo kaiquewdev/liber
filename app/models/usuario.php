@@ -31,9 +31,13 @@ class Usuario extends AppModel {
 			'className' => 'PedidoVenda',
 			'foreignKey' => 'usuario_alterou'
 		),
-		'ServicoOrdens_cadastrou' => array(
+		'ServicoOrdens_tecnico' => array(
 			'className' => 'ServicoOrdem',
 			'foreignKey' => 'usuario_id'
+		),
+		'ServicoOrdens_cadastrou' => array(
+			'className' => 'ServicoOrdem',
+			'foreignKey' => 'usuario_cadastrou'
 		),
 		'ServicoOrdens_alterou' => array(
 			'className' => 'ServicoOrdem',
@@ -74,7 +78,7 @@ class Usuario extends AppModel {
 			'rule' => array('email'),
 			'message' => 'E-mail inválido.'
 		),
-		'permissao' => array(
+		'tipo' => array(
 			'allowEmpty' => false,
 			'rule' => array('inList', array('0','1','2','3','4','5')),
 			'message' => 'Campo obrigatório.'

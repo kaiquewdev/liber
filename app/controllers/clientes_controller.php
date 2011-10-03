@@ -2,12 +2,12 @@
 
 class ClientesController extends AppController {
 	var $name = 'Clientes'; // PHP 4
-	var $helpers = array('Estados','Javascript');
-	var $components = array('Sanitizacao');
+	var $components = array('Sanitizacao','RequestHandler');
+	var $helpers = array('Estados','Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'Cliente.id' => 'asc'
+			'Cliente.id' => 'desc'
 		)
 	);
 	var $opcoes_categoria_cliente = array();
@@ -87,6 +87,12 @@ class ClientesController extends AppController {
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
 			$url = array('controller'=>'Clientes','action'=>'pesquisar');
+			//convertendo caracteres especiais
+			if( is_array($this->data['Cliente']) ) {
+				foreach($this->data['Cliente'] as &$cliente) {
+					$cliente = urlencode($cliente);
+				}
+			}
 			$params = array_merge($url,$this->data['Cliente']);
 			$this->redirect($params);
 		}
@@ -130,6 +136,41 @@ class ClientesController extends AppController {
 		}
 	}
 	
+	function pesquisaAjaxCliente($campo_a_pesquisar,$termo = null) {
+		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
+		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
+		else return null;
+		if (! isset($termo)) $termo = $this->params['url']['term'];
+		if ( $this->RequestHandler->isAjax() ) {
+			$i=0;
+			$resultados=array();
+			$retorno=array();
+			$r = array();
+   			Configure::write ('debug',0);
+   			$this->autoRender=false;
+			if ($campo == 'id') {
+				$condicoes = array('Cliente.id'=>$termo);
+			}
+			else {
+				$condicoes = array("Cliente.$campo LIKE" => '%'.$termo.'%');
+			}
+			$resultados = $this->Cliente->find('all',array('fields' => array('id','nome','situacao'),'conditions'=>$condicoes));
+			if (!empty($resultados)) {
+				foreach ($resultados as $r) {
+					$retorno[$i]['label'] = $r['Cliente']['nome'];
+					$retorno[$i]['value'] = $r['Cliente'][$campo];
+					$retorno[$i]['id'] = $r['Cliente']['id'];
+					$retorno[$i]['nome'] = $r['Cliente']['nome'];
+					$retorno[$i]['bloqueado'] = ($r['Cliente']['situacao'] == 'B') ? 1 : 0;
+					$retorno[$i]['inativo'] = ($r['Cliente']['situacao'] == 'I') ? 1 : 0;
+					$retorno[$i]['situacao'] = $r['Cliente']['situacao'];
+					$i++; 
+				}
+				print json_encode($retorno);
+			}
+		}
+	}
+
 }
 
 ?>

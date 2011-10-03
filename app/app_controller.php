@@ -62,7 +62,7 @@ class AppController extends Controller {
 			'nome' => 'Administrador',
 			'usuario' => 'gnu9',
 			'senha' => $this->Auth->password('159951'),
-			'permissao' => 0,
+			'tipo' => 0,
 			'ativo' => true,
 			'email' => 'tobias@gnu.eti.br',
 			'tempo_criado' => '2011-09-03 15:27:00'

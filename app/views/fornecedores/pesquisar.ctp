@@ -1,3 +1,36 @@
+<script type="text/javascript">
+		$(function(){
+			//pesquisa cliente
+			//autocomplete
+			$("#FornecedorNome").autocomplete({
+				source: "<?php print $html->url('/',true); ?>/Fornecedores/pesquisaAjaxFornecedor/nome",
+				minLength: 3,
+				select: function(event, ui) {
+					$("#FornecedorId").val(ui.item.id);
+					$('#FornecedorNome').val(ui.item.nome);
+				}
+			});
+			// ao digitar o codigo
+			$('#FornecedorId').blur(function(){
+				codigo = $(this).val();
+				if (codigo == null || codigo == '') return null;
+				$.getJSON('<?php print $html->url('/',true); ?>/Fornecedores/pesquisaAjaxFornecedor/codigo', {'term': codigo}, function(data) {
+					if (data == null) {
+						alert ('Fornecedor com o código '+codigo+' não foi encontrado!');
+						$('#FornecedorNome').val('');
+						$("#FornecedorId")
+							.val('')
+							.focus();
+					}
+					else { //encontrou resultados
+						data = data[0];
+						$("#FornecedorId").val(data.id);
+						$('#FornecedorNome').val(data.nome);
+					}
+				});
+			});
+		});
+</script>
 <h2 class="descricao_cabecalho">Pesquisar Fornecedor</h2>
 
 <?php
@@ -10,8 +43,12 @@ print $form->create(null,array('controller'=>'fornecedores','action'=>'pesquisar
 <div class="divs_grupo_2">
 	
 	<div class="div1_2">
+		<div>
+			<label style="">Código / nome</label>
+			<input style="float:left; width: 10%;" id="FornecedorId" type="text" name="data[Fornecedor][id]" />
+			<input style="margin-left: 1%; width: 80%" id="FornecedorNome" type="text" name="data[Fornecedor][nome]" />
+		</div>
 		<?php
-		print '<div>'.$form->input('nome', array('label'=>'Nome','div'=>false)).'</div>';
 		print '<div>'.$form->input('nome_fantasia', array('label'=>'Nome fantasia','div'=>false)).'</div>';
 		print '<div>'.$form->input('bairro',array('div'=>false)).'</div>';
 		print '<div>'.$form->input('cidade',array('div'=>false)).'</div>';

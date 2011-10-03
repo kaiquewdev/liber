@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas os serviços cadastrados</h2>
+<h2 class="descricao_cabecalho">Exibindo os serviços cadastrados</h2>
 
 <?php print $this->element('painel_index'); ?>
 
@@ -23,14 +23,14 @@
 			<td><?php print $html->link($c['Servico']['nome'],'editar/' . $c['Servico']['id']) ;?></td>
 			<td><?php print $c['Servico']['servico_categoria_id'].' '.$c['ServicoCategoria']['nome']; ?></td>
 			<td><?php print $c['Servico']['valor']; ?></td>
+			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
+			'alt'=>'Editar','url'=>array('action'=>'editar',$c['Servico']['id']))) ?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
 				href="'.$html->url(array('action'=>'excluir')).'/'.$c['Servico']['id'].'">'.
 				$html->image('del24x24.png', array('alt'=>'Excluir'))
 				.'</a>';?>
 			</td>
-			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-			'alt'=>'Editar','url'=>array('action'=>'editar',$c['Servico']['id']))) ?></td>
 		</tr>
 
 <?php endforeach ?>

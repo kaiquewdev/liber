@@ -21,7 +21,7 @@
 	margin-right: auto;
 	background-color: white;
 	color: #367889;
-	padding: 10px;
+	padding: 5px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
@@ -32,7 +32,10 @@
 }
 
 #banner .logo {
-	
+	font-size: 180%;
+	color: #d42624;
+	font-weight: bold;
+	text-shadow:2px 2px 2px #000000;
 }
 
 #rodape {
@@ -110,6 +113,10 @@ table tr:nth-child(2n) td .noinput {
 	border: none;
 	clear: none;
 	background-color: #FFFFFF;
+}
+
+body {
+	font-size: 80%;
 }
 
 /*---------------------------------- 
@@ -429,7 +436,6 @@ table td.actions a {
 fieldset {
 	border: 1px solid #ccc;
 	margin-bottom: 1em;
-	padding: 16px 20px;
 }
 fieldset legend {
 	background:#fff;
@@ -438,8 +444,7 @@ fieldset legend {
 }
 fieldset fieldset {
 	margin-top: 0px;
-	margin-bottom: 20px;
-	padding: 16px 10px;
+	margin-bottom: 10px;
 }
 fieldset fieldset legend {
 	font-weight: normal;
@@ -449,7 +454,7 @@ fieldset fieldset div {
 	margin: 0 20px;
 }
 form div {
-	padding: .5em;
+	padding: .3em;
 	vertical-align: text-top;
 }
 form .input {
@@ -481,10 +486,11 @@ label {
 }
 input, textarea {
 	clear: both;
-	width:98%;
+	width:100%;
 	-webkit-border-radius: 2px;
 	border: 1px solid #003d4c;
 }
+
 select {
 	clear: both;
 	vertical-align: text-bottom;
@@ -819,7 +825,6 @@ div.message {
 }
 
 div.error-message {
-	font-size: 12px;
 	color: #bfbfbf;
 	background: #fae5e3;
 	padding: 10px 0;

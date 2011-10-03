@@ -6,7 +6,7 @@ class CategoriaProdutosController extends AppController {
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
-			'CategoriaProduto.id' => 'asc'
+			'CategoriaProduto.id' => 'desc'
 		)
 	);
 	
