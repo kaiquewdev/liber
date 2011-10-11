@@ -1021,4 +1021,4 @@ div.code-coverage-results span.result-good {
 
 /** Jquery **/
 .ui-autocomplete-loading { background: white url('../img/carregando.gif') right center no-repeat; }
-.ui-autocomplete-input { background: white url('../img/autocomplete.png') right center no-repeat; }
+.ui-autocomplete-input { background: #DBDBDB; }

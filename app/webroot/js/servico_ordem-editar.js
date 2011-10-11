@@ -68,7 +68,7 @@ $(function() {
 	
 	//a partir daqui refere-se a aba de Serviços
 	$("#ServicoNome").autocomplete({
-		source: "../pesquisaAjaxServico/nome",
+		source: "../../Servicos/pesquisaAjaxServico/nome",
 		minLength: 3,
 		select: function(event, ui) {
 			$("#ServicoId").val(ui.item.id);
@@ -112,7 +112,7 @@ function procurar_por_codigo(codigo) {
 	
 	$(function(){
 		
-		$.getJSON('../pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
+		$.getJSON('../../Servicos/pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
 			if (data == null) {
 				alert ('Serviço com o código '+codigo+' não foi encontrado!');
 				$('#ServicoNome').val('');
@@ -171,7 +171,7 @@ function adicionar_servico() {
 			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][servico_nome]" value="'+nome+'" class="noinput item_nome" /> </td>'+
 			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][quantidade]" value="'+quantidade+'" class="noinput item_qtd" /> </td>'+
 			'<td> <input type="text" name="data[ServicoOrdemItem]['+numero_campo+'][valor]" value="'+valor+'" class="noinput item_val" /> </td>'+
-			'<td> <img src="../img/del24x24.png" class="remover_linha"/> </td>'+
+			'<td> <img src="../../img/del24x24.png" class="remover_linha"/> </td>'+
 		'</tr>'+"\n";
 		
 		$('#servicos_incluidos').append(novo_campo);

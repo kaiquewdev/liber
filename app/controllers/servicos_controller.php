@@ -2,7 +2,8 @@
 
 class ServicosController extends AppController {
 	var $name = 'Servicos';
-	var $components = array('Sanitizacao');
+	var $components = array('Sanitizacao','RequestHandler');
+	var $helpers = array('Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -75,6 +76,38 @@ class ServicosController extends AppController {
 		}
 		else {
 			$this->Session->setFlash('Serviço não informado.','flash_erro');
+		}
+	}
+	
+	function pesquisaAjaxServico($campo_a_pesquisar,$termo = null) {
+		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
+		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
+		else return null;
+		if (! isset($termo)) $termo = $this->params['url']['term'];
+		if ( $this->RequestHandler->isAjax() ) {
+			$i=0;
+			$resultados=array();
+			$retorno=array();
+			$r = array();
+   			Configure::write ('debug',0);
+   			$this->autoRender=false;
+			if ($campo == 'id') {
+				$condicoes = array('Servico.id'=>$termo);
+			}
+			else {
+				$condicoes = array("Servico.$campo LIKE" => '%'.$termo.'%');
+			}
+			$resultados = $this->Servico->find('all',array('fields' => array('id','nome','valor'),'conditions'=>$condicoes));
+			if (!empty($resultados)) {
+				foreach ($resultados as $r) {
+					$retorno[$i]['label'] = $r['Servico']['nome'];
+					$retorno[$i]['value'] = $r['Servico'][$campo];
+					$retorno[$i]['id'] = $r['Servico']['id'];
+					$retorno[$i]['valor'] = $r['Servico']['valor'];
+					$i++; 
+				}
+				print json_encode($retorno);
+			}
 		}
 	}
 	

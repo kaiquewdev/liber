@@ -328,4 +328,14 @@ class FormatacaoHelper extends AppHelper {
 		return trim(str_replace('  ', ' ', $rt));
 	}
 
+	function moeda2numero ($variavel) {
+		$variavel = preg_replace('/\./', '', $variavel);
+		$variavel = preg_replace('/,/', '.', $variavel);
+		return number_format($variavel,2,'.','');
+	}
+	
+	function numero2moeda ($variavel) {
+		return number_format($variavel,2,',','.');
+	}
+
 }

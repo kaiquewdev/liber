@@ -77,12 +77,14 @@ $javascript->link('formatar_moeda.js',false);
 								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][servico_id]" value="'.$item['servico_id'].'" class="noinput item_id" /> </td>'.
 								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][servico_nome]" value="'.$item['servico_nome'].'" class="noinput item_nome" /> </td>'.
 								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][quantidade]" value="'.$item['quantidade'].'" class="noinput item_qtd" /> </td>'.
-								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][valor]" value="'.$item['valor'].'" class="noinput item_val" /> </td>'.
+								'<td> <input type="text" name="data[ServicoOrdemItem]['.$i.'][valor]" value="'.$formatacao->numero2moeda($item['valor']).'" class="noinput item_val" /> </td>'.
 								'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
 								'</tr>'."\n";
 								$i++;
-								$valor_total += $item['quantidade'] * (preg_replace('/,/', '.', $item['valor']));
+								//valor é retornado direto do banco, em formato americano, por isso nao converto
+								$valor_total += $item['quantidade'] * $item['valor'];
 							}
+							$valor_total = $formatacao->numero2moeda($valor_total);
 							?>
 						</tbody>
 						<input type="hidden" id="numero_itens_incluidos" value="<?php if (isset($i)) print $i; else print '0';?>" />

@@ -22,4 +22,4 @@ jQuery(function($){
 	$.datepicker.setDefaults($.datepicker.regional['pt-BR']);
 });
 
-// #XXX incluido no script do jquery-ui
+// #NOTE incluido no script do jquery-ui

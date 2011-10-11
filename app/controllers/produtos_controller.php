@@ -2,7 +2,8 @@
 
 class ProdutosController extends AppController {
 	var $name = 'Produtos';
-	var $components = array('Sanitizacao');
+	var $components = array('Sanitizacao','RequestHandler');
+	var $helpers = array('Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -109,6 +110,46 @@ class ProdutosController extends AppController {
 			else {
 				$this->set('num_resultados','0');
 				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
+			}
+		}
+	}
+
+	function pesquisaAjaxProduto($campo_a_pesquisar,$termo = null) {
+		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
+		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
+		else return null;
+		if (! isset($termo)) $termo = $this->params['url']['term'];
+		if ( $this->RequestHandler->isAjax() ) {
+			$i=0;
+			$resultados=array();
+			$retorno=array();
+			$r = array();
+   			Configure::write ('debug',0);
+   			$this->autoRender=false;
+			if ($campo == 'id') {
+				$condicoes = array('Produto.id'=>$termo);
+			}
+			else {
+				$condicoes = array("Produto.$campo LIKE" => '%'.$termo.'%');
+			}
+			$resultados = $this->Produto->find('all',array('conditions'=>$condicoes));
+			if (!empty($resultados)) {
+				foreach ($resultados as $r) {
+					$retorno[$i]['label'] = $r['Produto']['nome'];
+					$retorno[$i]['value'] = $r['Produto'][$campo];
+					$retorno[$i]['id'] = $r['Produto']['id'];
+					$retorno[$i]['nome'] = $r['Produto']['nome'];
+					$retorno[$i]['eh_vendido'] = ($r['Produto']['tipo_produto'] != 'M') ? 1 : 0;
+					$retorno[$i]['tipo_produto'] = $r['Produto']['tipo_produto'];
+					$retorno[$i]['fora_de_linha'] = ($r['Produto']['situacao'] == 'F') ? 1 : 0;
+					$retorno[$i]['situacao'] = $r['Produto']['situacao'];
+					$retorno[$i]['preco_custo'] = $r['Produto']['preco_custo'];
+					$retorno[$i]['preco_venda'] = $r['Produto']['preco_venda'];
+					$retorno[$i]['estoque_disponivel'] = $r['Produto']['quantidade_estoque_fiscal'] - $r['Produto']['quantidade_reservada'];
+					$retorno[$i]['tem_estoque_ilimitado'] = $r['Produto']['tem_estoque_ilimitado'];
+					$i++; 
+				}
+				print json_encode($retorno);
 			}
 		}
 	}

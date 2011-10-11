@@ -1,7 +1,7 @@
 <?php
 class ServicoOrdem extends AppModel {
 	var $name = 'ServicoOrdem';
-	var $actsAs = array('AjusteFloat');
+	var $actsAs = array('CakePtbr.AjusteFloat');
 	var $belongsTo = array(
 		'Cliente' => array(
 			'className' => 'Cliente',
@@ -33,11 +33,13 @@ class ServicoOrdem extends AppModel {
 	);
 	var $validate = array(
 		'cliente_id'  => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório. Somente números'
+			'allowEmpty' => false,
+			'rule' => 'numeric',
+			'message' => 'Campo obrigatório. Somente números.'
 		),
 		'usuario_id' => array(
-			'rule' => 'notEmpty',
+			'allowEmpty' => false,
+			'rule' => 'numeric',
 			'message' => 'Campo obrigatório.'
 		),
 		'forma_pagamento_id' => array(

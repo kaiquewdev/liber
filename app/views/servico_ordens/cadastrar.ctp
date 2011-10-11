@@ -82,7 +82,7 @@ $javascript->link('formatar_moeda.js',false);
 									'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
 									'</tr>'."\n";
 									$i++;
-									$valor_total += $item['quantidade'] * (preg_replace('/,/', '.', $item['valor']));
+									$valor_total += $item['quantidade'] * $formatacao->moeda2numero($item['valor']);
 								}
 							}
 							?>

@@ -68,7 +68,7 @@ $(function() {
 	
 	//a partir daqui refere-se a aba de Serviços
 	$("#ServicoNome").autocomplete({
-		source: "pesquisaAjaxServico/nome",
+		source: "../Servicos/pesquisaAjaxServico/nome",
 		minLength: 3,
 		select: function(event, ui) {
 			$("#ServicoId").val(ui.item.id);
@@ -112,7 +112,7 @@ function procurar_por_codigo(codigo) {
 	
 	$(function(){
 		
-		$.getJSON('pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
+		$.getJSON('../Servicos/pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
 			if (data == null) {
 				alert ('Serviço com o código '+codigo+' não foi encontrado!');
 				$('#ServicoNome').val('');

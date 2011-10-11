@@ -11,8 +11,8 @@
 
 class ServicoOrdensController extends AppController {
 	var $name = 'ServicoOrdens';
-	var $components = array('Sanitizacao','RequestHandler');
-	var $helpers = array('Estados','Ajax', 'Javascript','Formatacao');
+	var $components = array('Sanitizacao','RequestHandler','Geral');
+	var $helpers = array('Estados','Ajax', 'Javascript','CakePtbr.Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -94,7 +94,7 @@ class ServicoOrdensController extends AppController {
 	function _calcula_valor_total($data) {
 		$valor_total = 0;
 		foreach ($data['ServicoOrdemItem'] as $c) {
-			$valor_total += ($c['quantidade']) * ( preg_replace('/,/', '.', $c['valor']) );
+			$valor_total += ($c['quantidade']) * ($this->Geral->moeda2numero($c['valor']));
 		}
 		return $valor_total;
 	}
@@ -161,9 +161,18 @@ class ServicoOrdensController extends AppController {
 			$valor_total = $this->_calcula_valor_total($this->data);
 			$this->data['ServicoOrdem'] += array ('valor_total' => $valor_total);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
-			if ($this->ServicoOrdem->save($this->data)) {
-				if ($s == 'F' || $s == 'E') { //se a situacao for Finalizada ou Entregue
+			// #TODO seria bom nao deletar e reinserir todos os registros
+			// deleto os itens que pertenciam a ordem de serviço
+			if( ! ($this->ServicoOrdem->ServicoOrdemItem->deleteAll(array('servico_ordem_id'=>$id),false))) {
+				$this->Session->setFlash('Erro ao salvar a ordem de serviço','flash_erro');
+				return false;
+			}
+			// insiro o que foi enviado agora, inclusive os itens
+			if ($this->ServicoOrdem->saveAll($this->data,array('validate'=>'first'))) {
+				$s2 = $this->data['ServicoOrdem']['situacao'];
+				if ($s2 == 'F' || $s2 == 'E') { //se a situacao for Finalizada ou Entregue
 				$fim = $this->ServicoOrdem->field('data_hora_fim');
+				$this->log('fim '.$fim,LOG_DEBUG);
 					if (empty($fim)) {
 						// se a data final nao foi preenchida
 						$this->ServicoOrdem->save(array('data_hora_fim'=>date('Y-m-d H:i:s')));
@@ -296,38 +305,7 @@ class ServicoOrdensController extends AppController {
 		}
 	}
 	
-	function pesquisaAjaxServico($campo_a_pesquisar,$termo = null) {
-		if (strtoupper($campo_a_pesquisar) == "NOME") $campo = 'nome';
-		else if (strtoupper($campo_a_pesquisar) == "CODIGO") $campo = 'id';
-		else return null;
-		if (! isset($termo)) $termo = $this->params['url']['term'];
-		if ( $this->RequestHandler->isAjax() ) {
-			$i=0;
-			$resultados=array();
-			$retorno=array();
-			$r = array();
-   			Configure::write ('debug',0);
-   			$this->autoRender=false;
-			$this->loadModel('Servico');
-			if ($campo == 'id') {
-				$condicoes = array('Servico.id'=>$termo);
-			}
-			else {
-				$condicoes = array("Servico.$campo LIKE" => '%'.$termo.'%');
-			}
-			$resultados = $this->Servico->find('all',array('fields' => array('id','nome','valor'),'conditions'=>$condicoes));
-			if (!empty($resultados)) {
-				foreach ($resultados as $r) {
-					$retorno[$i]['label'] = $r['Servico']['nome'];
-					$retorno[$i]['value'] = $r['Servico'][$campo];
-					$retorno[$i]['id'] = $r['Servico']['id'];
-					$retorno[$i]['valor'] = $r['Servico']['valor'];
-					$i++; 
-				}
-				print json_encode($retorno);
-			}
-		}
-	}
+	
 }
 
 ?>

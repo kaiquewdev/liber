@@ -2,7 +2,7 @@
 
 class ReceberConta extends AppModel {
 	var $name = 'ReceberConta';
-	var $actsAs = array('AjusteFloat');
+	var $actsAs = array('CakePtbr.AjusteFloat');
 	var $belongsTo = array(
 		'PlanoConta' => array(
 			'className' => 'PlanoConta'

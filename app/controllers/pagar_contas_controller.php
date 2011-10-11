@@ -3,7 +3,7 @@
 class PagarContasController extends AppController {
 	var $name = 'PagarContas';
 	var $components = array('Sanitizacao');
-	var $helpers = array('Formatacao');
+	var $helpers = array('CakePtbr.Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (

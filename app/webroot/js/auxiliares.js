@@ -71,6 +71,36 @@ function dialogoDeletar(objeto) {
 }
 
 /**
+ * formata uma $number com precisao de $decimals casas decimais
+ * utilizando $dec_point como separador decimal e $thousands_sep
+ * como separador de milhar
+ * @return $number formatado
+ */
+function number_format (number, decimals, dec_point, thousands_sep) {
+	//http://phpjs.org/functions/number_format:481
+    number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + Math.round(n * k) / k;
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '').length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1).join('0');
+    }
+    return s.join(dec);
+}
+
+/**
  * Retorna x arredondado para n casas
  * @param x variavel float
  * @param n numero de casas decimais
@@ -91,10 +121,12 @@ function arredonda_float(x,n){
  * que possa ser utilizado em calculos
  */
 function moeda2numero (variavel) {
-	variavel = variavel.replace('.','');
+	/*variavel = variavel.replace('.','');
 	variavel = variavel.replace(',','.');
 	variavel = parseFloat (variavel);
-	return variavel;
+	return variavel;*/
+	variavel = (variavel.replace(/\./g,'')).replace(/,/g,'.');
+	return number_format(variavel,2,'.','');
 }
 
 /**
@@ -102,10 +134,11 @@ function moeda2numero (variavel) {
  * de moeda
  */
 function numero2moeda (variavel) {
-	if (variavel != null && variavel != '') {
+	/*if (variavel != null && variavel != '') {
 		variavel = variavel + ''; //converte para string
 		return variavel.replace('.',',');
-	}
+	}*/
+	return number_format(variavel,2,',','.');
 }
 
 /**

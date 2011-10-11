@@ -4,7 +4,7 @@ class Produto extends AppModel {
 	var $name = 'Produto';
 	var $belongsTo = array('CategoriaProduto');
 	var $hasMany = array('ProdutoEstoqueLog');
-	var $actsAs = array('AjusteFloat');
+	var $actsAs = array('CakePtbr.AjusteFloat');
 	var $validate = array(
 		'nome' => array(
 			'rule' => 'notEmpty',
@@ -20,13 +20,13 @@ class Produto extends AppModel {
 		),
 		'codigo_ean' => array(
 			'allowEmpty' => true,
-			'rule' => 'number',
-			'message' => 'Campo obrigatório.'
+			'rule' => 'numeric',
+			'message' => 'Campo obrigatório. Somente números.'
 		),
 		'codigo_dun' => array(
 			'allowEmpty' => true,
-			'rule' => 'number',
-			'message' => 'Campo obrigatório.'
+			'rule' => 'numeric',
+			'message' => 'Campo obrigatório. Somente números.'
 		),
 		'preco_custo' => array(
 			'rule' => 'notEmpty',
@@ -46,8 +46,8 @@ class Produto extends AppModel {
 		),
 		'estoque_minimo' => array(
 			'allowEmpty' => true,
-			'rule' => 'number',
-			'message' => 'Campo obrigatório.'
+			'rule' => 'numeric',
+			'message' => 'Campo obrigatório. Somente números.'
 		),
 		'unidade' => array(
 			'rule' => 'notEmpty',

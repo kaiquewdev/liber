@@ -4,7 +4,7 @@
 * Version 0.9.6
 * Last Modified: 07/20/2011
 * 
-* #XXX inclui no jquery ui
+* #NOTE inclui no jquery ui
 * 
 * Copyright 2011 Trent Richardson
 * Dual licensed under the MIT and GPL licenses.

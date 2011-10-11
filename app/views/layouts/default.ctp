@@ -13,6 +13,7 @@
 			print $this->Html->css('estilo.css');
 			print $this->Html->css('jquery-ui/jquery-ui.css');
 			print $this->Html->script('jquery');
+			print $this->Html->script('auxiliares.js');
 		?>
 	</head>
 	
@@ -126,6 +127,22 @@
 							<li><?php print $html -> link('Categorias de serviços', "/servicoCategorias");?></li>
 						</ul>
 					</li>
+					
+					<li>
+						<a href="#">Expedição</a>
+						<ul>
+							<li>
+								<?php print $html -> link('Cargas', "/cargas/");?>
+								<ul>
+									<li><?php print $html -> link('Cadastrar', "/cargas/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/cargas/pesquisar");?></li>
+									<li><?php print $html -> link('Listar', "/cargas/");?></li>
+								</ul>
+							</li>
+							<li><?php print $html -> link('Motoristas', "/motoristas/");?></li>
+							<li><?php print $html -> link('Veículos', "/veiculos");?></li>
+						</ul>
+					</li>
 			
 					<li>
 						<a href="#" >Financeiro</a>
@@ -198,7 +215,6 @@
 		<?php 
 		print $this->Html->script('menu.superfish.js');
 		print $this->Html->script('jquery-ui.js');
-		print $this->Html->script('auxiliares.js');
 		print $scripts_for_layout;
 		?>
 		<script type="text/javascript">
@@ -210,6 +226,7 @@
 		<?php
 		print $this->element('sql_dump');
 		//#TODO no cakebook diz que é preciso usar isto, verificar
+		// http://book.cakephp.org/pt/view/1594/Usando-uma-biblioteca-de-Javascript-espec%C3%ADfica
 		//$js->writeBuffer(); // Escreve o conteudo em cache dos scripts
 		?>
 	</body>

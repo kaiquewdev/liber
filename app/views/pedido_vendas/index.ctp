@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo os últimos pedidos de venda</h2>
+<h2 class="descricao_cabecalho">Exibindo os pedidos de venda</h2>
 
 <?php print $this->element('painel_index'); ?>
 
@@ -16,7 +16,8 @@
 			<th><?php print $paginator->sort('Seguro','custo_seguro'); ?></th>
 			<th><?php print $paginator->sort('Outros custos','custo_outros'); ?></th>
 			<th><?php print $paginator->sort('Desconto','Desconto'); ?></th>
-			<th><?php print $paginator->sort('Valor total','valor_total'); ?></th>
+			<th><?php print $paginator->sort('Valor bruto','valor_bruto'); ?></th>
+			<th><?php print $paginator->sort('Valor líquido','valor_liquido'); ?></th>
 			<th><?php print $paginator->sort('Situação','situacao'); ?></th>
 			<th colspan="3">Ações</th>
 		</tr>
@@ -30,20 +31,22 @@ $s = array(
 'O' => 'Orçamento',
 'C' => 'Cancelado',
 'V' => 'Vendido');
+
 foreach ($consulta as $c): ?>
 		
 		<tr>
 			<td><?php print $c['PedidoVenda']['id'];?></td>
 			<td><?php print $html->link($formatacao->dataHora($c['PedidoVenda']['data_hora_cadastrado']),'editar/' . $c['PedidoVenda']['id']) ;?></td>
 			<td><?php print $c['PedidoVenda']['cliente_id'].' '.$c['Cliente']['nome']; ?></td>
-			<td><?php print $c['PedidoVenda']['usuario_vendeu'].' '.$c['Usuario']['nome']; ?></td>
+			<td><?php print $c['PedidoVenda']['usuario_vendeu'].' '.$c['Usuario_vendeu']['nome']; ?></td>
 			<td><?php print $c['PedidoVenda']['forma_pagamento_id'].' '.$c['FormaPagamento']['nome']; ?></td>
-			<td><?php print $formatacao->dataHora($c['PedidoVenda']['data_venda']); ?></td>
+			<td><?php if(isset($c['PedidoVenda']['data_venda']) && ($c['PedidoVenda']['data_venda'] != '0000-00-00') ) print $formatacao->data($c['PedidoVenda']['data_venda']); ?></td>
 			<td><?php print $c['PedidoVenda']['custo_frete']; ?></td>
 			<td><?php print $c['PedidoVenda']['custo_seguro']; ?></td>
 			<td><?php print $c['PedidoVenda']['custo_outros']; ?></td>
 			<td><?php print $c['PedidoVenda']['desconto']; ?></td>
-			<td><?php print $c['PedidoVenda']['valor_total']; ?></td>
+			<td><?php print $c['PedidoVenda']['valor_bruto']; ?></td>
+			<td><?php print $c['PedidoVenda']['valor_liquido']; ?></td>
 			<td><?php print $s[$c['PedidoVenda']['situacao']]; ?></td>
 			
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',

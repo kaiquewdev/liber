@@ -13,7 +13,7 @@
 			<th><?php print $paginator->sort('Situação','situacao'); ?></th>
 			<th><?php print $paginator->sort('Início','data_hora_inicio'); ?></th>
 			<th><?php print $paginator->sort('Fim','data_hora_fim'); ?></th>
-			<th><?php print $paginator->sort('Laudo técnico','laudo_tecnico'); ?></th>
+			<th><?php print $paginator->sort('Valor total','valor_total'); ?></th>
 			<th colspan="3">Ações</th>
 		</tr>
 	</thead>
@@ -38,7 +38,7 @@ foreach ($consulta as $c): ?>
 			<td><?php print $s[$c['ServicoOrdem']['situacao']]; ?></td>
 			<td><?php print $formatacao->dataHora($c['ServicoOrdem']['data_hora_inicio']); ?></td>
 			<td><?php if (!empty($c['ServicoOrdem']['data_hora_fim'])) print $formatacao->dataHora($c['ServicoOrdem']['data_hora_fim']); ?></td>
-			<td><?php print $c['ServicoOrdem']['laudo_tecnico']; ?></td>
+			<td><?php print $c['ServicoOrdem']['valor_total']; ?></td>
 			
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
 			'alt'=>'Editar','url'=>array('action'=>'editar',$c['ServicoOrdem']['id']))) ?></td>
