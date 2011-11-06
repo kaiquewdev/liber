@@ -12,7 +12,7 @@
 class ServicoOrdensController extends AppController {
 	var $name = 'ServicoOrdens';
 	var $components = array('Sanitizacao','RequestHandler','Geral');
-	var $helpers = array('Estados','Ajax', 'Javascript','CakePtbr.Formatacao');
+	var $helpers = array('CakePtbr.Estados','Ajax', 'Javascript','CakePtbr.Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (

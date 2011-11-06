@@ -2,7 +2,7 @@
 
 class FornecedoresController extends AppController {
 	var $name = 'Fornecedores'; // PHP 4
-	var $helpers = array('Estados','Javascript','Ajax');
+	var $helpers = array('CakePtbr.Estados','Javascript','Ajax');
 	var $components = array('Sanitizacao','RequestHandler');
 	var $paginate = array (
 		'limit' => 10,

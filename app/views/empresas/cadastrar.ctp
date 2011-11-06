@@ -25,7 +25,12 @@
 		print $form->input('bairro',array('label'=>'Bairro'));
 		print $form->input('complemento',array('label'=>'Complemento'));
 		print $form->input('cidade',array('label'=>'Cidade'));
-		print $estados->input('estado',array('label'=>'Estado'));
+		?>
+		<div class="input text required">
+			<label for="EmpresaUf">UF:</label>
+			<?php print $estados->select('uf'); ?>
+		</div>
+		<?php
 		?>
 	</div>
 </div>

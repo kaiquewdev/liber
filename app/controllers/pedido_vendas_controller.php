@@ -13,7 +13,7 @@
 class PedidoVendasController extends AppController {
 	var $name = 'PedidoVendas';
 	var $components = array('Sanitizacao','Geral');
-	var $helpers = array('Estados', 'Javascript','CakePtbr.Formatacao');
+	var $helpers = array('CakePtbr.Estados', 'Javascript','CakePtbr.Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (

@@ -34,7 +34,7 @@ class EstadosHelper extends AppHelper {
 				'uf' para mostrar apenas as siglas, sem os nomes
  */
 	function select($fieldName, $selected = null, $attributes = array()) {
-		App::import('Vendor', 'Estados');
+		App::import('Vendor', 'CakePtbr.Estados');
 		$options = Estados::lista();
 		if (isset($attributes['uf']) && $attributes['uf'] === true) {
 			$estados = array_keys($options);
@@ -48,7 +48,7 @@ class EstadosHelper extends AppHelper {
 	}
 	
 	function input ($campo, $atributos = array()) {
-		App::import('Vendor', 'Estados');
+		App::import('Vendor', 'CakePtbr.Estados');
 		$options = Estados::lista();
 		$valores = array(''=>'');
 		$valores += $options;

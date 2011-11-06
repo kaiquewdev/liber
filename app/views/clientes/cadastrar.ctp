@@ -63,7 +63,12 @@
 		<?php
 		print $form->input('bairro');
 		print $form->input('cidade');
-		print $estados->input('uf',array('label'=>'UF'));
+		?>
+		<div class="input text required">
+			<label for="ClienteUf">UF:</label>
+			<?php print $estados->select('uf'); ?>
+		</div>
+		<?php
 		print $form->input('cep', array('label'=>'CEP'));
 		print $form->input('numero_telefone', array('label'=>'Número de telefone'));
 		?>

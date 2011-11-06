@@ -3,7 +3,7 @@
 class ClientesController extends AppController {
 	var $name = 'Clientes'; // PHP 4
 	var $components = array('Sanitizacao','RequestHandler');
-	var $helpers = array('Estados','Ajax', 'Javascript');
+	var $helpers = array('CakePtbr.Estados','Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
