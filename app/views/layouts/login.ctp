@@ -26,10 +26,13 @@
 	
 	<body>
 		
+		
 		<div id="cabecalho">
-			<div id="banner">
-				&nbsp;
-			</div>
+			
+		</div>
+		
+		<div id="banner">
+			&nbsp;
 		</div>
 		
 		<div id="conteudo">

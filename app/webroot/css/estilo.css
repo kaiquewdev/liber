@@ -8,10 +8,10 @@
 
 #cabecalho {
 	width: 100%;
-	height: 70px;
-	border-top: 0px;
-	background-color: #0B586B;
-	border-radius: 5px;
+	height: 30px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background-color: #000000;
 	text-align: center;
 }
 
@@ -36,6 +36,8 @@
 	color: #d42624;
 	font-weight: bold;
 	text-shadow:2px 2px 2px #000000;
+	text-align: right;
+	margin-right: 50px;
 }
 
 #rodape {
@@ -115,10 +117,6 @@ table tr:nth-child(2n) td .noinput {
 	background-color: #FFFFFF;
 }
 
-body {
-	font-size: 80%;
-}
-
 /*---------------------------------- 
  * MENU
  *----------------------------------
@@ -195,17 +193,15 @@ ul.sf-menu li li li.sfHover ul {
 	text-align: left;
 }
 .sf-menu li li {
-	background:		#33889B;
+	background:		#383737;
 }
 .sf-menu li li li {
-	background:		#0F7F96;
+	background:		#4C4B4B;
 }
 .sf-menu li:hover, .sf-menu li.sfHover,
 .sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
-	color: black;
-	background-color:#0B586B;
-	font-weight: bold;
 	outline:		0;
+	color: red;
 }
 /*** bordas arredondadas ***/
 .sf-menu li li:first-child {
@@ -301,10 +297,11 @@ li.sfHover > a > .sf-sub-indicator {
 
 /** Estilo geral **/
 body {
-	background: #003d4c;
+	background: url('../img/bg.png') repeat;
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	margin: 0;
+	font-size: 80%;
 }
 a {
 	color: #003d4c;

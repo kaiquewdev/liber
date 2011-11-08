@@ -20,7 +20,6 @@
 	<body>
 		
 		<div id="cabecalho">
-			&nbsp;
 			<div id="menu" name="menu">
 				<ul class="sf-menu">
 					<li>

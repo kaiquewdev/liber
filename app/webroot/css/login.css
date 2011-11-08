@@ -3,9 +3,12 @@
 	width: 100%;
 	height: 80px;
 	border-top: 0px;
-	background-color: #0B586B;
+	background-color: #FFFFFF;
 	border-radius: 5px;
 	text-align: center;
+	filter:opacity(alpha=25);
+    -moz-opacity:0.25;
+    opacity:0.25;
 }
 
 #banner {
@@ -20,7 +23,7 @@
 
 #login {
 	width: 30%;
-	margin-top: 5%;
+	margin-top: 10%;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: white;
@@ -31,89 +34,18 @@
 	border-radius: 10px;
 }
 
-#rodape {
-	font-size: 80%;
-	font-style: italic;
-	text-align: center;
-}
-
-
 /** Estilo geral **/
 body {
-	background: #003d4c;
+	background: url('../img/bg.png') repeat;
 	color: #fff;
-	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	margin: 0;
 }
-a {
-	color: #003d4c;
-	text-decoration: underline;
-	font-weight: bold;
-}
-a:hover {
-	color: #367889;
-	text-decoration:none;
-}
-a img {
-	border:none;
-}
-h1, h2, h3, h4 {
-	font-weight: normal;
-	margin-bottom:0.5em;
-}
-h1 {
-	color: #003d4c;
-	font-size: 100%;
-}
-h2 {
-	color: #e32;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 190%;
-}
-h3 {
-	color: #993;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 165%;
-}
-h4 {
-	color: #993;
-	font-weight: normal;
-}
-ul, li {
-	margin: 0 12px;
-}
-
 
 /** Formulários **/
 form {
 	clear: both;
-	margin-right: 20px;
 	padding: 0;
 	width: 95%;
-}
-fieldset {
-	border: 1px solid #ccc;
-	margin-bottom: 1em;
-	padding: 16px 20px;
-}
-fieldset legend {
-	background:#fff;
-	color: #e32;
-	font-size: 110%;
-	font-weight: bold;
-}
-fieldset fieldset {
-	margin-top: 0px;
-	margin-bottom: 20px;
-	padding: 16px 10px;
-}
-fieldset fieldset legend {
-	font-size: 120%;
-	font-weight: normal;
-}
-fieldset fieldset div {
-	clear: left;
-	margin: 0 20px;
 }
 form div {
 	clear: both;
@@ -137,11 +69,7 @@ label.required:after {
 	content: '*';
 	display:inline;
 }
-form div.submit {
-	border: 0;
-	clear: both;
-	margin-top: 10px;
-}
+
 label {
 	display: block;
 	font-size: 110%;
@@ -151,55 +79,62 @@ label {
 }
 input, textarea {
 	clear: both;
-	width:98%;
+	width: 100%;
 	-webkit-border-radius: 2px;
 	border: 1px solid #003d4c;
 }
-select {
-	clear: both;
-	vertical-align: text-bottom;
-}
-select[multiple=multiple] {
-	width: 100%;
-}
-option {
-	font-size: 120%;
-	padding: 0 3px;
-}
-input[type=checkbox] {
-	clear: left;
-	float: left;
-	margin: 0px 6px 7px 2px;
-	width: auto;
-}
-div.checkbox label {
-	display: inline;
-}
-input[type=radio] {
-	float:left;
-	width:auto;
-	margin: 0 3px 7px 0;
-}
-div.radio label {
-	margin: 0 0 6px 20px;
-}
+
 input[type=submit] {
-	display: inline;
+	cursor: pointer;
+	display: inline-block;
 	font-size: 110%;
 	width: auto;
+	background-color: #e6e6e6;
+	background-repeat: no-repeat;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+	background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+	padding: 5px 14px 6px;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	color: #333;
+	line-height: normal;
+	border: 1px solid #ccc;
+	border-bottom-color: #bbb;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-webkit-transition: 0.1s linear all;
+	-moz-transition: 0.1s linear all;
+	transition: 0.1s linear all;
 }
-form .submit input[type=submit] {
-	background:#62af56;
-	background: -webkit-gradient(linear, left top, left bottom, from(#a8ea9c), to(#62af56));
-	background-image: -moz-linear-gradient(top, #a8ea9c, #62af56);
-	border-color: #2d6324;
-	color: #000;
-	text-shadow: #8cee7c 0px 1px 0px;
+input[type=submit]:hover {
+	background-position: 0 -15px;
+	color: #333;
+	text-decoration: none;
 }
-form .submit input[type=submit]:hover {
-	background:#4ca83d;
-	background: -webkit-gradient(linear, left top, left bottom, from(#85e573), to(#4ca83d));
-	background-image: -moz-linear-gradient(top, #85e573, #4ca83d);
+input[type=submit]:active {
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+input[type=submit][disabled] {
+  cursor: default;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  filter: alpha(opacity=65);
+  -khtml-opacity: 0.65;
+  -moz-opacity: 0.65;
+  opacity: 0.65;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 /** Notificações e Erros **/
@@ -250,162 +185,4 @@ p.error em {
 	background: green;
 	color: #fff;
 	border-radius: 5px;
-}
-
-/**  Actions  **/
-div.actions ul {
-	margin: 0;
-	padding: 0;
-}
-div.actions li {
-	margin:0 0 0.5em 0;
-	list-style-type: none;
-	white-space: nowrap;
-	padding: 0;
-}
-div.actions ul li a {
-	font-weight: normal;
-	display: block;
-	clear: both;
-}
-div.actions ul li a:hover {
-	text-decoration: underline;
-}
-
-input[type=submit],
-div.actions ul li a,
-td.actions a {
-	font-weight:normal;
-	padding: 4px 8px;
-	background:#e6e49f;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f1f1d4), to(#e6e49f));
-	background-image: -moz-linear-gradient(top, #f1f1d4, #e6e49f);
-	color:#333;
-	border:1px solid #aaac62;
-	-webkit-border-radius:8px;
-	-moz-border-radius:8px;
-	border-radius:8px;
-	text-decoration:none;
-	text-shadow: #fff 0px 1px 0px;
-	min-width: 0;
-}
-input[type=submit]:hover,
-div.actions ul li a:hover,
-td.actions a:hover {
-	background: #f0f09a;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f7f7e1), to(#eeeca9));
-}
-
-/** Related **/
-div.related {
-	clear: both;
-	display: block;
-}
-
-/** Debugging **/
-pre {
-	color: #000;
-	background: #f0f0f0;
-	padding: 1em;
-}
-pre.cake-debug {
-	background: #ffcc00;
-	font-size: 120%;
-	line-height: 140%;
-	margin-top: 1em;
-	overflow: auto;
-	position: relative;
-}
-div.cake-stack-trace {
-	background: #fff;
-	color: #333;
-	margin: 0px;
-	padding: 6px;
-	font-size: 120%;
-	line-height: 140%;
-	overflow: auto;
-	position: relative;
-}
-div.cake-code-dump pre {
-	position: relative;
-	overflow: auto;
-}
-div.cake-stack-trace pre, div.cake-code-dump pre {
-	color: #000;
-	background-color: #F0F0F0;
-	margin: 0px;
-	padding: 1em;
-	overflow: auto;
-}
-div.cake-code-dump pre, div.cake-code-dump pre code {
-	clear: both;
-	font-size: 12px;
-	line-height: 15px;
-	margin: 4px 2px;
-	padding: 4px;
-	overflow: auto;
-}
-div.cake-code-dump span.code-highlight {
-	background-color: #ff0;
-	padding: 4px;
-}
-div.code-coverage-results div.code-line {
-	padding-left:5px;
-	display:block;
-	margin-left:10px;
-}
-div.code-coverage-results div.uncovered span.content {
-	background:#ecc;
-}
-div.code-coverage-results div.covered span.content {
-	background:#cec;
-}
-div.code-coverage-results div.ignored span.content {
-	color:#aaa;
-}
-div.code-coverage-results span.line-num {
-	color:#666;
-	display:block;
-	float:left;
-	width:20px;
-	text-align:right;
-	margin-right:5px;
-}
-div.code-coverage-results span.line-num strong {
-	color:#666;
-}
-div.code-coverage-results div.start {
-	border:1px solid #aaa;
-	border-width:1px 1px 0px 1px;
-	margin-top:30px;
-	padding-top:5px;
-}
-div.code-coverage-results div.end {
-	border:1px solid #aaa;
-	border-width:0px 1px 1px 1px;
-	margin-bottom:30px;
-	padding-bottom:5px;
-}
-div.code-coverage-results div.realstart {
-	margin-top:0px;
-}
-div.code-coverage-results p.note {
-	color:#bbb;
-	padding:5px;
-	margin:5px 0 10px;
-	font-size:10px;
-}
-div.code-coverage-results span.result-bad {
-	color: #a00;
-}
-div.code-coverage-results span.result-ok {
-	color: #fa0;
-}
-div.code-coverage-results span.result-good {
-	color: #0a0;
-}
-
-/** Elements **/
-#url-rewriting-warning {
-	display: none;
 }
