@@ -2,18 +2,20 @@ $(function() {
 
 	$(".datepicker").datetimepicker({
 		showOn: "button",
-		buttonImage: "../img/calendario_icone.gif",
+		buttonImage: raiz_site+"/img/calendario_icone.gif",
 		buttonImageOnly: true
 	});
 		
 	$('#servico_ordem_abas').tabs();
 	
 	$('#ServicoValor').priceFormat();
+	$('#ServicoOrdemCustoOutros').priceFormat();
+	$('#ServicoOrdemDesconto').priceFormat();
 	
 	//pesquisa cliente
 	//autocomplete
 	$("#pesquisar_cliente").autocomplete({
-		source: "../Clientes/pesquisaAjaxCliente/nome",
+		source: ajaxPesqCliente + "nome",
 		minLength: 3,
 		select: function(event, ui) {
 			if (ui.item.bloqueado) {
@@ -38,7 +40,7 @@ $(function() {
 	$('#ServicoOrdemClienteId').blur(function(){
 		codigo = $(this).val();
 		if (codigo == null || codigo == '') return null;
-		$.getJSON('../Clientes/pesquisaAjaxCliente/codigo', {'term': codigo}, function(data) {
+		$.getJSON(ajaxPesqCliente + 'codigo', {'term': codigo}, function(data) {
 			if (data == null) {
 				alert ('Cliente com o código '+codigo+' não foi encontrado!');
 				$('#pesquisar_cliente').val('');
@@ -68,7 +70,7 @@ $(function() {
 	
 	//a partir daqui refere-se a aba de Serviços
 	$("#ServicoNome").autocomplete({
-		source: "../Servicos/pesquisaAjaxServico/nome",
+		source: ajaxPesqServico + "nome",
 		minLength: 3,
 		select: function(event, ui) {
 			$("#ServicoId").val(ui.item.id);
@@ -112,7 +114,7 @@ function procurar_por_codigo(codigo) {
 	
 	$(function(){
 		
-		$.getJSON('../Servicos/pesquisaAjaxServico/codigo', {'term': codigo}, function(data) {
+		$.getJSON( ajaxPesqServico + 'codigo', {'term': codigo}, function(data) {
 			if (data == null) {
 				alert ('Serviço com o código '+codigo+' não foi encontrado!');
 				$('#ServicoNome').val('');

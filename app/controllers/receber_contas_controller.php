@@ -3,7 +3,7 @@
 class ReceberContasController extends AppController {
 	var $name = 'ReceberContas';
 	var $components = array('Sanitizacao');
-	var $helpers = array('CakePtbr.Formatacao');
+	var $helpers = array('CakePtbr.Formatacao','Javascript');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (

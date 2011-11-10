@@ -17,3 +17,5 @@ plugins
 vendors
 app/config/database.php
 app/config/database.php
+outros/bd.mwb.bak
+app/tmp

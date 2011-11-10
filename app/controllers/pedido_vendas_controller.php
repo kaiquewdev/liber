@@ -13,7 +13,7 @@
 class PedidoVendasController extends AppController {
 	var $name = 'PedidoVendas';
 	var $components = array('Sanitizacao','Geral');
-	var $helpers = array('CakePtbr.Estados', 'Javascript','CakePtbr.Formatacao');
+	var $helpers = array('CakePtbr.Estados', 'Javascript','CakePtbr.Formatacao','Geral');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -134,7 +134,7 @@ class PedidoVendasController extends AppController {
 			$valor_bruto = $valores['valor_bruto'];
 			$valor_liquido = $valores['valor_liquido'];
 			if ($valor_liquido <= 0) {
-				$this->Session->setFlash('O valor total do pedido é R$ '.$this->Geral->numero2moeda($valor_total),'flash_erro');
+				$this->Session->setFlash('O valor total do pedido é R$ '.$this->Geral->numero2moeda($valor_liquido),'flash_erro');
 				return null;
 			}
 			$this->data['PedidoVenda'] += array ('valor_bruto' => $valor_bruto);
@@ -185,7 +185,7 @@ class PedidoVendasController extends AppController {
 			$valor_bruto = $valores['valor_bruto'];
 			$valor_liquido = $valores['valor_liquido'];
 			if ($valor_liquido <= 0) {
-				$this->Session->setFlash('Erro. O valor total do pedido é R$ '.$this->Geral->numero2moeda($valor_total),'flash_erro');
+				$this->Session->setFlash('Erro. O valor total do pedido é R$ '.$this->Geral->numero2moeda($valor_liquido),'flash_erro');
 				return null;
 			}
 			$this->data['PedidoVenda'] += array ('valor_bruto' => $valor_bruto);
@@ -298,7 +298,7 @@ class PedidoVendasController extends AppController {
 			if (! empty($dados['cliente_nome'])) $condicoes[] = array('Cliente.nome LIKE'=>'%'.$dados['cliente_nome'].'%');
 			if (! empty($dados['tecnico'])) $condicoes[] = array('PedidoVenda.usuario_id'=>$dados['tecnico']);
 			if (! empty($dados['situacao'])) $condicoes[] = array('PedidoVenda.situacao'=>$dados['situacao']);
-			if (! empty($dados['valor_total'])) $condicoes[] = array('PedidoVenda.valor_total'=>$dados['valor_total']);
+			if (! empty($dados['valor_total'])) $condicoes[] = array('PedidoVenda.valor_liquido'=>$dados['valor_total']);
 			if (! empty($dados['usuario_cadastrou'])) $condicoes[] = array('PedidoVenda.usuario_cadastrou'=>$dados['usuario_cadastrou']);
 			if (! empty($dados['data_hora_cadastrada'])) {
 				$ret = explode('-', $dados['data_hora_cadastrada']);

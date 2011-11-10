@@ -1,5 +1,5 @@
 
-<h2 class="descricao_cabecalho">Exibindo todas as contas a pagar</h2>
+<h2 class="descricao_cabecalho">Exibindo as contas a receber</h2>
 
 <?php print $this->element('painel_index'); ?>
 
@@ -7,16 +7,14 @@
 	<thead>
 		<tr>
 			<th><?php print $paginator->sort('Código','id'); ?></th>
-			<th><?php print $paginator->sort('Cadastrada em','data_hora_cadastrada'); ?></th>
-			<th><?php print $paginator->sort('É fiscal?','eh_fiscal'); ?></th>
 			<th><?php print $paginator->sort('Cliente ou fornecedor?','eh_cliente_ou_fornecedor'); ?></th>
-			<th><?php print $paginator->sort('Cliente/fornecedor','cliente_fornecedor_id'); ?></th>
-			<th><?php print $paginator->sort('Tipo documento','tipo_documento_id'); ?></th>
-			<th><?php print $paginator->sort('Número documento','numero_documento'); ?></th>
+			<th><?php print $paginator->sort('Cliente / fornecedor','cliente_fornecedor_id'); ?></th>
+			<th><?php print $paginator->sort('Documento','tipo_documento_id'); ?></th>
+			<th><?php print $paginator->sort('N. documento','numero_documento'); ?></th>
 			<th><?php print $paginator->sort('Valor','valor'); ?></th>
 			<th><?php print $paginator->sort('Conta origem','conta_origem'); ?></th>
 			<th><?php print $paginator->sort('Plano de contas','plano_conta_id'); ?></th>
-			<th><?php print $paginator->sort('Data do vencimento','data_vencimento'); ?></th>
+			<th><?php print $paginator->sort('Vencimento','data_vencimento'); ?></th>
 			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
@@ -30,19 +28,12 @@
 		
 		<tr>
 			<td><?php print $c['PagarConta']['id'];?></td>
-			<td><?php print $html->link($formatacao->dataHora($c['PagarConta']['data_hora_cadastrada']),'editar/' . $c['PagarConta']['id']) ;?></td>
-			<td>
-				<?php
-				if ($c['PagarConta']['eh_fiscal'] == 1) print 'Sim';
-				else print 'Não';
-				?>
-			</td>
 			<td><?php print ucfirst($tipo); ?></td>
 			<td>
 				<?php
 				print $c['PagarConta']['cliente_fornecedor_id'].' ';
-				if ($tipo == 'cliente') print $c['Cliente']['nome'];
-				else if ($tipo == 'fornecedor') print $c['Fornecedor']['nome'];
+				if ($tipo == 'cliente') print $html->link($c['Cliente']['nome'],'editar/'.$c['Cliente']['id']);
+				else if ($tipo == 'fornecedor') print $html->link($c['Fornecedor']['nome'],'editar/'.$c['Fornecedor']['id']);
 				?>
 			</td>
 			<td><?php print $c['PagarConta']['tipo_documento_id'].' '.$c['TipoDocumento']['nome']; ?></td>

@@ -2,7 +2,7 @@
 
 class PagarConta extends AppModel {
 	var $name = 'PagarConta';
-	var $actsAs = array('CakePtbr.AjusteFloat');
+	var $actsAs = array('CakePtbr.AjusteFloat','CakePtbr.AjusteData' => 'data_vencimento');
 	var $belongsTo = array(
 		'PlanoConta' => array(
 			'className' => 'PlanoConta'
@@ -53,8 +53,14 @@ class PagarConta extends AppModel {
 			'message' => 'Campo obrigatório.'
 		),
 		'data_vencimento' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
+			'obrigatorio' => array (
+				'rule' => 'notEmpty',
+				'message' => 'Campo obrigatório.'
+			),
+			'data' => array (
+				'rule' => 'date',
+				'message' => 'Data inválida.'
+			)
 		)
 	);
 }

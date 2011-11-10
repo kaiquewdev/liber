@@ -1,5 +1,12 @@
+<script type="text/javascript">
+	// variaveis a serem utilizadas no arquivo pedido_venda.js
+	var raiz_site = "<?php print $this->Html->url('/',true); ?>/";
+	var ajaxPesqCliente = "<?php print $this->Html->url(array('controller'=>'Clientes','action'=>'pesquisaAjaxCliente')); ?>/";
+	var ajaxPesqServico = "<?php print $this->Html->url(array('controller'=>'Servicos','action'=>'pesquisaAjaxServico')); ?>/";
+</script>
+
 <?php
-$javascript->link('servico_ordem-cadastrar.js',false);
+$javascript->link('ordem_servico.js',false);
 $javascript->link('formatar_moeda.js',false);
 ?>
 
@@ -82,7 +89,7 @@ $javascript->link('formatar_moeda.js',false);
 									'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
 									'</tr>'."\n";
 									$i++;
-									$valor_total += $item['quantidade'] * $formatacao->moeda2numero($item['valor']);
+									$valor_total += $item['quantidade'] * $geral->moeda2numero($item['valor']);
 								}
 							}
 							?>
@@ -128,6 +135,8 @@ $javascript->link('formatar_moeda.js',false);
 	
 	<id id="outros">
 		<?php
+		print $form->input('custo_outros',array('label'=>'Outros custos'));
+		print $form->input('desconto',array('label'=>'Desconto'));
 		print $form->input('defeitos_relatados',array('label'=>'Defeitos relatados','rows'=>'3'));
 		print $form->input('laudo_tecnico',array('label'=>'Laudo técnico','rows'=>'3'));
 		print $form->input('observacao',array('label'=>'Observação','rows'=>'3'));

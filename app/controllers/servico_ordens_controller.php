@@ -12,7 +12,7 @@
 class ServicoOrdensController extends AppController {
 	var $name = 'ServicoOrdens';
 	var $components = array('Sanitizacao','RequestHandler','Geral');
-	var $helpers = array('CakePtbr.Estados','Ajax', 'Javascript','CakePtbr.Formatacao');
+	var $helpers = array('CakePtbr.Estados','Ajax', 'Javascript','CakePtbr.Formatacao', 'Geral');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -91,12 +91,28 @@ class ServicoOrdensController extends AppController {
 		return 0;
 	}
 	
-	function _calcula_valor_total($data) {
-		$valor_total = 0;
+	function _calcular_valores($data) {
+		$valor_bruto = 0;
+		$valor_liquido = 0;
 		foreach ($data['ServicoOrdemItem'] as $c) {
-			$valor_total += ($c['quantidade']) * ($this->Geral->moeda2numero($c['valor']));
+			$valor_bruto += ($c['quantidade']) * ($this->Geral->moeda2numero($c['valor']));
 		}
-		return $valor_total;
+		// se ha outros custos, somo para obter o valor bruto
+		if (isset($data['ServicoOrdem']['custo_outros']) && (! empty($data['ServicoOrdem']['custo_outros']))) {
+			$valor_bruto = $valor_bruto + ($this->Geral->moeda2numero($data['ServicoOrdem']['custo_outros']));
+		}
+		$valor_liquido = $valor_bruto;
+		// se ha desconto, subtraio para obter o valor liquido
+		if (isset($data['ServicoOrdem']['desconto']) && (! empty($data['ServicoOrdem']['desconto']))) {
+			$valor_liquido = $valor_liquido - ($this->Geral->moeda2numero($data['ServicoOrdem']['desconto']));
+		}
+		
+		$retorno = array(
+			'valor_bruto' => $valor_bruto,
+			'valor_liquido' => $valor_liquido
+		);
+		
+		return $retorno;
 	}
 	
 	function cadastrar() {
@@ -115,8 +131,15 @@ class ServicoOrdensController extends AppController {
 			}
 			$this->data['ServicoOrdem'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
 			$this->data['ServicoOrdem'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
-			$valor_total = $this->_calcula_valor_total($this->data);
-			$this->data['ServicoOrdem'] += array ('valor_total' => $valor_total);
+			$valores = $this->_calcular_valores($this->data);
+			$valor_bruto = $valores['valor_bruto'];
+			$valor_liquido = $valores['valor_liquido'];
+			if ($valor_liquido <= 0) {
+				$this->Session->setFlash('O valor total da ordem de serviço é R$ '.$this->Geral->numero2moeda($valor_liquido),'flash_erro');
+				return null;
+			}
+			$this->data['ServicoOrdem'] += array ('valor_bruto' => $valor_bruto);
+			$this->data['ServicoOrdem'] += array ('valor_liquido' => $valor_liquido);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->ServicoOrdem->saveAll($this->data,array('validate'=>'first'))) {
 				$this->Session->setFlash('Ordem de serviço cadastrada com sucesso.','flash_sucesso');
@@ -158,8 +181,15 @@ class ServicoOrdensController extends AppController {
 			$this->_recupera_servicos_inseridos();
 			$this->data['ServicoOrdem']['id'] = $id;
 			$this->data['ServicoOrdem'] += array ('usuario_alterou' => $this->Auth->user('id'));
-			$valor_total = $this->_calcula_valor_total($this->data);
-			$this->data['ServicoOrdem'] += array ('valor_total' => $valor_total);
+			$valores = $this->_calcular_valores($this->data);
+			$valor_bruto = $valores['valor_bruto'];
+			$valor_liquido = $valores['valor_liquido'];
+			if ($valor_liquido <= 0) {
+				$this->Session->setFlash('O valor total da ordem de serviço é R$ '.$this->Geral->numero2moeda($valor_liquido),'flash_erro');
+				return null;
+			}
+			$this->data['ServicoOrdem'] += array ('valor_bruto' => $valor_bruto);
+			$this->data['ServicoOrdem'] += array ('valor_liquido' => $valor_liquido);
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			// #TODO seria bom nao deletar e reinserir todos os registros
 			// deleto os itens que pertenciam a ordem de serviço
