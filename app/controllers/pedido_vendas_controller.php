@@ -1,12 +1,10 @@
 <?php
 /**
- * A pedido de venda tem as seguintes situações:
+ * O pedido de venda tem as seguintes situações:
+ * A = Aberto
  * O = Orçamento
- * E = Em espera
- * X = Em execução
- * F = Finalizada
- * E = Entregue
- * C = Cancelada
+ * C = Cancelado
+ * V = Vendido
  */
 
 //#TODO criar alerta caso o(s) pedido(s) totalize(m) um valor maior que o limite de credito  
@@ -28,7 +26,6 @@ class PedidoVendasController extends AppController {
 	 * $opcoes_forma_pamamento
 	 */
 	function _obter_opcoes() {
-		
 		$this->loadModel('FormaPagamento');
 		$consulta2 = $this->FormaPagamento->find('all',array('fields'=>array('FormaPagamento.id','FormaPagamento.nome')));
 		foreach ($consulta2 as $op)
@@ -68,9 +65,8 @@ class PedidoVendasController extends AppController {
 			$valor_total = 0;
 			$campos_ja_inseridos = array();
 			foreach ($itens as $item) {
-				$this->loadModel('Produto');
-				$ret = $this->Produto->findById($item['produto_id']);
-				$n = $ret['Produto']['nome'];
+				$n = $this->PedidoVenda->PedidoVendaItem->Produto->findById($item['produto_id']);
+				$n = $n['Produto']['nome'];
 				$campos_ja_inseridos[$i] = array('produto_id'=>$item['produto_id']);
 				$campos_ja_inseridos[$i] += array('produto_nome'=>$n);
 				$campos_ja_inseridos[$i] += array('quantidade'=>$item['quantidade']);
@@ -102,7 +98,7 @@ class PedidoVendasController extends AppController {
 		$valor_liquido = $valor_bruto;
 		// se ha desconto, subtraio para obter o valor liquido
 		if (isset($data['PedidoVenda']['desconto']) && (! empty($data['PedidoVenda']['desconto']))) {
-			$valor_liquido = $valor_liquido - ($this->Geral->moeda2numero($data['PedidoVenda']['desconto']));
+			$valor_liquido = $valor_bruto - ($this->Geral->moeda2numero($data['PedidoVenda']['desconto']));
 		}
 		
 		$retorno = array(
@@ -128,7 +124,6 @@ class PedidoVendasController extends AppController {
 				return null;
 			}
 			$this->data['PedidoVenda'] += array ('data_hora_cadastrado' => date('Y-m-d H:i:s'));
-			$this->data['PedidoVenda'] += array ('usuario_vendeu' => $this->Auth->user('id'));
 			$this->data['PedidoVenda'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
 			$valores = $this->_calcular_valores($this->data);
 			$valor_bruto = $valores['valor_bruto'];
@@ -172,9 +167,9 @@ class PedidoVendasController extends AppController {
 				$this->Session->setFlash('Erro. Cliente não existe ou não está ativo.','flash_erro');
 				return null;
 			}
-			//a pedido de venda pode ser editada apenas se nao tiver sido cancelada ou entregue
+			//o pedido de venda pode ser editado apenas se nao tiver sido cancelado ou vendido
 			$s = strtoupper($this->PedidoVenda->field('situacao'));
-			if ( ($s == 'E') || ($s == 'C') ) {
+			if ( ($s == 'V') || ($s == 'C') ) {
 				$this->Session->setFlash('A situação desta pedido de venda impede que seja editado','flash_erro');
 				return false;
 			}
@@ -193,21 +188,12 @@ class PedidoVendasController extends AppController {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			// #TODO seria bom nao deletar e reinserir todos os registros
 			// deleto os itens que pertenciam a pedido de venda
-			if( ! ($this->PedidoVenda->Produto->deleteAll(array('produto_ordem_id'=>$id),false))) {
+			if( ! ($this->PedidoVenda->PedidoVendaItem->deleteAll(array('pedido_venda_id'=>$id),false))) {
 				$this->Session->setFlash('Erro ao salvar a pedido de venda','flash_erro');
 				return false;
 			}
 			// insiro o que foi enviado agora, inclusive os itens
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
-				$s2 = $this->data['PedidoVenda']['situacao'];
-				if ($s2 == 'F' || $s2 == 'E') { //se a situacao for Finalizada ou Entregue
-				$fim = $this->PedidoVenda->field('data_hora_fim');
-				$this->log('fim '.$fim,LOG_DEBUG);
-					if (empty($fim)) {
-						// se a data final nao foi preenchida
-						$this->PedidoVenda->save(array('data_hora_fim'=>date('Y-m-d H:i:s')));
-					}
-				}
 				$this->Session->setFlash('Pedido de venda atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
@@ -226,11 +212,11 @@ class PedidoVendasController extends AppController {
 		}
 		else {
 			// adiciono, no array resultante, o nome do produto correspondente
-			$this->loadModel('Produto');
+			$this->loadModel('PedidoVendaItem');
 			$i = 0;
-			foreach ($consulta['Produto'] as $x) {
-				$nome = $this->Produto->field('nome',array('Produto.id'=>$x['produto_id']));
-				$consulta['Produto'][$i]['produto_nome'] = $nome;
+			foreach ($consulta['PedidoVendaItem'] as $x) {
+				$nome = $this->PedidoVendaItem->field('nome',array('PedidoVendaItem.id'=>$x['produto_id']));
+				$consulta['PedidoVendaItem'][$i]['produto_nome'] = $nome;
 				$i++;
 			}
 			$this->set('c',$consulta);
@@ -246,16 +232,16 @@ class PedidoVendasController extends AppController {
 				$this->redirect(array('action'=>'pesquisar'));
 				return false;
 			}
-			//Uma pedido de venda apenas pode ser deletada se sua situacao for 'Orçamento' ou 'Em execução'
+			//Uma pedido de venda apenas pode ser deletado se sua situacao for 'Orçamento' ou 'Aberto'
 			$r = strtoupper($r);
-			if ( ($r != 'O') && ($r != 'E') ) {
-				$this->Session->setFlash('A situação da pedido de venda impede a sua exclusão. Talvez você deva apenas cancelá-la','flash_erro');
+			if ( ($r != 'O') && ($r != 'A') ) {
+				$this->Session->setFlash('A situação do pedido de venda impede a sua exclusão. Talvez você deva apenas cancelá-lo','flash_erro');
 				$this->redirect(array('action'=>'index'));
 				return false;
 			}
-			if ($this->PedidoVenda->Produto->deleteAll(array('Produto.produto_ordem_id'=>$id))) {
+			if ($this->PedidoVenda->PedidoVendaItem->deleteAll(array('PedidoVendaItem.pedido_venda_id'=>$id))) {
 				if ($this->PedidoVenda->delete($id)) {
-					$this->Session->setFlash("Pedido de venda número $id foi excluída com sucesso.",'flash_sucesso');
+					$this->Session->setFlash("Pedido de venda número $id foi excluído com sucesso.",'flash_sucesso');
 					$this->redirect(array('action'=>'index'));
 				}
 				else $this->Session->setFlash("Pedido de venda $id não pode ser excluído",'flassh_erro');

@@ -1,9 +1,10 @@
 <?php
 
+#FIXME corrigir data de validade da CNH, que é recuperada em 00/00/0000 e validada
 class MotoristasController extends AppController {
 	var $name = 'Motoristas';
 	var $components = array('Sanitizacao','Geral');
-	var $helpers = array('Formatacao');
+	var $helpers = array('CakePtbr.Formatacao');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -14,9 +15,9 @@ class MotoristasController extends AppController {
 	
 	function _obter_opcoes() {
 		$this->loadModel('Veiculo');
-		$consulta1 = $this->Veiculo->find('all',array('fields'=>array('Veiculo.id','Veiculo.modelo')));
+		$consulta1 = $this->Veiculo->find('all',array('fields'=>array('Veiculo.id','Veiculo.placa')));
 		foreach ($consulta1 as $op)
-			$this->opcoes_veiculo += array($op['Veiculo']['id']=>$op['Veiculo']['modelo']);
+			$this->opcoes_veiculo += array($op['Veiculo']['id']=>$op['Veiculo']['placa']);
 		$this->set('opcoes_veiculo',$this->opcoes_veiculo);
 	}
 	

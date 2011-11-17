@@ -131,11 +131,11 @@
 						<a href="#">Expedição</a>
 						<ul>
 							<li>
-								<?php print $html -> link('Cargas', "/cargas/");?>
+								<?php print $html -> link('Carregamento', "/carregamentos/");?>
 								<ul>
-									<li><?php print $html -> link('Cadastrar', "/cargas/cadastrar");?></li>
-									<li><?php print $html -> link('Pesquisar', "/cargas/pesquisar");?></li>
-									<li><?php print $html -> link('Listar', "/cargas/");?></li>
+									<li><?php print $html -> link('Cadastrar', "/carregamentos/cadastrar");?></li>
+									<li><?php print $html -> link('Pesquisar', "/carregamentos/pesquisar");?></li>
+									<li><?php print $html -> link('Listar', "/carregamentos/");?></li>
 								</ul>
 							</li>
 							<li><?php print $html -> link('Motoristas', "/motoristas/");?></li>

@@ -11,7 +11,6 @@
 			<th><?php print $paginator->sort('Placa','placa'); ?></th>
 			<th><?php print $paginator->sort('Fabricante','fabricante'); ?></th>
 			<th><?php print $paginator->sort('Ano','ano'); ?></th>
-			<th><?php print $paginator->sort('Tipo','tipo'); ?></th>
 			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
@@ -26,7 +25,6 @@
 			<td><?php print $veiculo['Veiculo']['placa']; ?></td>
 			<td><?php print $veiculo['Veiculo']['fabricante']; ?></td>
 			<td><?php print $veiculo['Veiculo']['ano']; ?></td>
-			<td><?php print $veiculo['Veiculo']['tipo']; ?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
 				href="'.$html->url(array('action'=>'excluir')).'/'.$veiculo['Veiculo']['id'].'">'.

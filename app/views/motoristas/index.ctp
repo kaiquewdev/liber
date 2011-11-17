@@ -8,10 +8,8 @@
 		<tr>
 			<th><?php print $paginator->sort('Código','id'); ?></th>
 			<th><?php print $paginator->sort('Nome','nome'); ?></th>
-			<th><?php print $paginator->sort('CNH - núm. registro','cnh_numero_registro'); ?></th>
-			<th><?php print $paginator->sort('CNH - data de validade','cnh_data_validade'); ?></th>
 			<th><?php print $paginator->sort('CNH - categoria','cnh_categoria'); ?></th>
-			<th><?php print $paginator->sort('Veículo padrão','veiculo_id'); ?></th>
+			<th><?php print $paginator->sort('Veículo padrão','veiculo_padrao'); ?></th>
 			<th colspan="2">Ações</th>
 		</tr>
 	</thead>
@@ -23,10 +21,8 @@
 		<tr>
 			<td><?php print $c['Motorista']['id'];?></td>
 			<td><?php print $html->link($c['Motorista']['nome'],'editar/' . $c['Motorista']['id']) ;?></td>
-			<td><?php print $c['Motorista']['cnh_numero_registro']; ?></td>
-			<td><?php if ($c['Motorista']['cnh_data_validade'] != '0000-00-00') print $formatacao->data($c['Motorista']['cnh_data_validade']); ?></td>
 			<td><?php print $c['Motorista']['cnh_categoria']; ?></td>
-			<td><?php print $c['Motorista']['veiculo_id'].' '.$c['Veiculo']['modelo']; ?></td>
+			<td><?php print $c['Motorista']['veiculo_padrao'].' '.$c['Veiculo']['modelo']; ?></td>
 			<td>
 				<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
 				href="'.$html->url(array('action'=>'excluir')).'/'.$c['Motorista']['id'].'">'.

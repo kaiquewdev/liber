@@ -8,7 +8,6 @@
 		<tr>
 			<th><?php print $paginator->sort('Código','id'); ?></th>
 			<th><?php print $paginator->sort('Cliente','cliente_id'); ?></th>
-			<th><?php print $paginator->sort('Usuário vendeu','usuario_vendeu'); ?></th>
 			<th><?php print $paginator->sort('Forma de pagamento','forma_pagamento_id'); ?></th>
 			<th><?php print $paginator->sort('Data venda','data_venda'); ?></th>
 			<th><?php print $paginator->sort('Valor bruto','valor_bruto'); ?></th>
@@ -32,7 +31,6 @@ foreach ($consulta as $c): ?>
 		<tr>
 			<td><?php print $c['PedidoVenda']['id'];?></td>
 			<td><?php print $c['PedidoVenda']['cliente_id'].' '.$c['Cliente']['nome']; ?></td>
-			<td><?php print $c['PedidoVenda']['usuario_vendeu'].' '.$c['Usuario_vendeu']['nome']; ?></td>
 			<td><?php print $c['PedidoVenda']['forma_pagamento_id'].' '.$c['FormaPagamento']['nome']; ?></td>
 			<td><?php if(isset($c['PedidoVenda']['data_venda']) && ($c['PedidoVenda']['data_venda'] != '0000-00-00') ) print $formatacao->data($c['PedidoVenda']['data_venda']); ?></td>
 			<td><?php print $c['PedidoVenda']['valor_bruto']; ?></td>

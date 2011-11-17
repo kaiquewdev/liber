@@ -2,8 +2,14 @@
 
 class Motorista extends AppModel {
 	var $name = 'Motorista';
+	var $hasOne = array('Carregamento');
+	var $belongsTo = array(
+		'Veiculo' => array(
+			'className' => 'veiculo',
+			'foreignKey' => 'veiculo_padrao'
+		)
+	);
 	var $actsAs = array('CakePtbr.AjusteData');
-	var $belongsTo = array('Veiculo');
 	var $validate = array(
 		'nome' => array(
 			'rule' => 'notEmpty',
@@ -18,10 +24,6 @@ class Motorista extends AppModel {
 			'allowEmpty' => true,
 			'rule' => 'date',
 			'message' => 'Data inválida.'
-		),
-		'sexo' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
 		)
 	);
 }

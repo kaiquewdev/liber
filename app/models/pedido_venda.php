@@ -12,10 +12,6 @@ class PedidoVenda extends AppModel {
 			'className' => 'FormaPagamento',
 			'foreignKey' => 'forma_pagamento_id'
 		),
-		'Usuario_vendeu' => array(
-			'className' => 'Usuario',
-			'foreignKey' => 'usuario_vendeu'
-		),
 		'Usuario_cadastrou' => array(
 			'className' => 'Usuario',
 			'foreignKey' => 'usuario_cadastrou'
@@ -29,6 +25,10 @@ class PedidoVenda extends AppModel {
 	var $hasMany = array(
 		'PedidoVendaItem' => array(
 			'className' => 'PedidoVendaItem',
+			'foreignKey' => 'pedido_venda_id'
+		),
+		'CarregamentoItem' => array(
+			'className' => 'CarregamentoItem',
 			'foreignKey' => 'pedido_venda_id'
 		)
 	);

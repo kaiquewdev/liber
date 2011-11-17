@@ -48,8 +48,8 @@ $javascript->link('formatar_moeda.js',false);
 				print $form->input('situacao',array('label'=>'Situação','options'=>array(
 				'A' => 'Aberto',
 				'O' => 'Orçamento',
-				/*'C' => 'Cancelado',
-				'V' => 'Vendido'*/
+				/*'C' => 'Cancelado',*/
+				'V' => 'Vendido'
 				)));
 				print $form->input('desconto',array('label'=>'Desconto'));
 				?>

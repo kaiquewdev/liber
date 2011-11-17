@@ -10,21 +10,12 @@ class VeiculosController extends AppController {
 		)
 	);
 	
-	var $opcoes_veiculos = array(
-		'' => '',
-		'M' => 'Motocicleta',
-		'C' => 'Carro',
-		'A' => 'Caminhão',
-		'R' => 'Carreta'
-	);
-	
 	function index() {
 		$dados = $this->paginate('Veiculo');
 		$this->set('consulta_veiculo',$dados);
 	}
 	
 	function cadastrar() {
-		$this->set('tipos_veiculo',$this->opcoes_veiculos);
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Veiculo->save($this->data)) {
@@ -38,7 +29,6 @@ class VeiculosController extends AppController {
 	}
 	
 	function editar($id=NULL) {
-		$this->set('tipos_veiculo',$this->opcoes_veiculos);
 		if (empty ($this->data)) {
 			$this->data = $this->Veiculo->read();
 			if ( ! $this->data) {

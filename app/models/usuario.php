@@ -23,9 +23,9 @@ class Usuario extends AppModel {
 			'className' => 'Fornecedor',
 			'foreignKey' => 'usuario_alterou'
 		),
-		'Pedidos_usuario_vendeu' => array(
+		'Pedidos_usuario_cadastrou' => array(
 			'className' => 'PedidoVenda',
-			'foreignKey' => 'usuario_vendeu'
+			'foreignKey' => 'usuario_cadastrou'
 		),
 		'Pedidos_usuario_alterou' => array(
 			'className' => 'PedidoVenda',
