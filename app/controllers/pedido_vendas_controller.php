@@ -8,6 +8,7 @@
  */
 
 //#TODO criar alerta caso o(s) pedido(s) totalize(m) um valor maior que o limite de credito  
+//FIXME utilizar transaction
 class PedidoVendasController extends AppController {
 	var $name = 'PedidoVendas';
 	var $components = array('Sanitizacao','Geral');
@@ -47,7 +48,7 @@ class PedidoVendasController extends AppController {
 		foreach ($consulta2 as $op)
 			$this->opcoes_usuarios += array($op['Usuario']['id']=>$op['Usuario']['nome']);
 		$this->set('opcoes_usuarios',$this->opcoes_usuarios);
-	}	
+	}
 	
 	function index() {
 		$dados = $this->paginate('PedidoVenda');
@@ -138,6 +139,63 @@ class PedidoVendasController extends AppController {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
 				$this->Session->setFlash('Pedido de venda cadastrado com sucesso.','flash_sucesso');
+				
+				/**
+				 * Gera conta a receber
+				 */
+				// Apenas crio a forma de pagamento se a situacao do pedido for 'Vendido'
+				if (strtoupper($this->data['PedidoVenda']['situacao']) == 'V' ) {
+					$forma_pagamento = $this->PedidoVenda->FormaPagamento->find('all',array('conditions'=>array('FormaPagamento.id' => $this->data['PedidoVenda']['forma_pagamento_id']),'recursive'=>'-1') );
+					$forma_pagamento = $forma_pagamento[0]['FormaPagamento'];
+					
+					// se a forma de pagamento for 'A vista'
+					if ($forma_pagamento['numero_maximo_parcelas'] == 0) {
+						//aplico desconto a vista
+						$valor_a_receber = $valor_liquido - (($valor_liquido * $forma_pagamento['porcentagem_desconto_a_vista'])/100);
+						$conta_receber = array(
+							'ReceberConta' => array(
+								'data_hora_cadastrada' => date('Y-m-d H:i:s'),
+								'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
+								'eh_cliente_ou_fornecedor' => 'C',
+								'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
+								'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
+								'numero_documento' => $this->PedidoVenda->id,
+								'valor' => $valor_a_receber,
+								'conta_origem' => $forma_pagamento['conta_principal'],
+								'plano_conta_id' => '11',
+								'data_vencimento' => date("Y-m-d"),
+							),
+						);
+					}
+					else { // a forma de pagamento tem uma ou mais parcelas
+						$forma_pagamento['numero_maximo_parcelas'];
+						$valor_a_receber = $valor_liquido;
+						
+						// para cada parcela
+						for ($i = 1; $i <= $forma_pagamento['numero_maximo_parcelas']; $i++) {
+							$conta_receber = array(
+								$i => array(
+									'ReceberConta' => array(
+										'data_hora_cadastrada' => date('Y-m-d H:i:s'),
+										'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
+										'eh_cliente_ou_fornecedor' => 'C',
+										'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
+										'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
+										'numero_documento' => $this->PedidoVenda->id,
+										'valor' => $valor_a_receber,
+										'conta_origem' => $forma_pagamento['conta_principal'],
+										'plano_conta_id' => '11',
+										'data_vencimento' => date("Y-m-d",time()+3600*24*($forma_pagamento['dias_intervalo_parcelamento'])),
+									),
+								),
+							);
+						}
+					}
+					
+					$this->loadModel('ReceberConta');
+					$this->ReceberConta->save($conta_receber);
+				} // fim conta a receber
+				
 				$this->redirect(array('action'=>'index'));
 			}
 			else {

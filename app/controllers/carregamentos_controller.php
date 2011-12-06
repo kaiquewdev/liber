@@ -19,15 +19,26 @@ class CarregamentosController extends AppController {
 			'Carregamento.id' => 'asc'
 		)
 	);
+	var $situacoes = array (
+		'L' => 'Livre',
+		'E' => 'Enviado',
+	);
+        
+        /**
+         * @var Carregamento
+         */
+        var $Carregamento;
 	
 	function _obter_opcoes() {
 		$motoristas = $this->Carregamento->Motorista->find('list',array('fields'=>array('Motorista.id','Motorista.nome')));
 		$veiculos = $this->Carregamento->Veiculo->find('list',array('fields'=>array('Veiculo.id','Veiculo.placa')));
 		$this->set('opcoes_motoristas',$motoristas);
 		$this->set('opcoes_veiculos',$veiculos);
+		$this->set('opcoes_situacoes',$this->situacoes);
 	}
 	
 	function index() {
+		$this->_obter_opcoes();
 		$dados = $this->paginate('Carregamento');
 		$this->set('consulta',$dados);
 	}
@@ -35,7 +46,6 @@ class CarregamentosController extends AppController {
 	function cadastrar() {
 		if (! empty($this->data)) {
 			$this->data['Carregamento'] += array ('data_hora_criado' => date('Y-m-d H:i:s'));
-			$this->data['Carregamento'] += array ('situacao' => 'L');
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->Carregamento->saveAll($this->data,array('validate'=>'first'))) {
 				// marco o(s) pedido(s) com a situacao vendido
@@ -59,7 +69,7 @@ class CarregamentosController extends AppController {
 			}
 		}
 		else {
-			// O carregamento serah montado com os pedidos que estao em aberto
+			// O carregamento será montado com os pedidos que estao em aberto
 			$consulta = $this->Carregamento->CarregamentoItem->PedidoVenda->find('all',array('conditions'=>array('PedidoVenda.situacao'=>'A')));
 			$this->set('consulta_pedidos',$consulta);
 			$this->_obter_opcoes();
@@ -69,8 +79,40 @@ class CarregamentosController extends AppController {
 	
 	function excluir($id=NULL) {
 		if (! empty($id)) {
-			if ($this->Carregamento->delete($id)) $this->Session->setFlash("Carregamento $id excluído com sucesso.",'flash_sucesso');
-			else $this->Session->setFlash("Carregamento $id não pode ser excluído.",'flash_erro');
+			$this->Carregamento->id = $id;
+			// Inicio a transação
+			$this->Carregamento->begin();
+			
+			if (! $this->Carregamento->read()) {
+				$this->Session->setFlash('Carregamento não encontrado','flash_erro');
+				return NULL;
+			}
+			
+			$carregamentoItems = $this->Carregamento->CarregamentoItem->find('all',array('conditions'=>array('CarregamentoItem.carregamento_id'=>$id)));
+			if (empty($carregamentoItems)) {
+				$this->Session->setFlash('Carregamento não possui itens!','flash_erro');
+				return NULL;
+			}
+			foreach ($carregamentoItems as $item) {
+				$this->Carregamento->CarregamentoItem->PedidoVenda->id = $item['PedidoVenda']['id'];
+				$r = $this->Carregamento->CarregamentoItem->PedidoVenda->save(array('PedidoVenda'=>array('situacao'=>'A')));
+				if (! $r) {
+					$this->setFlash('Erro ao atualizar os itens do carregamento','flash_erro');
+					$this->Carregamento->rollback();
+					exit;
+				}
+			}
+			
+			if ($this->Carregamento->CarregamentoItem->deleteAll(array('CarregamentoItem.carregamento_id'=>$id))) {
+				if ($this->Carregamento->delete($id)) {
+					$this->Session->setFlash("Carregamento $id excluído com sucesso.",'flash_sucesso');
+					$this->Carregamento->commit();
+				}
+			}
+			else {
+				$this->Carregamento->rollback();
+				$this->Session->setFlash("Carregamento $id não pode ser excluído.",'flash_erro');
+			}
 			$this->redirect(array('action'=>'index'));
 		}
 		else {
@@ -79,17 +121,31 @@ class CarregamentosController extends AppController {
 	}
 	
 	function pesquisar() {
-		
+		$this->_obter_opcoes();
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
-			$url = array('controller'=>'Clientes','action'=>'pesquisar');
+			$url = array('controller'=>'Carregamentos','action'=>'pesquisar');
 			//convertendo caracteres especiais
-			if( is_array($this->data['Cliente']) ) {
-				foreach($this->data['Cliente'] as &$cliente) {
-					$cliente = urlencode($cliente);
+			if( isset($this->data['Carregamento']) && is_array($this->data['Carregamento']) ) {
+				foreach($this->data['Carregamento'] as &$carregamento) {
+					$carregamento = urlencode($carregamento);
 				}
+				$params = array_merge($url,$this->data['Carregamento']);
 			}
-			$params = array_merge($url,$this->data['Cliente']);
+			if(isset($this->data['Motorista']) && is_array($this->data['Motorista']) ) {
+				foreach($this->data['Motorista'] as &$motorista) {
+					$motorista = urlencode($motorista);
+				}
+				$params = array_merge($params,$this->data['Motorista']);
+			}
+			if( isset($this->data['Veiculo']) && is_array($this->data['Veiculo']) ) {
+				foreach($this->data['Veiculo'] as &$veiculo) {
+					$veiculo = urlencode($veiculo);
+				}
+				$params = array_merge($params,$this->data['Veiculo']);
+			}
+			if (! isset($params) ) $params = $url;
+			
 			$this->redirect($params);
 		}
 		
@@ -97,28 +153,57 @@ class CarregamentosController extends AppController {
 			//a instrucao acima redirecionou para cá
 			$dados = $this->params['named'];
 			$condicoes=array();
-			if (! empty($dados['nome'])) $condicoes[] = array('Cliente.nome LIKE'=>'%'.$dados['nome'].'%');
-			if (! empty($dados['nome_fantasia'])) $condicoes[] = array('Cliente.nome_fantasia LIKE'=>'%'.$dados['nome_fantasia'].'%');
-			if (! empty($dados['bairro'])) $condicoes[] = array('Cliente.bairro'=>$dados['bairro']);
-			if (! empty($dados['cidade'])) $condicoes[] = array('Cliente.cidade'=>$dados['cidade']);
-			if (! empty($dados['cnpj'])) $condicoes[] = array('Cliente.cnpj'=>$dados['cnpj']);
-			if (! empty($dados['inscricao_estadual'])) $condicoes[] = array('Cliente.inscricao_estadual'=>$dados['inscricao_estadual']);
-			if (! empty($dados['cpf'])) $condicoes[] = array('Cliente.cpf'=>$dados['cpf']);
-			if (! empty($dados['rg'])) $condicoes[] = array('Cliente.rg'=>$dados['rg']);
+			if (! empty($dados['data_inicial'])) $condicoes[] = array('Carregamento.data_hora_criado LIKE'=>'%'.$dados['data_inicial'].'%');
+			if (! empty($dados['data_final'])) $condicoes[] = array('Carregamento.data_hora_criado LIKE'=>'%'.$dados['data_final'].'%');
+			if (! empty($dados['situacao'])) $condicoes[] = array('Carregamento.situacao'=>$dados['situacao']);
+			if (! empty($dados['descricao'])) $condicoes[] = array('Carregamento.descricao'=>$dados['descricao']);
+			if (! empty($dados['motorista'])) $condicoes[] = array('Motorista.id'=>$dados['motorista']);
+			if (! empty($dados['veiculo'])) $condicoes[] = array('Veiculo.id'=>$dados['veiculo']);
 			if (! empty ($condicoes)) {
-				$resultados = $this->paginate('Cliente',$condicoes);
+				$resultados = $this->paginate('Carregamento',$condicoes);
 				if (! empty($resultados)) {
 					$num_encontrados = count($resultados);
 					$this->set('resultados',$resultados);
 					$this->set('num_resultados',$num_encontrados);
-					$this->Session->setFlash("$num_encontrados cliente(s) encontrado(s)",'flash_sucesso');
+					$this->Session->setFlash("$num_encontrados carregamento(s) encontrado(s)",'flash_sucesso');
 				}
-				else $this->Session->setFlash("Nenhum cliente encontrado",'flash_erro');
+				else $this->Session->setFlash("Nenhum carregamento encontrado",'flash_erro');
 			}
 			else {
 				$this->set('num_resultados','0');
 				$this->Session->setFlash("Nenhum resultado encontrado",'flash_erro');
 			}
+		}
+	}
+
+	function detalhar($id = NULL) {
+		if ($id) {
+			$this->Carregamento->id = $id;
+			$r = $this->Carregamento->read();
+			if (empty($r)) {
+				$this->Session->setFlash("Carregamento $id não encontrado");
+				return null;
+			}
+			else $this->set('carregamento',$r);
+		}
+		else {
+			$this->Session->setFlash('Erro: nenhum carregamento informado.','flash_erro');
+		}
+	}
+	
+	/**
+	 * Principal action para relatórios, ela é responsavel
+	 * por chamar o metodo apropriado para a geração do relatório.
+	 */
+	function relatorios ($relatorio = NULL) {
+		if (empty ($relatorio)) {
+			$this->Session->setFlash('Relatório não informado','flash_erro');
+			$this->redirect(array('action'=>'index'));
+			return NULL;
+		}
+		
+		if (strtoupper($relatorio) == 'PEDIDOSPORCARREGAMENTO') {
+			
 		}
 	}
 	

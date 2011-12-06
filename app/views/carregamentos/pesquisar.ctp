@@ -1,39 +1,19 @@
 <script type="text/javascript">
 		$(function(){
-			//pesquisa cliente
-			//autocomplete
-			$("#FornecedorNome").autocomplete({
-				source: "<?php print $html->url('/',true); ?>/Fornecedores/pesquisaAjaxFornecedor/nome",
-				minLength: 3,
-				select: function(event, ui) {
-					$("#FornecedorId").val(ui.item.id);
-					$('#FornecedorNome').val(ui.item.nome);
-				}
+			$(".datepicker").datepicker({
+				showOn: "button",
+				buttonImage: "<?php print $html->url('/',true); ?>/img/calendario_icone.gif",
+				buttonImageOnly: true
 			});
-			// ao digitar o codigo
-			$('#FornecedorId').blur(function(){
-				codigo = $(this).val();
-				if (codigo == null || codigo == '') return null;
-				$.getJSON('<?php print $html->url('/',true); ?>/Fornecedores/pesquisaAjaxFornecedor/codigo', {'term': codigo}, function(data) {
-					if (data == null) {
-						alert ('Fornecedor com o código '+codigo+' não foi encontrado!');
-						$('#FornecedorNome').val('');
-						$("#FornecedorId")
-							.val('')
-							.focus();
-					}
-					else { //encontrou resultados
-						data = data[0];
-						$("#FornecedorId").val(data.id);
-						$('#FornecedorNome').val(data.nome);
-					}
-				});
-			});
+	
 		});
 </script>
 <h2 class="descricao_cabecalho">Pesquisar carregamento</h2>
 
 <?php
+array_unshift($opcoes_situacoes,array(''=>''));
+array_unshift($opcoes_motoristas,array(''=>''));
+array_unshift($opcoes_veiculos,array(''=>''));
 /**
  * Elimino as divs dos campos input para que nao apareça quais campos
  * sao marcados como obrigatorios no BD, pois aqui isso non ecxiste
@@ -44,21 +24,22 @@ print $form->create(null,array('controller'=>'carregamentos','action'=>'pesquisa
 	
 	<div class="div1_2">
 		<?php
-		print '<div>'.$form->input('nome_fantasia', array('label'=>'Nome fantasia','div'=>false)).'</div>';
-		print '<div>'.$form->input('bairro',array('div'=>false)).'</div>';
-		print '<div>'.$form->input('cidade',array('div'=>false)).'</div>';
+		print '<div>'.$form->input('data_inicial', array('label'=>'Data Inicial','div'=>false,'class'=>'datepicker mascara_data')).'</div>';
+		print '<div>'.$form->input('data_final',array('div'=>false,'class'=>'datepicker mascara_data')).'</div>';
+		print '<div>'.$form->input('situacao',array('div'=>false,'label'=>'Situação','options'=>$opcoes_situacoes)).'</div>';
 		?>
 	</div>
 	
 	<div class="div2_2">
 		<?php
-		print '<div>'.$form->input('cnpj',array('label'=>'CNPJ','div'=>false)).'</div>';
-		print '<div>'.$form->input('inscricao_estadual',array('label'=>'Inscrição estadual','div'=>false)).'</div>';
-		print '<div>'.$form->input('cpf',array('label'=>'CPF','div'=>false)).'</div>';
-		print '<div>'.$form->input('rg',array('label'=>'RG','div'=>false)).'</div>';
+		print '<div>'.$form->input('descricao',array('label'=>'Descrição','div'=>false)).'</div>';
+		print '<div>'.$form->input('motorista',array('label'=>'Motorista','div'=>false,'options'=>$opcoes_motoristas)).'</div>';
+		print '<div>'.$form->input('veiculo',array('label'=>'Veículo','div'=>false,'options'=>$opcoes_veiculos)).'</div>';
 		?>
 	</div>
-	
+
+<div class="limpar">&nbsp;</div>
+
 	<?php
 	print $form->end('Pesquisar');	
 	?>
@@ -70,13 +51,11 @@ print $form->create(null,array('controller'=>'carregamentos','action'=>'pesquisa
 		<thead>
 			<tr>
 				<th><?php print $paginator->sort('Cód','id'); ?></th>
-				<th><?php print $paginator->sort('Pessoa','tipo_pessoa'); ?></th>
-				<th><?php print $paginator->sort('Nome','nome'); ?></th>
-				<th><?php print $paginator->sort('Nome fantasia','nome_fantasia'); ?></th>
-				<th><?php print $paginator->sort('Cidade','cidade'); ?></th>
-				<th>CPF/CNPJ</th>
-				<th>RG/IE</th>
-				<th><?php print $paginator->sort('Usuário cadastrou','usuario_cadastrou'); ?></th>
+				<th><?php print $paginator->sort('Criado em','data_hora_criado'); ?></th>
+				<th><?php print $paginator->sort('Situação','situacao'); ?></th>
+				<th><?php print $paginator->sort('Descrição','descricao'); ?></th>
+				<th><?php print $paginator->sort('Motorista','motorista'); ?></th>
+				<th><?php print $paginator->sort('Veículo','veiculo'); ?></th>
 				<th colspan="2">Ações</th>
 			</tr>
 		</thead>
@@ -84,18 +63,16 @@ print $form->create(null,array('controller'=>'carregamentos','action'=>'pesquisa
 		<tbody>
 			<?php foreach ($resultados as $r) : ?>
 				<tr>
-					<td><?php print $r['Fornecedor']['id']; ?></td>
-					<td><?php print $r['Fornecedor']['tipo_pessoa']; ?></td>
-					<td><?php print $html->link($r['Fornecedor']['nome'],'editar/' . $r['Fornecedor']['id']) ;?></td>
-					<td><?php print $r['Fornecedor']['nome_fantasia']; ?></td>
-					<td><?php print $r['Fornecedor']['cidade']; ?></td>
-					<td><?php print $r['Fornecedor']['cpf'].$r['Fornecedor']['cnpj']; ?></td>
-					<td><?php print $r['Fornecedor']['rg'].$r['Fornecedor']['inscricao_estadual']; ?></td>
-					<td><?php print $r['Usuario']['login']; ?></td>
+					<td><?php print $r['Carregamento']['id']; ?></td>
+					<td><?php print $html->link($r['Carregamento']['data_hora_criado'],'editar/' . $r['Carregamento']['id']) ;?></td>
+					<td><?php print $opcoes_situacoes[$r['Carregamento']['situacao']]; ?></td>
+					<td><?php print $r['Carregamento']['descricao']; ?></td>
+					<td><?php print $r['Motorista']['nome']; ?></td>
+					<td><?php print $r['Veiculo']['placa']; ?></td>
 					<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-					'alt'=>'Editar','url'=>array('action'=>'editar',$r['Fornecedor']['id']))) ?></td>
+					'alt'=>'Editar','url'=>array('action'=>'editar',$r['Carregamento']['id']))) ?></td>
 					<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
-					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['Fornecedor']['id']))) ?></td>
+					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['Carregamento']['id']))) ?></td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

@@ -10,13 +10,7 @@ class FormaPagamentosController extends AppController {
 		)
 	);
 	
-	function index() {
-		$dados = $this->paginate('FormaPagamento');
-		$this->set('consulta_forma_pagamento',$dados);
-	}
-	
-	function cadastrar() {
-		//definindo dados para serem exibidos na view
+	function _obter_opcoes() {
 		$this->loadModel('Conta');
 		$contas = $this->Conta->find('all');
 		$opcoes_contas = array();
@@ -25,29 +19,43 @@ class FormaPagamentosController extends AppController {
 		}
 		$this->set('opcoes_contas',$opcoes_contas);
 		
-		#FIXME exibir legenda que 0 = a vista
 		$numero_maximo_parcelas = range(0, 50);
+		$numero_maximo_parcelas[0] = 'A vista';
 		$this->set('numero_maximo_parcelas',$numero_maximo_parcelas);
 		
 		$numero_parcelas_sem_juros = range(0, 50);
 		$this->set('numero_parcelas_sem_juros',$numero_parcelas_sem_juros);
 		
-		#FIXME colocar isso em num model e tornar uma opção padrao
+		#XXX colocar isso em num model e tornar uma opção padrao
 		$dias_intervalo_parcelas = array(
-		'1'=>'Uma por dia',
-		'7'=>'Uma a cada semana',
-		'15'=>'Uma a cada 15 dias',
-		'21'=>'Uma a cada 21 dias',
-		'30'=>'Uma por mês',
-		'60'=>'Uma a cada dois meses',
-		'90'=>'Uma a cada três meses',
-		'120'=>'Uma a cada quatro meses',
-		'180'=>'Uma a cada seis meses',
-		'365'=>'Uma por ano',
-		'730'=>'Uma a cada dois anos',
-		'1095'=>'Uma a cada três anos'
+			'0' => 'Não há',
+			'1'=>'Uma por dia',
+			'7'=>'Uma a cada semana',
+			'15'=>'Uma a cada 15 dias',
+			'21'=>'Uma a cada 21 dias',
+			'30'=>'Uma por mês',
+			'60'=>'Uma a cada dois meses',
+			'90'=>'Uma a cada três meses',
+			'120'=>'Uma a cada quatro meses',
+			'180'=>'Uma a cada seis meses',
+			'365'=>'Uma por ano',
+			'730'=>'Uma a cada dois anos',
+			'1095'=>'Uma a cada três anos'
 		);
 		$this->set('dias_intervalo_parcelas',$dias_intervalo_parcelas);
+		
+		$r = $this->FormaPagamento->TipoDocumento->find('list',array('fields'=>array('TipoDocumento.id','TipoDocumento.nome')));
+		$this->set('opcoes_documentos',$r);
+	}
+	
+	function index() {
+		$dados = $this->paginate('FormaPagamento');
+		$this->set('consulta_forma_pagamento',$dados);
+	}
+	
+	function cadastrar() {
+		
+		$this->_obter_opcoes();
 		
 		if (! empty($this->data)) {
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
@@ -62,38 +70,7 @@ class FormaPagamentosController extends AppController {
 	}
 	
 	function editar($id=NULL) {
-		//definindo dados para serem exibidos na view
-		$this->loadModel('Conta');
-		$contas = $this->Conta->find('all');
-		$opcoes_contas = array();
-		foreach ($contas as $c) {
-			$opcoes_contas += array($c['Conta']['id']=>$c['Conta']['nome']);
-		}
-		$this->set('opcoes_contas',$opcoes_contas);
-		
-		#FIXME exibir legenda que 0 = a vista
-		$numero_maximo_parcelas = range(0, 50);
-		$this->set('numero_maximo_parcelas',$numero_maximo_parcelas);
-		
-		$numero_parcelas_sem_juros = range(0, 50);
-		$this->set('numero_parcelas_sem_juros',$numero_parcelas_sem_juros);
-		
-		#FIXME colocar isso em num model e tornar uma opção padrao
-		$dias_intervalo_parcelas = array(
-		'1'=>'Uma por dia',
-		'7'=>'Uma a cada semana',
-		'15'=>'Uma a cada 15 dias',
-		'21'=>'Uma a cada 21 dias',
-		'30'=>'Uma por mês',
-		'60'=>'Uma a cada dois meses',
-		'90'=>'Uma a cada três meses',
-		'120'=>'Uma a cada quatro meses',
-		'180'=>'Uma a cada seis meses',
-		'365'=>'Uma por ano',
-		'730'=>'Uma a cada dois anos',
-		'1095'=>'Uma a cada três anos'
-		);
-		$this->set('dias_intervalo_parcelas',$dias_intervalo_parcelas);
+		$this->_obter_opcoes();
 			
 		if (empty ($this->data)) {
 			$this->data = $this->FormaPagamento->read();

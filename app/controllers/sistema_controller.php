@@ -17,6 +17,15 @@ class SistemaController extends AppController {
 	function sobre() {
 		
 	}
+	
+	function noscript(){
+		/**
+		 *  basicamente definido um novo layout pois este nao pode ter a tag
+		 * noscript que redireciona para a pagina sistema/noscript, pois ficaria em loop infinito.
+		 * O novo layout remove scripts e quase todo o menu.
+		 */
+		$this->layout = 'noscript';
+	}
 }
 
 ?>

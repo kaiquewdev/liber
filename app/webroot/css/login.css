@@ -36,7 +36,7 @@
 
 /** Estilo geral **/
 body {
-	background: url('../img/bg.png') repeat;
+	background: url(../img/img.png);
 	color: #fff;
 	margin: 0;
 }

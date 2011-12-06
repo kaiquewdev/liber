@@ -294,7 +294,8 @@ li.sfHover > a > .sf-sub-indicator {
 
 /** Estilo geral **/
 body {
-	background: url('../img/bg.png') repeat;
+	/*background: url('../img/bg.png') repeat;*/
+        background: url(../img/img.png);
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	margin: 0;

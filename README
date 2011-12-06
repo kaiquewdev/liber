@@ -1,0 +1,4 @@
+Baixe o cakephp
+substitua o diretorio app por este
+chmod -R 777 app/tmp
+apenas o diretorio app é versionado

@@ -6,7 +6,11 @@ class FormaPagamento extends AppModel {
 		'Conta' => array(
 			'className' => 'Conta',
 			'foreignKey' => 'conta_principal'
-		)
+		),
+		'TipoDocumento' => array(
+		    'className' => 'TipoDocumento',
+		    'foreignKey' => 'tipo_documento_id'
+		),
 	);
 	var $hasMany = array(
 		'ServicoOrdem' => array(
@@ -48,7 +52,11 @@ class FormaPagamento extends AppModel {
 		'conta_principal' => array(
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'
-		)
+		),
+		'tipo_documento_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
 	);
 }
 

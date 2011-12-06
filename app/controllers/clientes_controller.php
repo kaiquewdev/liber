@@ -129,7 +129,12 @@ class ClientesController extends AppController {
 	function detalhar($id = NULL) {
 		if ($id) {
 			$this->Cliente->id = $id;
-			$this->set('cliente',$this->Cliente->read());
+			$r = $this->Cliente->read();
+			if (empty($r)) {
+				$this->Session->setFlash("Cliente $id não encontrado");
+				return null;
+			}
+			else $this->set('cliente',$r);
 		}
 		else {
 			$this->Session->setFlash('Erro: nenhum cliente informado.','flash_erro');

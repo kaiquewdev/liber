@@ -2,6 +2,9 @@
 <html>
 	<head>
 		<?php print $this->Html->charset()."\n"; ?>
+		<noscript>
+			<meta http-equiv="refresh" content="0; URL=<?php print $this->Html->url('/',true); ?>sistema/noscript" />
+		</noscript>
 		<title>
 			<?php
 			__('Liber - ');
@@ -70,7 +73,7 @@
 							<li>
 								<a href="#">Relatórios</a>
 								<ul>
-									<li><?php print $html -> link('Fornecedores cadastrados', "/relatorios/fornecedoresCadastrados");?></li>
+									<li><?php print $html -> link('Fornecedores cadastrados', "fornecedores/relatorios/fornecedoresCadastrados");?></li>
 								</ul>
 							</li>
 						</ul>
@@ -105,7 +108,7 @@
 							<li>
 								<a href="#">Relatórios</a>
 								<ul>
-									<li><?php print $html -> link('ABC de vendas', "/relatorios/abcvendas");?></li>
+									<li><?php print $html -> link('ABC de vendas', "pedidoVendas/relatorios/abcVendas");?></li>
 								</ul>
 							</li>
 						</ul>
@@ -140,6 +143,12 @@
 							</li>
 							<li><?php print $html -> link('Motoristas', "/motoristas/");?></li>
 							<li><?php print $html -> link('Veículos', "/veiculos");?></li>
+							<li>
+								<a href="#">Relatórios</a>
+								<ul>
+									<li><?php print $html -> link('Pedidos por carregamento', "/carregamentos/relatorios/pedidosPorCarregamento");?></li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 			
@@ -163,7 +172,7 @@
 								</ul>
 							</li>
 							<li><?php print $html -> link('Plano de contas', "/planoContas/");?></li>
-							<li><?php print $html -> link('Tipo de documentos', "/tipoDocumentos/");?></li>
+							<li><?php print $html -> link('Tipos de documentos', "/tipoDocumentos/");?></li>
 							<li class="separador"></li>
 							<li><?php print $html -> link('Formas de pagamento', "/formaPagamentos");?></li>
 							<li><?php print $html -> link('Contas', "/contas/");?></li>

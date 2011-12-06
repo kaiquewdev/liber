@@ -60,6 +60,16 @@ print $form->input('descricao',array('label'=>'Descrição'));
 			));
 		?>
 </div>
+<div class="grupo_horizontal">
+	<?php
+		print $form->label('situacao','Situação',array('class'=>'required'));
+		print $form->input('situacao',array(
+			'div'=>false,
+			'label'=>false,
+			'options'=>$opcoes_situacoes
+			));
+		?>
+</div>
 <div class="limpar"></div>
 
 	<fieldset>

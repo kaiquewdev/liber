@@ -129,10 +129,15 @@ class FornecedoresController extends AppController {
 	function detalhar($id = NULL) {
 		if ($id) {
 			$this->Fornecedor->id = $id;
-			$this->set('fornecedor',$this->Fornecedor->read());
+			$r = $this->Fornecedor->read();
+			if (empty($r)) {
+				$this->Session->setFlash("Fornecedor $id não encontrado");
+				return null;
+			}
+			else $this->set('fornecedor',$r);
 		}
 		else {
-			$this->Session->setFlash('Erro: nenhum Fornecedor informado.','flash_erro');
+			$this->Session->setFlash('Nenhum fornecedor informado.','flash_erro');
 		}
 	}
 
