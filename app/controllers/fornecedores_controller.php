@@ -3,7 +3,7 @@
 class FornecedoresController extends AppController {
 	var $name = 'Fornecedores'; // PHP 4
 	var $helpers = array('CakePtbr.Estados','Javascript','Ajax');
-	var $components = array('Sanitizacao','RequestHandler');
+	var $components = array('RequestHandler');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -47,7 +47,7 @@ class FornecedoresController extends AppController {
 		if (! empty($this->data)) {
 			$this->data['Fornecedor'] += array ('data_cadastrado' => date('Y-m-d H:i:s'));
 			$this->data['Fornecedor'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Fornecedor->save($this->data)) {
 				$this->Session->setFlash('Fornecedor cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Fornecedores'));
@@ -71,7 +71,7 @@ class FornecedoresController extends AppController {
 			$this->data['Fornecedor']['id'] = $id;
 			$this->data['Fornecedor'] += array ('atualizado' => date('Y-m-d H:i:s'));
 			$this->data['Fornecedor'] += array ('usuario_alterou' => $this->Auth->user('id'));
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Fornecedor->save($this->data)) {
 				$this->Session->setFlash('Fornecedor atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Fornecedores'));

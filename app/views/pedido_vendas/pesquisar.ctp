@@ -80,7 +80,7 @@ print $form->create(null,array('controller'=>'pedidoVendas','action'=>'pesquisar
 	<div class="div2_2">
 		<div>
 			<?php
-			$opcoes_situacoes = array_merge(array(''=>''),$opcoes_situacoes);
+			$opcoes_situacoes = array_merge(array('0'=>''),$opcoes_situacoes);
 			print $form->label('situacao','Situacao',array('class'=>'norequired'));
 				print $form->input('situacao', array(
 				'div'=>false,
@@ -91,7 +91,7 @@ print $form->create(null,array('controller'=>'pedidoVendas','action'=>'pesquisar
 		</div>
 		<div>
 			<?php
-			$opcoes_usuarios = array_merge (array(''=>''),$opcoes_usuarios);
+			$opcoes_usuarios = array_merge (array('0'=>''),$opcoes_usuarios);
 			print $form->label('usuario_cadastrou','Usuário cadastrou',array('class'=>'norequired'));
 				print $form->input('usuario_cadastrou', array(
 				'div'=>false,

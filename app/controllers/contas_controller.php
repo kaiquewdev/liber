@@ -17,7 +17,7 @@ class ContasController extends AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Conta->save($this->data)) {
 				$this->Session->setFlash('Conta cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -38,7 +38,7 @@ class ContasController extends AppController {
 		}
 		else {
 			$this->data['Conta']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Conta->save($this->data)) {
 				$this->Session->setFlash('Conta atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

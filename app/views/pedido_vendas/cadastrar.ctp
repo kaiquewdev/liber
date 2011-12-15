@@ -40,7 +40,7 @@ $javascript->link('formatar_moeda.js',false);
 				<?php
 				// #TODO implementar opcoes de resgatar numero de parcelas
 				// armazenar numero de parcelas no banco?
-				$opcoes_forma_pamamento = array_merge(array(''=>''),$opcoes_forma_pamamento);
+				$opcoes_forma_pamamento = array_merge(array('0'=>''),$opcoes_forma_pamamento);
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('data_venda',array('label'=>'Data da venda','type'=>'text','class'=>'mascara_data datepicker'));
 				

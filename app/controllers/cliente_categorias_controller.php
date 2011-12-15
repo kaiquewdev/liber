@@ -17,7 +17,7 @@ class ClienteCategoriasController extends AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->ClienteCategoria->save($this->data)) {
 				$this->Session->setFlash('Categoria de cliente cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -38,7 +38,7 @@ class ClienteCategoriasController extends AppController {
 		}
 		else {
 			$this->data['ClienteCategoria']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->ClienteCategoria->save($this->data)) {
 				$this->Session->setFlash('Categoria de cliente atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

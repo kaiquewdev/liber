@@ -18,7 +18,7 @@ class EmpresasController extends AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Empresa->save($this->data)) {
 				$this->Session->setFlash('Empresa cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -39,7 +39,7 @@ class EmpresasController extends AppController {
 		}
 		else {
 			$this->data['Empresa']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Empresa->save($this->data)) {
 				$this->Session->setFlash('Empresa atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

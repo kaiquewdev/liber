@@ -2,7 +2,7 @@
 
 class FormaPagamentosController extends AppController {
 	var $name = 'FormaPagamentos';
-	var $components = array('Sanitizacao','RequestHandler');
+	var $components = array('RequestHandler');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -58,7 +58,7 @@ class FormaPagamentosController extends AppController {
 		$this->_obter_opcoes();
 		
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->FormaPagamento->save($this->data)) {
 				$this->Session->setFlash('Forma de pagamento cadastrada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -85,7 +85,7 @@ class FormaPagamentosController extends AppController {
 		}
 		else {
 			$this->data['FormaPagamento']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->FormaPagamento->save($this->data)) {
 				$this->Session->setFlash('Forma de pagamento atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

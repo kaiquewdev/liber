@@ -2,7 +2,7 @@
 
 class ClientesController extends AppController {
 	var $name = 'Clientes'; // PHP 4
-	var $components = array('Sanitizacao','RequestHandler');
+	var $components = array('RequestHandler');
 	var $helpers = array('CakePtbr.Estados','Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
@@ -47,7 +47,7 @@ class ClientesController extends AppController {
 		if (! empty($this->data)) {
 			$this->data['Cliente'] += array ('data_cadastrado' => date('Y-m-d H:i:s'));
 			$this->data['Cliente'] += array ('usuario_cadastrou' => $this->Auth->user('id'));
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Cliente->save($this->data)) {
 				$this->Session->setFlash('Cliente cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Clientes'));
@@ -71,7 +71,7 @@ class ClientesController extends AppController {
 			$this->data['Cliente']['id'] = $id;
 			$this->data['Cliente'] += array ('atualizado' => date('Y-m-d H:i:s'));
 			$this->data['Cliente'] += array ('usuario_alterou' => $this->Auth->user('id'));
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Cliente->save($this->data)) {
 				$this->Session->setFlash('Cliente atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('controller'=>'Clientes'));

@@ -46,7 +46,7 @@ class CarregamentosController extends AppController {
 	function cadastrar() {
 		if (! empty($this->data)) {
 			$this->data['Carregamento'] += array ('data_hora_criado' => date('Y-m-d H:i:s'));
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Carregamento->saveAll($this->data,array('validate'=>'first'))) {
 				// marco o(s) pedido(s) com a situacao vendido
 				// futuramente, quando houver faturamento, os pedidos serao marcados

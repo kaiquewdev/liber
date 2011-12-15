@@ -2,7 +2,7 @@
 
 class ProdutosController extends AppController {
 	var $name = 'Produtos';
-	var $components = array('Sanitizacao','RequestHandler');
+	var $components = array('RequestHandler');
 	var $helpers = array('Ajax', 'Javascript');
 	var $paginate = array (
 		'limit' => 10,
@@ -32,7 +32,7 @@ class ProdutosController extends AppController {
 	function cadastrar() {
 		$this->_obter_opcoes();
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Produto->save($this->data)) {
 				$this->Session->setFlash('Produto cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -54,7 +54,7 @@ class ProdutosController extends AppController {
 		}
 		else {
 			$this->data['Produto']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Produto->save($this->data)) {
 				$this->Session->setFlash("Produto $id atualizado com sucesso.",'flash_sucesso');
 				$this->redirect(array('action'=>'index'));

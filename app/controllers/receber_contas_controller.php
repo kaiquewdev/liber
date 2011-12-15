@@ -82,7 +82,7 @@ class ReceberContasController extends AppController {
 			
 			else {
 				$this->data['ReceberConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
-				$this->data = $this->Sanitizacao->sanitizar($this->data);
+				
 				if ($this->ReceberConta->save($this->data)) {
 					$this->Session->setFlash('Conta a receber cadastrada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));

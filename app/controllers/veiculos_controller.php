@@ -17,7 +17,7 @@ class VeiculosController extends AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Veiculo->save($this->data)) {
 				$this->Session->setFlash('Veiculo cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -38,7 +38,7 @@ class VeiculosController extends AppController {
 		}
 		else {
 			$this->data['Veiculo']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->Veiculo->save($this->data)) {
 				$this->Session->setFlash('Veículo atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

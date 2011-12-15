@@ -82,7 +82,7 @@ class PagarContasController extends AppController {
 			
 			else {
 				$this->data['PagarConta'] += array ('data_hora_cadastrada' => date('Y-m-d H:i:s'));
-				$this->data = $this->Sanitizacao->sanitizar($this->data);
+				
 				if ($this->PagarConta->save($this->data)) {
 					$this->Session->setFlash('Conta a pagar cadastrada com sucesso.','flash_sucesso');
 					$this->redirect(array('action'=>'index'));

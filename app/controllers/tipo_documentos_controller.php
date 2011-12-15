@@ -17,7 +17,7 @@ class TipoDocumentosController extends AppController {
 	
 	function cadastrar() {
 		if (! empty($this->data)) {
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->TipoDocumento->save($this->data)) {
 				$this->Session->setFlash('Tipo de documento cadastrado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
@@ -38,7 +38,7 @@ class TipoDocumentosController extends AppController {
 		}
 		else {
 			$this->data['TipoDocumento']['id'] = $id;
-			$this->data = $this->Sanitizacao->sanitizar($this->data);
+			
 			if ($this->TipoDocumento->save($this->data)) {
 				$this->Session->setFlash('Tipo de documento atualizado com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
