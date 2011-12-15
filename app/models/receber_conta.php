@@ -21,6 +21,9 @@ class ReceberConta extends AppModel {
 		'Fornecedor' => array(
 			'className' => 'Fornecedor',
 			'foreignKey' => 'cliente_fornecedor_id'
+		),
+		'Empresa' => array(
+			'className' => 'Empresa'
 		)
 	);
 	var $validate = array(
@@ -61,6 +64,14 @@ class ReceberConta extends AppModel {
 				'rule' => 'date',
 				'message' => 'Data inválida.'
 			)
+		),
+		'empresa_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
+		'situacao' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
 		)
 	);
 }

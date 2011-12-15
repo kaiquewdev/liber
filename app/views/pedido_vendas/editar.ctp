@@ -3,6 +3,7 @@
 	var raiz_site = "<?php print $this->Html->url('/',true); ?>/";
 	var ajaxPesqCliente = "<?php print $this->Html->url(array('controller'=>'Clientes','action'=>'pesquisaAjaxCliente')); ?>/";
 	var ajaxPesqProduto = "<?php print $this->Html->url(array('controller'=>'Produtos','action'=>'pesquisaAjaxProduto')); ?>/";
+	var ajaxPesqFormaPagamento = "<?php print $this->Html->url(array('controller'=>'FormaPagamentos','action'=>'pesquisaAjaxNumeroMaximoParcelas')); ?>/";
 </script>
 
 <?php
@@ -10,7 +11,7 @@ $javascript->link('pedido_venda.js',false);
 $javascript->link('formatar_moeda.js',false);
 ?>
 
-<h2 class="descricao_cabecalho">Cadastrar pedido de venda</h2>
+<h2 class="descricao_cabecalho">Editar pedido de venda</h2>
 
 <?php print $form->create('PedidoVenda',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;')); ?>
 
@@ -37,20 +38,17 @@ $javascript->link('formatar_moeda.js',false);
 					<input style="margin-left: 1%; width: 80%" type="text" name="pesquisar_cliente" id="pesquisar_cliente" />
 				</div>
 				<?php
+				$opcoes_forma_pamamento = array_merge(array(''=>''),$opcoes_forma_pamamento);
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('data_venda',array('label'=>'Data da venda','type'=>'text','class'=>'mascara_data datepicker'));
-				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
 				?>
 			</div>
 			<div class="div2_2">
 				<?php
+				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
 				print $form->input('data_entrega',array('label'=>'Data entrega','type'=>'text','class'=>'mascara_data datepicker'));
-				print $form->input('situacao',array('label'=>'Situação','options'=>array(
-				'A' => 'Aberto',
-				'O' => 'Orçamento',
-				'C' => 'Cancelado',
-				'V' => 'Vendido'
-				)));
+				unset($opcoes_situacoes['C']);
+				print $form->input('situacao',array('label'=>'Situação','options'=>$opcoes_situacoes));
 				print $form->input('desconto',array('label'=>'Desconto'));
 				?>
 			</div>
@@ -108,7 +106,7 @@ $javascript->link('formatar_moeda.js',false);
 								'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][produto_id]" value="'.$item['produto_id'].'" class="noinput item_id" /> </td>'.
 								'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][produto_nome]" value="'.$item['produto_nome'].'" class="noinput item_nome" /> </td>'.
 								'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][quantidade]" value="'.$item['quantidade'].'" class="noinput item_qtd" /> </td>'.
-								'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][preco_venda]" value="'.$item['preco_venda'].'" class="noinput item_val" /> </td>'.
+								'<td> <input type="text" name="data[PedidoVendaItem]['.$i.'][preco_venda]" value="'.$geral->numero2moeda($item['preco_venda']).'" class="noinput item_val" /> </td>'.
 								'<td> <img src="'.$this->Html->url('/',true).'/img/del24x24.png" class="remover_linha"/> </td>'.
 								'</tr>'."\n";
 								$i++;
@@ -128,7 +126,9 @@ $javascript->link('formatar_moeda.js',false);
 		<div class="limpar">&nbsp;</div>
 	</div> <!-- fim de produtos -->
 	
-	<id id="outros">
+	<div id="outros">
+		<?php print $form->input('empresa_id',array('label'=>'Empresa','options'=>$opcoes_empresas)); ?>
+		
 		<div class="grupo_horizontal">
 			<?php print $form->input('custo_frete',array('label'=>'Custo do frete')); ?>
 		</div>

@@ -22,6 +22,9 @@ class ServicoOrdem extends AppModel {
 		'usuario_alterou' => array(
 			'className' => 'Usuario',
 			'foreignKey' => 'usuario_alterou'
+		),
+		'Empresa' => array(
+			'className' => 'Empresa',
 		)
 	);
 	var $hasMany = array(
@@ -53,7 +56,11 @@ class ServicoOrdem extends AppModel {
 		'data_hora_inicio' => array(
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'
-		)
+		),
+		'empresa_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
 	);
 	
 

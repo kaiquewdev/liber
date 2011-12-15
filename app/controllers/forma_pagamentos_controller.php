@@ -2,7 +2,7 @@
 
 class FormaPagamentosController extends AppController {
 	var $name = 'FormaPagamentos';
-	var $components = array('Sanitizacao');
+	var $components = array('Sanitizacao','RequestHandler');
 	var $paginate = array (
 		'limit' => 10,
 		'order' => array (
@@ -104,6 +104,29 @@ class FormaPagamentosController extends AppController {
 		}
 		else {
 			$this->Session->setFlash('Forma de pagamento não informada.','flash_erro');
+		}
+	}
+	
+	/**
+	 * Retorna o numero maximo de parcelas definido para a forma de pagamento
+	 * identificada pelo id $forma_pagamento_id
+	 * 
+	 * @param int $forma_pagamento_id 
+	 * @return int
+	 */
+	function pesquisaAjaxNumeroMaximoParcelas ($forma_pagamento_id = null) {
+		if (! isset($forma_pagamento_id)) $forma_pagamento_id = $this->params['url']['id'];
+		if ( $this->RequestHandler->isAjax() ) {
+   			Configure::write ('debug',0);
+   			$this->autoRender=false;
+			if (empty($forma_pagamento_id)) return null;
+			$this->FormaPagamento->id = $forma_pagamento_id;
+			$r = $this->FormaPagamento->field('numero_maximo_parcelas');
+			if ($r === false) return null;
+			else {
+				$resultado = array('numero_maximo_parcelas'=>$r);
+				print json_encode ($resultado);
+			}
 		}
 	}
 	

@@ -20,6 +20,33 @@ $(function() {
 		$('#PedidoVendaDataVenda').val(data_fim);
 	}
 	
+	$('#PedidoVendaFormaPagamentoId').change(function(){
+		$('.numeroparcelas').remove();
+		id = $(this).val();
+		$.getJSON(ajaxPesqFormaPagamento, {'id': id}, function(data) {
+			if (data == null) {
+				alert ('Forma de pagamento '+id+' não foi encontrada!');
+			}
+			else { //encontrou resultados
+				
+				if (data.numero_maximo_parcelas > 0) {
+					var opcoes;
+					for (i=1;i<=data.numero_maximo_parcelas;i++) {
+						opcoes+= '<option value='+i+'>'+i+'</option>';
+					}
+					html = '<div class="input select required numeroparcelas">\n\
+							<label for="PedidoVendaNumeroParcelas">Número de parcelas</label>\n\
+							<select id="PedidoVendaNumeroParcelas" name="data[PedidoVenda][numero_parcelas]">\n\
+							'+opcoes+'\n\
+							</select>\n\
+						</div>';
+					$('#PedidoVendaFormaPagamentoId').after(html);
+				}
+				
+			}
+		});
+	});
+	
 	//pesquisa cliente
 	//autocomplete
 	$("#pesquisar_cliente").autocomplete({

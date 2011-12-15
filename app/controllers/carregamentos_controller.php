@@ -5,7 +5,7 @@
  * L => Livre
  * E => Enviado
  * 
- * No nomento o usuario marca o carregamento como enviado, quando houver
+ * #TODO No nomento o usuario marca o carregamento como enviado, quando houver
  * a rotina de faturamento, ao faturar será marcado como enviado
  */
 
@@ -203,8 +203,13 @@ class CarregamentosController extends AppController {
 		}
 		
 		if (strtoupper($relatorio) == 'PEDIDOSPORCARREGAMENTO') {
-			
+			$this->_relatorioPedidosPorCarregamento();
 		}
+	}
+	
+	function _relatorioPedidosPorCarregamento() {
+		
+			
 	}
 	
 }

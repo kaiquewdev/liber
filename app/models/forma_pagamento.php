@@ -41,7 +41,7 @@ class FormaPagamento extends AppModel {
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'
 		),
-		'valor_taxa_fixa' => array(
+		'valor_minimo_parcela' => array(
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'
 		),

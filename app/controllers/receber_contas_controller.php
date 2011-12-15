@@ -38,12 +38,23 @@ class ReceberContasController extends AppController {
 		foreach ($consulta3 as $op)
 			$this->opcoes_plano_contas += array($op['PlanoConta']['id']=>$op['PlanoConta']['nome']);
 		$this->set('opcoes_plano_contas',$this->opcoes_plano_contas);
+		
+		$consulta4 = $this->ReceberConta->Empresa->find('list',array('fields'=>array('Empresa.id','Empresa.nome')));
+		$this->set('opcoes_empresas',$consulta4);
+		
+		$opcoes_situacoes = array (
+			'N' => 'Não paga',
+			'P' => 'Paga',
+		);
+		$this->set('opcoes_situacoes',$opcoes_situacoes);
+		
 		return null;
 	}
 	
 	function index() {
 		$dados = $this->paginate('ReceberConta');
 		$this->set('consulta_conta_receber',$dados);
+		$this->_obter_opcoes();
 	}
 	
 	function cadastrar() {
@@ -90,6 +101,9 @@ class ReceberContasController extends AppController {
 			if ( ! $this->data) {
 				$this->Session->setFlash('Conta a receber não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
+			}
+			else {
+				$this->data['ReceberConta']['data_vencimento'] = date('d/m/Y', strtotime($this->data['ReceberConta']['data_vencimento']));
 			}
 		}
 		else {
@@ -159,6 +173,7 @@ class ReceberContasController extends AppController {
 			if (! empty($dados['tipo_documento'])) $condicoes[] = array('ReceberConta.tipo_documento'=>$dados['tipo_documento']);
 			if (! empty($dados['conta_origem'])) $condicoes[] = array('ReceberConta.conta_origem'=>$dados['conta_origem']);
 			if (! empty($dados['plano_conta_id'])) $condicoes[] = array('ReceberConta.rg'=>$dados['plano_conta_id']);
+			if (! empty($dados['situacao'])) $condicoes[] = array('ReceberConta.situacao'=>$dados['situacao']);
 			if (! empty ($condicoes)) {
 				$resultados = $this->paginate('ReceberConta',$condicoes);
 				if (! empty($resultados)) {

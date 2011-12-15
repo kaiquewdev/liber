@@ -20,39 +20,25 @@ class PedidoVendasController extends AppController {
 		)
 	);
 	
-	var $opcoes_forma_pamamento = array(''=>'');
-	
-	/**
-	 * Obtem dados do banco e popula as variaveis globais
-	 * $opcoes_forma_pamamento
-	 */
 	function _obter_opcoes() {
-		$this->loadModel('FormaPagamento');
-		$consulta2 = $this->FormaPagamento->find('all',array('fields'=>array('FormaPagamento.id','FormaPagamento.nome')));
-		foreach ($consulta2 as $op)
-			$this->opcoes_forma_pamamento += array($op['FormaPagamento']['id']=>$op['FormaPagamento']['nome']);
-		$this->set('opcoes_forma_pamamento',$this->opcoes_forma_pamamento);
+		$opcoes_forma_pamamento = $this->PedidoVenda->FormaPagamento->find('list',array('fields'=>array('FormaPagamento.id','FormaPagamento.nome')));
+		$this->set('opcoes_forma_pamamento',$opcoes_forma_pamamento);
 		
-	}
-	
-	function _obter_opcoes_pesquisa() {
-		$this->loadModel('Usuario');
-		$consulta1 = $this->Usuario->find('all',array('fields'=>array('Usuario.id','Usuario.nome'),
-		'conditions'=>array('Usuario.eh_tecnico'=>'1','Usuario.ativo'=>'1')));
-		foreach ($consulta1 as $op)
-			$this->opcoes_tecnico += array($op['Usuario']['id']=>$op['Usuario']['nome']);
-		$this->set('opcoes_tecnico',$this->opcoes_tecnico);
+		$opcoes_empresas = $this->PedidoVenda->Empresa->find('list',array('fields'=>array('Empresa.id','Empresa.nome')));
+		$this->set('opcoes_empresas',$opcoes_empresas);
 		
-		$consulta2 = $this->Usuario->find('all',array('fields'=>array('Usuario.id','Usuario.nome'),
-		'conditions'=>array('Usuario.ativo'=>'1')));
-		foreach ($consulta2 as $op)
-			$this->opcoes_usuarios += array($op['Usuario']['id']=>$op['Usuario']['nome']);
-		$this->set('opcoes_usuarios',$this->opcoes_usuarios);
-	}
-	
-	function index() {
-		$dados = $this->paginate('PedidoVenda');
-		$this->set('consulta',$dados);
+		$opcoes_situacoes = array(
+			'A'=>'Aberto',
+			'O' => 'Orçamento',
+			'C' => 'Cancelado',
+			'V' => 'Vendido',
+		);
+		$this->set('opcoes_situacoes',$opcoes_situacoes);
+		
+		// view pesquisa
+		$this->loadModel('Usuario');	
+		$opcoes_usuarios = $this->Usuario->find('list',array('fields'=>array('Usuario.id','Usuario.nome'), 'conditions'=>array('Usuario.ativo'=>'1','Usuario.eh_tecnico'=>'0')));
+		$this->set('opcoes_usuarios',$opcoes_usuarios);
 	}
 	
 	/**
@@ -110,6 +96,156 @@ class PedidoVendasController extends AppController {
 		return $retorno;
 	}
 	
+	/**
+	 * Gera conta a receber
+	 * Executar depois de se ter os dados prontos para serem inseridos no banco
+	 * 
+	 * @param $valor_total da conta a receber
+	 * @param $opcoes (array)
+	 * @param $opcoes['numero_parcelas'] numero de parcelas a serem utilizadas
+	 * 
+	 * @return NULL
+	 * @return Dados já são inseridos no banco
+	 */
+	function _gerar_conta_receber ($valor_total=null, $opcoes=array()) {
+		if (empty($valor_total)) return false;
+		
+		$valor_liquido = $valor_total;
+		
+		// Apenas crio a forma de pagamento se a situacao do pedido for 'Vendido'
+		if (strtoupper($this->data['PedidoVenda']['situacao']) == 'V' ) {
+			$forma_pagamento = $this->PedidoVenda->FormaPagamento->find('all',array('conditions'=>array('FormaPagamento.id' => $this->data['PedidoVenda']['forma_pagamento_id']),'recursive'=>'-1') );
+			$forma_pagamento = $forma_pagamento[0]['FormaPagamento'];
+
+			// se a forma de pagamento for 'A vista'
+			if ($forma_pagamento['numero_maximo_parcelas'] == 0) {
+				if ( $forma_pagamento['porcentagem_desconto_a_vista'] > 0) {
+					//aplico desconto a vista
+					$valor_a_receber = $valor_liquido - (($valor_liquido * $forma_pagamento['porcentagem_desconto_a_vista'])/100);
+				}
+				else $valor_a_receber = $valor_liquido;
+				
+				$conta_receber = array(
+					'ReceberConta' => array(
+						'data_hora_cadastrada' => date('Y-m-d H:i:s'),
+						'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
+						'eh_cliente_ou_fornecedor' => 'C',
+						'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
+						'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
+						'numero_documento' => $this->PedidoVenda->id,
+						'valor' => $valor_a_receber,
+						'conta_origem' => $forma_pagamento['conta_principal'],
+						'plano_conta_id' => '11',
+						'data_vencimento' => date("Y-m-d"),
+						'situacao' => 'N',
+						'empresa_id' => $this->data['PedidoVenda']['empresa_id'],
+					),
+				);
+			}
+			else { // a forma de pagamento tem uma ou mais parcelas
+				$numero_parcelas = $this->data['PedidoVenda']['numero_parcelas'];
+				if ($numero_parcelas > $forma_pagamento['numero_maximo_parcelas']) {
+					$this->Session->setFlash('Número de parcelas escolhido ultrapassa o máximo permitido!','flash_erro');
+					return null;
+				}
+
+				// a forma de pagamento nao tem um valor minimo por parcela
+				if ($forma_pagamento['valor_minimo_parcela'] <= 0) {
+					// crio um array contendo as parcelas
+					$valor_a_receber = array();
+					for ($j=1;$j<=$numero_parcelas;$j++) {
+						$valor_a_receber[$j] = $valor_liquido / $numero_parcelas;
+						$valor_a_receber[$j] = number_format($valor_a_receber[$j],2,'.','');
+					}
+
+					// se o valor de todas as parcelas somadas for menor que o valor da compra
+					// acrescento a diferença na ultima parcela
+					// até este momento todos os elementos do array $valor_a_receber sao iguais
+					$diferenca = ($valor_liquido - ($valor_a_receber[1]*$numero_parcelas) );
+					if ( $diferenca > 0 ) {
+						$valor_a_receber[$numero_parcelas-1] += $diferenca;
+					}
+					else if ($diferenca < 0) {
+						//#TODO  o somatorio das parcelas é maior que o valor liquido. Fazer algo?
+					}
+				}
+				else { // a forma de pagamento tem um valor mínimo para cada parcela
+					// crio um array contendo as parcelas
+					$valor_a_receber = array();
+					for ($j=1;$j<=$numero_parcelas;$j++) {
+						$valor_a_receber[$j] = $valor_liquido / $numero_parcelas;
+						if ($valor_a_receber[$j] < $forma_pagamento['valor_minimo_parcela']) {
+							$valor_a_receber[$j] = $forma_pagamento['valor_minimo_parcela'];
+						}
+						$valor_a_receber[$j] = number_format($valor_a_receber[$j],2,'.','');
+					}
+					// se o valor de todas as parcelas somadas for menor que o valor da compra
+					// acrescento a diferença na ultima parcela
+					$s = 0;
+					foreach ($valor_a_receber as $v) {
+						$s += $v;
+					}
+					$diferenca = ($valor_liquido - $s );
+					if ( $diferenca > 0 ) {
+						$valor_a_receber[$numero_parcelas-1] += $diferenca;
+					}
+					else if ($diferenca < 0) {
+						// este é bem provavel que dê mais
+						//#TODO  o somatorio das parcelas é maior que o valor liquido. Fazer algo?
+					}
+
+				}
+
+				$conta_receber = array(
+					'ReceberConta' => array(
+						//0 => array(),
+					),
+				);
+				// para cada parcela
+				for ($i = 1; $i <= $numero_parcelas; $i++) {
+					if ( ($i > $forma_pagamento['numero_parcelas_sem_juros']) && ($forma_pagamento['porcentagem_juros'] > 0) ) {
+						// aplicar juros
+						$juros = (($valor_a_receber[$i]*number_format($forma_pagamento['porcentagem_juros'],2,'.','')) / 100);
+						$valor_a_receber[$i] += $juros;
+						$valor_a_receber[$i] = number_format($valor_a_receber[$i],2,'.','');
+					}
+
+					$conta =  array(
+						($i) => array(
+							'data_hora_cadastrada' => date('Y-m-d H:i:s'),
+							'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
+							'eh_cliente_ou_fornecedor' => 'C',
+							'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
+							'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
+							'numero_documento' => $this->PedidoVenda->id,
+							'valor' => $valor_a_receber[$i],
+							'conta_origem' => $forma_pagamento['conta_principal'],
+							'plano_conta_id' => '11',
+							'data_vencimento' => date("Y-m-d",time()+3600*24*($forma_pagamento['dias_intervalo_parcelamento'])),
+							'situacao' => 'N',
+							'empresa_id' => $this->data['PedidoVenda']['empresa_id'],
+						),
+					);
+					$conta_receber['ReceberConta'] = array_merge($conta_receber['ReceberConta'],$conta);
+				}
+			}
+
+			$this->loadModel('ReceberConta');
+			if (! ($this->ReceberConta->saveAll($conta_receber['ReceberConta']))) {
+				$this->Session->setFlash('Erro ao cadastrar o pedido de venda/conta a receber.','flash_erro');
+				return false;
+			}
+			return 1;
+		} // fim conta a receber
+		return 99;
+	}
+	
+	function index() {
+		$dados = $this->paginate('PedidoVenda');
+		$this->set('consulta',$dados);
+		$this->_obter_opcoes();
+	}
+	
 	function cadastrar() {
 		$this->set("title_for_layout","Pedido de venda"); 
 		$this->_obter_opcoes();
@@ -138,63 +274,10 @@ class PedidoVendasController extends AppController {
 			
 			$this->data = $this->Sanitizacao->sanitizar($this->data);
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
+				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
+					return false;
+				}
 				$this->Session->setFlash('Pedido de venda cadastrado com sucesso.','flash_sucesso');
-				
-				/**
-				 * Gera conta a receber
-				 */
-				// Apenas crio a forma de pagamento se a situacao do pedido for 'Vendido'
-				if (strtoupper($this->data['PedidoVenda']['situacao']) == 'V' ) {
-					$forma_pagamento = $this->PedidoVenda->FormaPagamento->find('all',array('conditions'=>array('FormaPagamento.id' => $this->data['PedidoVenda']['forma_pagamento_id']),'recursive'=>'-1') );
-					$forma_pagamento = $forma_pagamento[0]['FormaPagamento'];
-					
-					// se a forma de pagamento for 'A vista'
-					if ($forma_pagamento['numero_maximo_parcelas'] == 0) {
-						//aplico desconto a vista
-						$valor_a_receber = $valor_liquido - (($valor_liquido * $forma_pagamento['porcentagem_desconto_a_vista'])/100);
-						$conta_receber = array(
-							'ReceberConta' => array(
-								'data_hora_cadastrada' => date('Y-m-d H:i:s'),
-								'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
-								'eh_cliente_ou_fornecedor' => 'C',
-								'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
-								'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
-								'numero_documento' => $this->PedidoVenda->id,
-								'valor' => $valor_a_receber,
-								'conta_origem' => $forma_pagamento['conta_principal'],
-								'plano_conta_id' => '11',
-								'data_vencimento' => date("Y-m-d"),
-							),
-						);
-					}
-					else { // a forma de pagamento tem uma ou mais parcelas
-						$forma_pagamento['numero_maximo_parcelas'];
-						$valor_a_receber = $valor_liquido;
-						
-						// para cada parcela
-						for ($i = 1; $i <= $forma_pagamento['numero_maximo_parcelas']; $i++) {
-							$conta_receber = array(
-								$i => array(
-									'ReceberConta' => array(
-										'data_hora_cadastrada' => date('Y-m-d H:i:s'),
-										'eh_fiscal' => 0, //#TODO mudar quando houver nota fiscal e/ou uma abrangencia fiscal maior
-										'eh_cliente_ou_fornecedor' => 'C',
-										'cliente_fornecedor_id' => $this->data['PedidoVenda']['cliente_id'],
-										'tipo_documento_id' => $forma_pagamento['tipo_documento_id'],
-										'numero_documento' => $this->PedidoVenda->id,
-										'valor' => $valor_a_receber,
-										'conta_origem' => $forma_pagamento['conta_principal'],
-										'plano_conta_id' => '11',
-										'data_vencimento' => date("Y-m-d",time()+3600*24*($forma_pagamento['dias_intervalo_parcelamento'])),
-									),
-								),
-							);
-						}
-					}
-					
-					$this->loadModel('ReceberConta');
-					$this->ReceberConta->save($conta_receber);
-				} // fim conta a receber
 				
 				$this->redirect(array('action'=>'index'));
 			}
@@ -213,9 +296,21 @@ class PedidoVendasController extends AppController {
 				$this->Session->setFlash('Pedido de venda não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'index'));
 			}
-			else $this->_recupera_produtos_inseridos($this->data);
+			else {
+				$this->_recupera_produtos_inseridos($this->data);
+				
+				if ($this->data['PedidoVenda']['data_saida'] == '0000-00-00') $this->data['PedidoVenda']['data_saida'] = null;
+				else $this->data['PedidoVenda']['data_saida'] = date('d/m/Y', strtotime($this->data['PedidoVenda']['data_saida']));
+				
+				if ($this->data['PedidoVenda']['data_entrega'] == '0000-00-00') $this->data['PedidoVenda']['data_entrega'] = null;
+				else $this->data['PedidoVenda']['data_entrega'] = date('d/m/Y', strtotime($this->data['PedidoVenda']['data_entrega']));
+				
+				if ($this->data['PedidoVenda']['data_venda'] == '0000-00-00') $this->data['PedidoVenda']['data_venda'] = null;
+				else $this->data['PedidoVenda']['data_venda'] = date('d/m/Y', strtotime($this->data['PedidoVenda']['data_venda']));
+			}
 		}
 		else {
+			$this->_recupera_produtos_inseridos($this->data);
 			$this->loadModel('Cliente');
 			$r = $this->Cliente->find('first',
 				array('conditions'=>array(
@@ -229,9 +324,8 @@ class PedidoVendasController extends AppController {
 			$s = strtoupper($this->PedidoVenda->field('situacao'));
 			if ( ($s == 'V') || ($s == 'C') ) {
 				$this->Session->setFlash('A situação desta pedido de venda impede que seja editado','flash_erro');
-				return false;
+				return null;
 			}
-			$this->_recupera_produtos_inseridos($this->data);
 			$this->data['PedidoVenda']['id'] = $id;
 			$this->data['PedidoVenda'] += array ('usuario_alterou' => $this->Auth->user('id'));
 			$valores = $this->_calcular_valores($this->data);
@@ -248,10 +342,13 @@ class PedidoVendasController extends AppController {
 			// deleto os itens que pertenciam a pedido de venda
 			if( ! ($this->PedidoVenda->PedidoVendaItem->deleteAll(array('pedido_venda_id'=>$id),false))) {
 				$this->Session->setFlash('Erro ao salvar a pedido de venda','flash_erro');
-				return false;
+				return null;
 			}
 			// insiro o que foi enviado agora, inclusive os itens
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
+				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
+					return false;
+				}
 				$this->Session->setFlash('Pedido de venda atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));
 			}
@@ -270,14 +367,15 @@ class PedidoVendasController extends AppController {
 		}
 		else {
 			// adiciono, no array resultante, o nome do produto correspondente
-			$this->loadModel('PedidoVendaItem');
 			$i = 0;
+			$this->loadModel('Produto');
 			foreach ($consulta['PedidoVendaItem'] as $x) {
-				$nome = $this->PedidoVendaItem->field('nome',array('PedidoVendaItem.id'=>$x['produto_id']));
+				$nome = $this->Produto->field('nome',array('Produto.id'=>$x['produto_id']));
 				$consulta['PedidoVendaItem'][$i]['produto_nome'] = $nome;
 				$i++;
 			}
 			$this->set('c',$consulta);
+			$this->_obter_opcoes();
 		}
 	}
 
@@ -315,14 +413,12 @@ class PedidoVendasController extends AppController {
 	
 	function pesquisar() {
 		$this->set("title_for_layout","Pedido de venda");
-		$this->_obter_opcoes_pesquisa();
+		$this->_obter_opcoes();
 		if (! empty($this->data)) {
 			//usuario enviou os dados da pesquisa
 			$url = array('controller'=>'PedidoVendas','action'=>'pesquisar');
 			//trocandos as barras dos campos de data, pois estes parametros, caso existam, vou para a url
-			if (!empty($this->data['PedidoVenda']['data_hora_cadastrada'])) $this->data['PedidoVenda']['data_hora_cadastrada'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_cadastrada']);
-			if (!empty($this->data['PedidoVenda']['data_hora_inicio'])) $this->data['PedidoVenda']['data_hora_inicio'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_inicio']);
-			if (!empty($this->data['PedidoVenda']['data_hora_fim'])) $this->data['PedidoVenda']['data_hora_fim'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_fim']);
+			if (!empty($this->data['PedidoVenda']['data_hora_cadastrado'])) $this->data['PedidoVenda']['data_hora_cadastrado'] = preg_replace('/\//', '-', $this->data['PedidoVenda']['data_hora_cadastrado']);
 			// codificando os parametros
 			if( is_array($this->data['PedidoVenda']) ) {
 				foreach($this->data['PedidoVenda'] as &$produto) {
@@ -340,27 +436,14 @@ class PedidoVendasController extends AppController {
 			if (! empty($dados['id'])) $condicoes[] = array('PedidoVenda.id'=>$dados['id']);
 			if (! empty($dados['cliente_id'])) $condicoes[] = array('PedidoVenda.cliente_id'=>$dados['cliente_id']);
 			if (! empty($dados['cliente_nome'])) $condicoes[] = array('Cliente.nome LIKE'=>'%'.$dados['cliente_nome'].'%');
-			if (! empty($dados['tecnico'])) $condicoes[] = array('PedidoVenda.usuario_id'=>$dados['tecnico']);
 			if (! empty($dados['situacao'])) $condicoes[] = array('PedidoVenda.situacao'=>$dados['situacao']);
 			if (! empty($dados['valor_total'])) $condicoes[] = array('PedidoVenda.valor_liquido'=>$dados['valor_total']);
 			if (! empty($dados['usuario_cadastrou'])) $condicoes[] = array('PedidoVenda.usuario_cadastrou'=>$dados['usuario_cadastrou']);
-			if (! empty($dados['data_hora_cadastrada'])) {
-				$ret = explode('-', $dados['data_hora_cadastrada']);
-				$dados['data_hora_cadastrada'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
+			if (! empty($dados['data_hora_cadastrado'])) {
+				$ret = explode('-', $dados['data_hora_cadastrado']);
+				$dados['data_hora_cadastrado'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
 				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
 				$condicoes[] = array('PedidoVenda.data_hora_cadastrada BETWEEN ? AND ?'=>array($dados['data_hora_cadastrada'].' 00:00:00',$dados['data_hora_cadastrada'].' 23:59:59'));
-			}
-			if (! empty($dados['data_hora_inicio'])) {
-				$ret = explode('-', $dados['data_hora_inicio']);
-				$dados['data_hora_inicio'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
-				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
-				$condicoes[] = array('PedidoVenda.data_hora_inicio BETWEEN ? AND ?'=>array($dados['data_hora_inicio'].' 00:00:00',$dados['data_hora_inicio'].' 23:59:59'));
-			}
-			if (! empty($dados['data_hora_fim'])) {
-				 $ret = explode('-', $dados['data_hora_fim']);
-				$dados['data_hora_fim'] = $ret[2].'-'.$ret[1].'-'.$ret[0];
-				// pesquiso todos os registros cadastrados entre o intervalo do dia informado pelo usuario
-				$condicoes[] = array('PedidoVenda.data_hora_fim BETWEEN ? AND ?'=>array($dados['data_hora_fim'].' 00:00:00',$dados['data_hora_fim'].' 23:59:59'));
 			}
 			if (! empty ($condicoes)) {
 				$resultados = $this->paginate('PedidoVenda',$condicoes);
@@ -378,6 +461,7 @@ class PedidoVendasController extends AppController {
 			}
 		}
 	}
+	
 }
 
 ?>

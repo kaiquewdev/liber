@@ -12,6 +12,33 @@ $(function() {
 	$('#ServicoOrdemCustoOutros').priceFormat();
 	$('#ServicoOrdemDesconto').priceFormat();
 	
+	$('#ServicoOrdemFormaPagamentoId').change(function(){
+		$('.numeroparcelas').remove();
+		id = $(this).val();
+		$.getJSON(ajaxPesqFormaPagamento, {'id': id}, function(data) {
+			if (data == null) {
+				alert ('Forma de pagamento '+id+' não foi encontrada!');
+			}
+			else { //encontrou resultados
+				
+				if (data.numero_maximo_parcelas > 0) {
+					var opcoes;
+					for (i=1;i<=data.numero_maximo_parcelas;i++) {
+						opcoes+= '<option value='+i+'>'+i+'</option>';
+					}
+					html = '<div class="input select required numeroparcelas">\n\
+							<label for="ServicoOrdemNumeroParcelas">Número de parcelas</label>\n\
+							<select id="ServicoOrdemNumeroParcelas" name="data[ServicoOrdem][numero_parcelas]">\n\
+							'+opcoes+'\n\
+							</select>\n\
+						</div>';
+					$('#ServicoOrdemFormaPagamentoId').after(html);
+				}
+				
+			}
+		});
+	});
+	
 	//pesquisa cliente
 	//autocomplete
 	$("#pesquisar_cliente").autocomplete({

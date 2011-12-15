@@ -180,7 +180,7 @@
 					</li>
 			
 					<li>
-						<a href="#">Outros</a>
+						<a href="#">Ferramentas</a>
 						<ul>
 							<li>
 								<?php print $html -> link('Empresas', "/empresas");?>

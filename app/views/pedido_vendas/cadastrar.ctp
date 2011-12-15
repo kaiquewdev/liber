@@ -3,6 +3,7 @@
 	var raiz_site = "<?php print $this->Html->url('/',true); ?>/";
 	var ajaxPesqCliente = "<?php print $this->Html->url(array('controller'=>'Clientes','action'=>'pesquisaAjaxCliente')); ?>/";
 	var ajaxPesqProduto = "<?php print $this->Html->url(array('controller'=>'Produtos','action'=>'pesquisaAjaxProduto')); ?>/";
+	var ajaxPesqFormaPagamento = "<?php print $this->Html->url(array('controller'=>'FormaPagamentos','action'=>'pesquisaAjaxNumeroMaximoParcelas')); ?>/";
 </script>
 
 <?php
@@ -37,20 +38,20 @@ $javascript->link('formatar_moeda.js',false);
 					<input style="margin-left: 1%; width: 80%" type="text" name="pesquisar_cliente" id="pesquisar_cliente" />
 				</div>
 				<?php
+				// #TODO implementar opcoes de resgatar numero de parcelas
+				// armazenar numero de parcelas no banco?
+				$opcoes_forma_pamamento = array_merge(array(''=>''),$opcoes_forma_pamamento);
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('data_venda',array('label'=>'Data da venda','type'=>'text','class'=>'mascara_data datepicker'));
-				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
+				
 				?>
 			</div>
 			<div class="div2_2">
 				<?php
+				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
 				print $form->input('data_entrega',array('label'=>'Data entrega','type'=>'text','class'=>'mascara_data datepicker'));
-				print $form->input('situacao',array('label'=>'Situação','options'=>array(
-				'A' => 'Aberto',
-				'O' => 'Orçamento',
-				/*'C' => 'Cancelado',*/
-				'V' => 'Vendido'
-				)));
+				unset($opcoes_situacoes['C']);
+				print $form->input('situacao',array('label'=>'Situação','options'=>$opcoes_situacoes));
 				print $form->input('desconto',array('label'=>'Desconto'));
 				?>
 			</div>
@@ -128,7 +129,9 @@ $javascript->link('formatar_moeda.js',false);
 		<div class="limpar">&nbsp;</div>
 	</div> <!-- fim de produtos -->
 	
-	<id id="outros">
+	<div id="outros">
+		<?php print $form->input('empresa_id',array('label'=>'Empresa','options'=>$opcoes_empresas)); ?>
+		
 		<div class="grupo_horizontal">
 			<?php print $form->input('custo_frete',array('label'=>'Custo do frete')); ?>
 		</div>

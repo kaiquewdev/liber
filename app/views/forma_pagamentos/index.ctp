@@ -12,7 +12,7 @@
 			<th><?php print $paginator->sort('Num. máximo de parcelas s/ juros','numero_parcelas_sem_juros'); ?></th>
 			<th><?php print $paginator->sort('Dias de intervalo do parcelamento','dias_intervalo_parcelamento'); ?></th>
 			<th><?php print $paginator->sort('Porcentagem de juros','porcentagem_juros'); ?></th>
-			<th><?php print $paginator->sort('Valor de taxa fixa','valor_taxa_fixa'); ?></th>
+			<th><?php print $paginator->sort('Valor mínimo por parcela','valor_minimo_parcela'); ?></th>
 			<th><?php print $paginator->sort('Porcentagem de desconto a vista','porcentagem_desconto_a_vista'); ?></th>
 			<th><?php print $paginator->sort('Conta principal','conta_pricipal'); ?></th>
 			<th colspan="2">Ações</th>
@@ -30,7 +30,7 @@
 			<td><?php print $consulta['FormaPagamento']['numero_parcelas_sem_juros']; ?></td>
 			<td><?php print $consulta['FormaPagamento']['dias_intervalo_parcelamento']; ?></td>
 			<td><?php print $consulta['FormaPagamento']['porcentagem_juros']; ?></td>
-			<td><?php print $consulta['FormaPagamento']['valor_taxa_fixa']; ?></td>
+			<td><?php print $consulta['FormaPagamento']['valor_minimo_parcela']; ?></td>
 			<td><?php print $consulta['FormaPagamento']['porcentagem_desconto_a_vista']; ?></td>
 			<td><?php print $consulta['FormaPagamento']['conta_principal'].' '.
 			$consulta['Conta']['nome']; ?></td>

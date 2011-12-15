@@ -12,13 +12,16 @@ class PedidoVenda extends AppModel {
 			'className' => 'FormaPagamento',
 			'foreignKey' => 'forma_pagamento_id'
 		),
-		'Usuario_cadastrou' => array(
+		'UsuarioCadastrou' => array(
 			'className' => 'Usuario',
 			'foreignKey' => 'usuario_cadastrou'
 		),
-		'Usuario_alterou' => array(
+		'UsuarioAlterou' => array(
 			'className' => 'Usuario',
 			'foreignKey' => 'usuario_alterou'
+		),
+		'Empresa' => array(
+			'className' => 'Empresa',
 		)
 	);
 	
@@ -62,6 +65,10 @@ class PedidoVenda extends AppModel {
 			'allowEmpty' => false,
 			'rule' => 'date',
 			'message' => 'Data obrigatória.'
-		)
+		),
+		'empresa_id' => array(
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
 	);
 }

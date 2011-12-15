@@ -1,8 +1,9 @@
 <script type="text/javascript">
-	// variaveis a serem utilizadas no arquivo pedido_venda.js
+	// variaveis a serem utilizadas no arquivo ordem_servico.js
 	var raiz_site = "<?php print $this->Html->url('/',true); ?>/";
 	var ajaxPesqCliente = "<?php print $this->Html->url(array('controller'=>'Clientes','action'=>'pesquisaAjaxCliente')); ?>/";
 	var ajaxPesqServico = "<?php print $this->Html->url(array('controller'=>'Servicos','action'=>'pesquisaAjaxServico')); ?>/";
+	var ajaxPesqFormaPagamento = "<?php print $this->Html->url(array('controller'=>'FormaPagamentos','action'=>'pesquisaAjaxNumeroMaximoParcelas')); ?>/";
 </script>
 
 <?php
@@ -37,6 +38,8 @@ $javascript->link('formatar_moeda.js',false);
 					<input style="margin-left: 1%; width: 80%" type="text" name="pesquisar_cliente" id="pesquisar_cliente" />
 				</div>
 				<?php
+				// #TODO implementar opcoes de resgatar numero de parcelas
+				// armazenar numero de parcelas no banco?
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('dias_garantia',array('label'=>'Dias de garantia'));
 				?>
@@ -46,7 +49,7 @@ $javascript->link('formatar_moeda.js',false);
 				print $form->input('data_hora_inicio',array('label'=>'Data e hora do início'));
 				print $form->input('situacao',array('label'=>'Situação','options'=>array(
 				'O' => 'Orçamento',
-				'E' => 'Em espera',
+				'S' => 'Em espera',
 				'X' => 'Em execução',
 				/*'F' => 'Finalizada',
 				'E' => 'Entregue',
@@ -133,8 +136,9 @@ $javascript->link('formatar_moeda.js',false);
 		<div class="limpar">&nbsp;</div>
 	</div> <!-- fim de servicos -->
 	
-	<id id="outros">
+	<div id="outros">
 		<?php
+		print $form->input('empresa_id',array('label'=>'Empresa','options'=>$opcoes_empresas));
 		print $form->input('custo_outros',array('label'=>'Outros custos'));
 		print $form->input('desconto',array('label'=>'Desconto'));
 		print $form->input('defeitos_relatados',array('label'=>'Defeitos relatados','rows'=>'3'));

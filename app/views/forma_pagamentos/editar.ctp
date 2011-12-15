@@ -1,3 +1,14 @@
+<script type="text/javascript">
+$(function(){
+	if ( $('#FormaPagamentoValorMinimoParcela').val() == '' ) {
+		$('#FormaPagamentoValorMinimoParcela').val('0');
+	}
+	if ( $('#FormaPagamentoPorcentagemJuros').val() == '' ) {
+		$('#FormaPagamentoPorcentagemJuros').val('0');
+	}
+});
+</script>
+
 <h2 class="descricao_cabecalho">Editar forma de pagamento</h2>
 
 <?php
@@ -15,8 +26,8 @@ print $form->create('FormaPagamento',array('autocomplete'=>'off','onsubmit'=>'su
 	</div>
 	<div class="div2_2">
 		<?php
-		print $form->input('valor_taxa_fixa',array('label'=>'Valor para taxa fixa','value'=>0));
-		print $form->input('porcentagem_juros',array('label'=>'Porcentagem de juros','value'=>0));
+		print $form->input('valor_minimo_parcela',array('label'=>'Valor mínimo por parcela'));
+		print $form->input('porcentagem_juros',array('label'=>'Porcentagem de juros'));
 		print $form->input('tipo_documento_id',array('label'=>'Documento','options'=>$opcoes_documentos));
 		print $form->input('conta_principal',array('label'=>'Conta principal','options'=>$opcoes_contas));
 		?>

@@ -134,7 +134,12 @@ class Fornecedor extends AppModel {
 				'rule' => 'isUnique',
 				'message' => 'Já cadastrado.'
 			)
-		)
+		),
+		'empresa_id' => array(
+			'allowEmpty' => false,
+			'rule' => 'notEmpty',
+			'message' => 'Campo obrigatório.'
+		),
 		
 	);
 	

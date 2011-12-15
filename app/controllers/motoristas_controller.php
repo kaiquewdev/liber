@@ -1,6 +1,5 @@
 <?php
 
-#FIXME corrigir data de validade da CNH, que é recuperada em 00/00/0000 e validada
 class MotoristasController extends AppController {
 	var $name = 'Motoristas';
 	var $components = array('Sanitizacao','Geral');
@@ -53,6 +52,10 @@ class MotoristasController extends AppController {
 			if ( ! $this->data) {
 				$this->Session->setFlash('Motorista não encontrado.','flash_erro');
 				$this->redirect(array('action'=>'index'));
+			}
+			else {
+				if ($this->data['Motorista']['cnh_data_validade'] == '0000-00-00') $this->data['Motorista']['cnh_data_validade'] = null;
+				else $this->data['Motorista']['cnh_data_validade'] = date('d/m/Y', strtotime($this->data['Motorista']['cnh_data_validade']));
 			}
 		}
 		else {

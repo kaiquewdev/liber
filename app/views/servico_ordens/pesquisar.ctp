@@ -131,7 +131,7 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 				<th><?php print $paginator->sort('Cadastrada em','data_hora_cadastrada'); ?></th>
 				<th><?php print $paginator->sort('Cliente','cliente_id'); ?></th>
 				<th><?php print $paginator->sort('Situação','situacao'); ?></th>
-				<th><?php print $paginator->sort('Valor total','valor_total'); ?></th>
+				<th><?php print $paginator->sort('Valor total','valor_liquido'); ?></th>
 				<th colspan="3">Ações</th>
 			</tr>
 		</thead>
@@ -143,7 +143,7 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 					<td><?php print $html->link($formatacao->dataHora($r['ServicoOrdem']['data_hora_cadastrada']),'editar/' . $r['ServicoOrdem']['id']) ;?></td>
 					<td><?php print $r['ServicoOrdem']['cliente_id'].' '.$r['Cliente']['nome']; ?></td>
 					<td><?php print $s[$r['ServicoOrdem']['situacao']]; ?></td>
-					<td><?php print $r['ServicoOrdem']['valor_total']; ?></td>
+					<td><?php print $r['ServicoOrdem']['valor_liquido']; ?></td>
 					<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
 					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['ServicoOrdem']['id']))) ?></td>
 					<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',

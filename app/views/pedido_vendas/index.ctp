@@ -20,11 +20,6 @@
 	<tbody>
 		
 <?php
-$s = array(
-'A' => 'Aberto',
-'O' => 'Orçamento',
-'C' => 'Cancelado',
-'V' => 'Vendido');
 
 foreach ($consulta as $c): ?>
 		
@@ -35,7 +30,7 @@ foreach ($consulta as $c): ?>
 			<td><?php if(isset($c['PedidoVenda']['data_venda']) && ($c['PedidoVenda']['data_venda'] != '0000-00-00') ) print $formatacao->data($c['PedidoVenda']['data_venda']); ?></td>
 			<td><?php print $c['PedidoVenda']['valor_bruto']; ?></td>
 			<td><?php print $c['PedidoVenda']['valor_liquido']; ?></td>
-			<td><?php print $s[$c['PedidoVenda']['situacao']]; ?></td>
+			<td><?php print $opcoes_situacoes[$c['PedidoVenda']['situacao']]; ?></td>
 			
 			<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
 			'alt'=>'Editar','url'=>array('action'=>'editar',$c['PedidoVenda']['id']))) ?></td>

@@ -36,6 +36,28 @@ $javascript->link('formatar_moeda.js',false);
 		));
 	?>
 </div>
+
+<div class="grupo_horizontal">
+	<?php
+	print $form->label('empresa_id','Empresa',array('class'=>'required'));
+	print $form->input('empresa_id', array(
+		'div'=>false,
+		'label'=>false,
+		'options'=>$opcoes_empresas
+		));
+	?>
+</div>
+
+<div class="grupo_horizontal">
+	<?php
+	print $form->label('situacao','Situação',array('class'=>'required'));
+	print $form->input('situacao', array(
+		'div'=>false,
+		'label'=>false,
+		'options'=>$opcoes_situacoes
+		));
+	?>
+</div>
 <div class="limpar"></div>
 
 <div class="divs_grupo_2">

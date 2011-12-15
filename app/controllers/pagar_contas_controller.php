@@ -38,12 +38,23 @@ class PagarContasController extends AppController {
 		foreach ($consulta3 as $op)
 			$this->opcoes_plano_contas += array($op['PlanoConta']['id']=>$op['PlanoConta']['nome']);
 		$this->set('opcoes_plano_contas',$this->opcoes_plano_contas);
+		
+		$consulta4 = $this->PagarConta->Empresa->find('list',array('fields'=>array('Empresa.id','Empresa.nome')));
+		$this->set('opcoes_empresas',$consulta4);
+		
+		$opcoes_situacoes = array (
+			'N' => 'Não paga',
+			'P' => 'Paga',
+		);
+		$this->set('opcoes_situacoes',$opcoes_situacoes);
+		
 		return null;
 	}
 	
 	function index() {
 		$dados = $this->paginate('PagarConta');
 		$this->set('consulta_conta_pagar',$dados);
+		$this->_obter_opcoes();
 	}
 	
 	function cadastrar() {
@@ -90,6 +101,9 @@ class PagarContasController extends AppController {
 			if ( ! $this->data) {
 				$this->Session->setFlash('Conta a receber não encontrada.','flash_erro');
 				$this->redirect(array('action'=>'index'));
+			}
+			else {
+				$this->data['PagarConta']['data_vencimento'] = date('d/m/Y', strtotime($this->data['PagarConta']['data_vencimento']));
 			}
 		}
 		else {
@@ -159,6 +173,7 @@ class PagarContasController extends AppController {
 			if (! empty($dados['tipo_documento'])) $condicoes[] = array('PagarConta.tipo_documento'=>$dados['tipo_documento']);
 			if (! empty($dados['conta_origem'])) $condicoes[] = array('PagarConta.conta_origem'=>$dados['conta_origem']);
 			if (! empty($dados['plano_conta_id'])) $condicoes[] = array('PagarConta.rg'=>$dados['plano_conta_id']);
+			if (! empty($dados['situacao'])) $condicoes[] = array('PagarConta.situacao'=>$dados['situacao']);
 			if (! empty ($condicoes)) {
 				$resultados = $this->paginate('PagarConta',$condicoes);
 				if (! empty($resultados)) {

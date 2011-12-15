@@ -26,6 +26,8 @@ print $form->create(null,array('action'=>'pesquisar','autocomplete'=>'off'));
 		print '<div>'.$form->input('tipo_documento_id',array('label'=>'Tipo do documento','div'=>false,'options'=>$opcoes_tipo_documento)).'</div>';
 		print '<div>'.$form->input('conta_origem',array('label'=>'Conta de origem','div'=>false,'options'=>$opcoes_conta_origem)).'</div>';
 		print '<div>'.$form->input('plano_conta_id',array('label'=>'Plano de contas','div'=>false,'options'=>$opcoes_plano_contas)).'</div>';
+		$opcoes_situacoes = array_merge(array(''=>''),$opcoes_situacoes);
+		print '<div>'.$form->input('situacao',array('label'=>'Situação','div'=>false,'options'=>$opcoes_situacoes)).'</div>';
 		?>
 	</div>
 	

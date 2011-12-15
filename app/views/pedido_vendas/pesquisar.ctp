@@ -45,21 +45,15 @@ $javascript->link('formatar_moeda.js',false);
 	});
 </script>
 
-<h2 class="descricao_cabecalho">Pesquisar ordem de serviço</h2>
+<h2 class="descricao_cabecalho">Pesquisar pedido de venda</h2>
 
 <?php
 /**
  * Elimino as divs dos campos input para que nao apareça quais campos
  * sao marcados como obrigatorios no BD
  */
-$s = array(
-'O' => 'Orçamento',
-'E' => 'Em espera',
-'X' => 'Em execução',
-'F' => 'Finalizada',
-'E' => 'Entregue',
-'C' => 'Cancelada');
-print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisar','autocomplete'=>'off'));
+
+print $form->create(null,array('controller'=>'pedidoVendas','action'=>'pesquisar','autocomplete'=>'off'));
 ?>
 <div class="divs_grupo_2">
 	
@@ -69,16 +63,13 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 			<input id="PedidoVendaId" type="text" name="data[PedidoVenda][id]" class="" />
 		</div>
 		<div>
-			<label>Cadastrada em</label>
-			<input id="PedidoVendaDataHoraCadastrada" type="text" name="data[PedidoVenda][data_hora_cadastrada]" class="datepicker mascara_data" />
+			<label style="">Cliente</label>
+			<input style="float:left; width: 10%;" id="PedidoVendaClienteId" type="text" name="data[PedidoVenda][cliente_id]" />
+			<input style="margin-left: 1%; width: 80%" id="PedidoVendaClienteNome" type="text" name="data[PedidoVenda][cliente_nome]" />
 		</div>
 		<div>
-			<label>Início</label>
-			<input type="text" id="PedidoVendaDataHoraInicio" name="data[PedidoVenda][data_hora_inicio]" class="datepicker macara-data"/>
-		</div>
-		<div>
-			<label>Fim</label>
-			<input type="text" id="PedidoVendaDataHoraFim" name="data[PedidoVenda][data_hora_fim]" class="datepicker mascara_data"/>
+			<label>Cadastrado em</label>
+			<input id="PedidoVendaDataHoraCadastrado" type="text" name="data[PedidoVenda][data_hora_cadastrado]" class="datepicker mascara_data" />
 		</div>
 		<div>
 			<label>Valor total</label>
@@ -88,34 +79,26 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 	
 	<div class="div2_2">
 		<div>
-			<label style="">Cliente</label>
-			<input style="float:left; width: 10%;" id="PedidoVendaClienteId" type="text" name="data[PedidoVenda][cliente_id]" />
-			<input style="margin-left: 1%; width: 80%" id="PedidoVendaClienteNome" type="text" name="data[PedidoVenda][cliente_nome]" />
+			<?php
+			$opcoes_situacoes = array_merge(array(''=>''),$opcoes_situacoes);
+			print $form->label('situacao','Situacao',array('class'=>'norequired'));
+				print $form->input('situacao', array(
+				'div'=>false,
+				'label'=>false,
+				'options'=>$opcoes_situacoes,
+			));
+			?>
 		</div>
 		<div>
-			<label>Técnico</label>
-			<select name="data[PedidoVenda][tecnico]">
-				<?php foreach ($opcoes_tecnico as $chave => $valor)
-					print "<option value='$chave'>$valor</option>";
-				?>
-			</select>
-		</div>
-		<div>
-			<label>Situação</label>
-			<select name="data[PedidoVenda][situacao]">
-				<option value=""></option>
-				<?php foreach ($s as $chave => $valor)
-					print "<option value='$chave'>$valor</option>";
-				?>
-			</select>
-		</div>
-		<div>
-			<label>Usuário cadastrou</label>
-			<select name="data[PedidoVenda][usuario_cadastrou]" id="PedidoVendaUsuarioCadastrou">
-				<?php foreach ($opcoes_usuarios as $chave => $valor)
-					print "<option value='$chave'>$valor</option>";
-				?>
-			</select>
+			<?php
+			$opcoes_usuarios = array_merge (array(''=>''),$opcoes_usuarios);
+			print $form->label('usuario_cadastrou','Usuário cadastrou',array('class'=>'norequired'));
+				print $form->input('usuario_cadastrou', array(
+				'div'=>false,
+				'label'=>false,
+				'options'=>$opcoes_usuarios,
+			));
+			?>
 		</div>
 	</div>
 	
@@ -128,10 +111,10 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 		<thead>
 			<tr>
 				<th><?php print $paginator->sort('Cód','id'); ?></th>
-				<th><?php print $paginator->sort('Cadastrada em','data_hora_cadastrada'); ?></th>
+				<th><?php print $paginator->sort('Cadastrada em','data_hora_cadastrado'); ?></th>
 				<th><?php print $paginator->sort('Cliente','cliente_id'); ?></th>
 				<th><?php print $paginator->sort('Situação','situacao'); ?></th>
-				<th><?php print $paginator->sort('Valor total','valor_total'); ?></th>
+				<th><?php print $paginator->sort('Valor total','valor_liquido'); ?></th>
 				<th colspan="3">Ações</th>
 			</tr>
 		</thead>
@@ -140,10 +123,10 @@ print $form->create(null,array('controller'=>'servicoOrdens','action'=>'pesquisa
 			<?php foreach ($resultados as $r): ?>
 				<tr>
 					<td><?php print $r['PedidoVenda']['id']; ?></td>
-					<td><?php print $html->link($formatacao->dataHora($r['PedidoVenda']['data_hora_cadastrada']),'editar/' . $r['PedidoVenda']['id']) ;?></td>
+					<td><?php print $html->link($formatacao->dataHora($r['PedidoVenda']['data_hora_cadastrado']),'editar/' . $r['PedidoVenda']['id']) ;?></td>
 					<td><?php print $r['PedidoVenda']['cliente_id'].' '.$r['Cliente']['nome']; ?></td>
-					<td><?php print $s[$r['PedidoVenda']['situacao']]; ?></td>
-					<td><?php print $r['PedidoVenda']['valor_total']; ?></td>
+					<td><?php print $opcoes_situacoes[$r['PedidoVenda']['situacao']]; ?></td>
+					<td><?php print $r['PedidoVenda']['valor_liquido']; ?></td>
 					<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
 					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['PedidoVenda']['id']))) ?></td>
 					<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
