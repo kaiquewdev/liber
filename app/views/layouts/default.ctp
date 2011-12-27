@@ -144,9 +144,9 @@
 							<li><?php print $html -> link('Motoristas', "/motoristas/");?></li>
 							<li><?php print $html -> link('Veículos', "/veiculos");?></li>
 							<li>
-								<a href="#">Relatórios</a>
+								<a href="#">Consultar</a>
 								<ul>
-									<li><?php print $html -> link('Pedidos por carregamento', "/carregamentos/relatorios/pedidosPorCarregamento");?></li>
+									<li><?php print $html -> link('Pedidos por carregamento', "/carregamentos/pedidosPorCarregamento");?></li>
 								</ul>
 							</li>
 						</ul>

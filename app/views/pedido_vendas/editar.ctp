@@ -47,7 +47,6 @@ $javascript->link('formatar_moeda.js',false);
 				<?php
 				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
 				print $form->input('data_entrega',array('label'=>'Data entrega','type'=>'text','class'=>'mascara_data datepicker'));
-				unset($opcoes_situacoes['C']);
 				print $form->input('situacao',array('label'=>'Situação','options'=>$opcoes_situacoes));
 				print $form->input('desconto',array('label'=>'Desconto'));
 				?>

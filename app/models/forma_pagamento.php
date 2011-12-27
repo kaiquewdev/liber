@@ -13,6 +13,9 @@ class FormaPagamento extends AppModel {
 		),
 	);
 	var $hasMany = array(
+		'FormaPagamentoItem' => array(
+			'class_name' => 'FormaPagamentoItem',
+		),
 		'ServicoOrdem' => array(
 			'className' => 'ServicoOrdem'
 		),
@@ -22,30 +25,6 @@ class FormaPagamento extends AppModel {
 	);
 	var $validate = array(
 		'nome' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'numero_maximo_parcelas' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'numero_parcelas_sem_juros' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'dias_intervalo_parcelamento' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'porcentagem_juros' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'valor_minimo_parcela' => array(
-			'rule' => 'notEmpty',
-			'message' => 'Campo obrigatório.'
-		),
-		'porcentagem_desconto_a_vista' => array(
 			'rule' => 'notEmpty',
 			'message' => 'Campo obrigatório.'
 		),

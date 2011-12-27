@@ -1,5 +1,5 @@
 <?php 
-/* App schema generated on: 2011-09-17 00:01:44 : 1316228504*/
+/* App schema generated on: 2011-12-15 16:33:27 : 1323974007*/
 class AppSchema extends CakeSchema {
 	var $name = 'App';
 
@@ -10,6 +10,26 @@ class AppSchema extends CakeSchema {
 	function after($event = array()) {
 	}
 
+	var $carregamento_itens = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'carregamento_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
+		'pedido_venda_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_carregamento_itens_carregamentos1' => array('column' => 'carregamento_id', 'unique' => 0), 'fk_carregamento_itens_pedido_vendas1' => array('column' => 'pedido_venda_id', 'unique' => 0)),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+	);
+	var $carregamentos = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'data_hora_criado' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
+		'situacao' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 1, 'collate' => 'utf8_general_ci', 'comment' => 'Situacao
+L = Livre
+E = Enviada', 'charset' => 'utf8'),
+		'descricao' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'motorista_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
+		'veiculo_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
+		'observacao' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_carregamentos_motoristas1' => array('column' => 'motorista_id', 'unique' => 0), 'fk_carregamentos_veiculos1' => array('column' => 'veiculo_id', 'unique' => 0)),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+	);
 	var $categoria_produtos = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'nome' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
@@ -93,10 +113,11 @@ B -> Bloqueado'),
 		'numero_parcelas_sem_juros' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2),
 		'dias_intervalo_parcelamento' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2),
 		'porcentagem_juros' => array('type' => 'float', 'null' => false, 'default' => '0'),
-		'valor_taxa_fixa' => array('type' => 'float', 'null' => false, 'default' => NULL),
+		'valor_minimo_parcela' => array('type' => 'float', 'null' => false, 'default' => NULL),
 		'porcentagem_desconto_a_vista' => array('type' => 'float', 'null' => false, 'default' => NULL),
 		'conta_principal' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_forma_pagamentos_contas1' => array('column' => 'conta_principal', 'unique' => 0)),
+		'tipo_documento_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_forma_pagamentos_contas1' => array('column' => 'conta_principal', 'unique' => 0), 'fk_forma_pagamentos_tipo_documentos1' => array('column' => 'tipo_documento_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $fornecedor_categorias = array(
@@ -139,6 +160,19 @@ B -> Bloqueado'),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_fornecedores_usuarios1' => array('column' => 'usuario_cadastrou', 'unique' => 0), 'fk_fornecedores_usuarios2' => array('column' => 'usuario_alterou', 'unique' => 0), 'fk_fornecedores_empresas1' => array('column' => 'empresa_id', 'unique' => 0), 'fk_fornecedores_fornecedor_categorias1' => array('column' => 'fornecedor_categoria_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
+	var $motoristas = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'nome' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'cnh_numero_registro' => array('type' => 'integer', 'null' => true, 'default' => NULL),
+		'cnh_data_validade' => array('type' => 'date', 'null' => true, 'default' => NULL),
+		'cnh_categoria' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 1, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'logradouro_nome' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'logradouro_numero' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 10, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'logradouro_complemento' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'veiculo_padrao' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_motoristas_veiculos1' => array('column' => 'veiculo_padrao', 'unique' => 0)),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+	);
 	var $pagar_contas = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'data_hora_cadastrada' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
@@ -152,7 +186,10 @@ B -> Bloqueado'),
 		'plano_conta_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'data_vencimento' => array('type' => 'date', 'null' => false, 'default' => NULL),
 		'observacao' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_contas_pagar_contas1' => array('column' => 'conta_origem', 'unique' => 0), 'fk_contas_pagar_plano_contas1' => array('column' => 'plano_conta_id', 'unique' => 0), 'fk_contas_pagar_tipo_documentos1' => array('column' => 'tipo_documento_id', 'unique' => 0)),
+		'empresa_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'situacao' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 1, 'collate' => 'utf8_general_ci', 'comment' => 'P = Paga
+N = Não paga', 'charset' => 'utf8'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_contas_pagar_contas1' => array('column' => 'conta_origem', 'unique' => 0), 'fk_contas_pagar_plano_contas1' => array('column' => 'plano_conta_id', 'unique' => 0), 'fk_contas_pagar_tipo_documentos1' => array('column' => 'tipo_documento_id', 'unique' => 0), 'fk_pagar_contas_empresas1' => array('column' => 'empresa_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $pedido_venda_itens = array(
@@ -160,15 +197,14 @@ B -> Bloqueado'),
 		'pedido_venda_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'produto_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'quantidade' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5),
-		'valor' => array('type' => 'float', 'null' => false, 'default' => NULL),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_pedido_vendas_itens_pedido_vendas1' => array('column' => 'pedido_venda_id', 'unique' => 0), 'fk_pedido_vendas_itens_produtos1' => array('column' => 'produto_id', 'unique' => 0)),
+		'preco_venda' => array('type' => 'float', 'null' => false, 'default' => NULL),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_pedido_venda_itens_pedido_vendas1' => array('column' => 'pedido_venda_id', 'unique' => 0), 'fk_pedido_venda_itens_produtos1' => array('column' => 'produto_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $pedido_vendas = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
 		'data_hora_cadastrado' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
 		'cliente_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
-		'usuario_vendeu' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
 		'forma_pagamento_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'data_saida' => array('type' => 'date', 'null' => true, 'default' => NULL),
 		'data_entrega' => array('type' => 'date', 'null' => true, 'default' => NULL),
@@ -181,8 +217,13 @@ B -> Bloqueado'),
 O = Orçamento
 C = Cancelado
 V = Vendido', 'charset' => 'utf8'),
+		'observacao' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'usuario_cadastrou' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'valor_bruto' => array('type' => 'float', 'null' => false, 'default' => NULL),
+		'valor_liquido' => array('type' => 'float', 'null' => false, 'default' => NULL),
 		'usuario_alterou' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 5, 'key' => 'index'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_pedido_vendas_clientes1' => array('column' => 'cliente_id', 'unique' => 0), 'fk_pedido_vendas_usuarios1' => array('column' => 'usuario_vendeu', 'unique' => 0), 'fk_pedido_vendas_forma_pagamentos1' => array('column' => 'forma_pagamento_id', 'unique' => 0), 'fk_pedido_vendas_usuarios2' => array('column' => 'usuario_alterou', 'unique' => 0)),
+		'empresa_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_pedido_vendas_clientes1' => array('column' => 'cliente_id', 'unique' => 0), 'fk_pedido_vendas_forma_pagamentos1' => array('column' => 'forma_pagamento_id', 'unique' => 0), 'fk_pedido_vendas_usuarios2' => array('column' => 'usuario_alterou', 'unique' => 0), 'fk_pedido_vendas_usuarios3' => array('column' => 'usuario_cadastrou', 'unique' => 0), 'fk_pedido_vendas_empresas1' => array('column' => 'empresa_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $plano_contas = array(
@@ -193,15 +234,6 @@ D=Despesas
 R=Receitas
 E=Especiais', 'charset' => 'utf8'),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
-		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
-	);
-	var $produto_estoque_log = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
-		'data_hora_registro' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
-		'produto_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
-		'quantidade_estoque_fiscal' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5),
-		'quantidade_estoque_nao_fiscal' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_log_estoque_produtos_produtos1' => array('column' => 'produto_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $produtos = array(
@@ -241,7 +273,10 @@ F = Fora de linha', 'charset' => 'utf8'),
 		'plano_conta_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'data_vencimento' => array('type' => 'date', 'null' => false, 'default' => NULL),
 		'observacao' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_contas_pagar_contas1' => array('column' => 'conta_origem', 'unique' => 0), 'fk_contas_pagar_plano_contas1' => array('column' => 'plano_conta_id', 'unique' => 0), 'fk_contas_pagar_tipo_documentos1' => array('column' => 'tipo_documento_id', 'unique' => 0)),
+		'empresa_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'situacao' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 1, 'collate' => 'utf8_general_ci', 'comment' => 'P = Paga
+N = Não paga', 'charset' => 'utf8'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_contas_pagar_contas1' => array('column' => 'conta_origem', 'unique' => 0), 'fk_contas_pagar_plano_contas1' => array('column' => 'plano_conta_id', 'unique' => 0), 'fk_contas_pagar_tipo_documentos1' => array('column' => 'tipo_documento_id', 'unique' => 0), 'fk_receber_contas_empresas1' => array('column' => 'empresa_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $servico_categorias = array(
@@ -266,7 +301,7 @@ F = Fora de linha', 'charset' => 'utf8'),
 		'usuario_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
 		'forma_pagamento_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'index'),
 		'situacao' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 1, 'collate' => 'utf8_general_ci', 'comment' => 'O = Orçamento
-E = Em espera
+S = Em espera
 X = Em execução
 F = Finalizada
 E = Entregue
@@ -274,10 +309,17 @@ C = Cancelada', 'charset' => 'utf8'),
 		'dias_garantia' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 3),
 		'data_hora_inicio' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
 		'data_hora_fim' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'custo_outros' => array('type' => 'float', 'null' => true, 'default' => NULL),
+		'desconto' => array('type' => 'float', 'null' => true, 'default' => NULL),
 		'defeitos_relatados' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'laudo_tecnico' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'observacao' => array('type' => 'text', 'null' => true, 'default' => NULL, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_servico_ordens_clientes1' => array('column' => 'cliente_id', 'unique' => 0), 'fk_servico_ordens_usuarios1' => array('column' => 'usuario_id', 'unique' => 0), 'fk_servico_ordens_forma_pagamentos1' => array('column' => 'forma_pagamento_id', 'unique' => 0)),
+		'valor_bruto' => array('type' => 'float', 'null' => false, 'default' => NULL),
+		'valor_liquido' => array('type' => 'float', 'null' => false, 'default' => NULL),
+		'usuario_cadastrou' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'usuario_alterou' => array('type' => 'integer', 'null' => true, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'empresa_id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 5, 'key' => 'index'),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'fk_servico_ordens_clientes1' => array('column' => 'cliente_id', 'unique' => 0), 'fk_servico_ordens_usuarios1' => array('column' => 'usuario_id', 'unique' => 0), 'fk_servico_ordens_forma_pagamentos1' => array('column' => 'forma_pagamento_id', 'unique' => 0), 'fk_servico_ordens_usuarios2' => array('column' => 'usuario_alterou', 'unique' => 0), 'fk_servico_ordens_usuarios3' => array('column' => 'usuario_cadastrou', 'unique' => 0), 'fk_servico_ordens_empresas1' => array('column' => 'empresa_id', 'unique' => 0)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 	var $servicos = array(
@@ -299,13 +341,24 @@ C = Cancelada', 'charset' => 'utf8'),
 		'nome' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'login' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 50, 'key' => 'unique', 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'senha' => array('type' => 'string', 'null' => false, 'default' => NULL, 'length' => 40, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'permissao' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2),
+		'tipo' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'length' => 2),
 		'ativo' => array('type' => 'boolean', 'null' => false, 'default' => '1'),
 		'email' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 100, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
 		'tempo_criado' => array('type' => 'datetime', 'null' => false, 'default' => NULL),
 		'ultimo_login' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
 		'ultimo_logout' => array('type' => 'datetime', 'null' => true, 'default' => NULL),
+		'eh_tecnico' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
+		'eh_vendedor' => array('type' => 'boolean', 'null' => false, 'default' => '0'),
 		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1), 'usuario_UNIQUE' => array('column' => 'login', 'unique' => 1)),
+		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
+	);
+	var $veiculos = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => NULL, 'key' => 'primary'),
+		'placa' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 45, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'fabricante' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'modelo' => array('type' => 'string', 'null' => true, 'default' => NULL, 'length' => 50, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
+		'ano' => array('type' => 'text', 'null' => true, 'default' => NULL, 'length' => 4),
+		'indexes' => array('PRIMARY' => array('column' => 'id', 'unique' => 1)),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
 }

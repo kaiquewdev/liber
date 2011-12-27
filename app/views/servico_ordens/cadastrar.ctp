@@ -51,9 +51,9 @@ $javascript->link('formatar_moeda.js',false);
 				'O' => 'Orçamento',
 				'S' => 'Em espera',
 				'X' => 'Em execução',
-				/*'F' => 'Finalizada',
+				'F' => 'Finalizada',
 				'E' => 'Entregue',
-				'C' => 'Cancelada',*/
+				//'C' => 'Cancelada',
 				)));
 				print $form->input('usuario_id',array('label'=>'Técnico','options'=>$opcoes_tecnico));
 				?>

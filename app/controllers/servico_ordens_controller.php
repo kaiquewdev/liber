@@ -125,6 +125,7 @@ class ServicoOrdensController extends AppController {
 			$dados = array_merge(
 				array('valor_total'=>$valor_total),
 				array('numero_documento'=>$this->ServicoOrdem->id),
+				array('plano_conta_id'=>10),
 				$this->data['ServicoOrdem']
 				);
 			return $this->ContasReceber->gerarContaReceber($dados);

@@ -30,19 +30,20 @@ $(function() {
 			else { //encontrou resultados
 				
 				if (data.numero_maximo_parcelas > 0) {
-					var opcoes;
+					var opcoes='';
 					for (i=1;i<=data.numero_maximo_parcelas;i++) {
 						opcoes+= '<option value='+i+'>'+i+'</option>';
 					}
-					html = '<div class="input select required numeroparcelas">\n\
-							<label for="PedidoVendaNumeroParcelas">Número de parcelas</label>\n\
-							<select id="PedidoVendaNumeroParcelas" name="data[PedidoVenda][numero_parcelas]">\n\
+					html = '<select id="ReceberContaNumeroParcelas" name="data[ReceberConta][numero_parcelas]" class="numeroparcelas">\n\
 							'+opcoes+'\n\
-							</select>\n\
-						</div>';
-					$('#PedidoVendaFormaPagamentoId').after(html);
+							</select>';
 				}
-				
+				else {
+					html = '<select id="ReceberContaNumeroParcelas" name="data[ReceberConta][numero_parcelas]" class="numeroparcelas">\n\
+								<option value=""></option>\n\
+							</select>';
+				}
+				$('label[for="ReceberContaNumeroParcelas"]').after(html);
 			}
 		});
 	});
@@ -170,7 +171,8 @@ $(function() {
 		if (registro < 1) {
 			alert('É necessário incluir ao menos um produto!');
 			return false;
-		} 
+		}
+		
 	});
 	
 });

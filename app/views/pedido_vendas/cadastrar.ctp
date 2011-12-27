@@ -38,8 +38,6 @@ $javascript->link('formatar_moeda.js',false);
 					<input style="margin-left: 1%; width: 80%" type="text" name="pesquisar_cliente" id="pesquisar_cliente" />
 				</div>
 				<?php
-				// #TODO implementar opcoes de resgatar numero de parcelas
-				// armazenar numero de parcelas no banco?
 				$opcoes_forma_pamamento = array_merge(array('0'=>''),$opcoes_forma_pamamento);
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('data_venda',array('label'=>'Data da venda','type'=>'text','class'=>'mascara_data datepicker'));

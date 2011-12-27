@@ -20,6 +20,11 @@ class ContasReceberComponent {
 	 */
 	function gerarContaReceber ($dados=array()) {
 		if (empty($dados)) return null;
+		$padrao = array (
+			'plano_conta_id' => 11,
+		);
+		
+		$dados = array_merge($padrao,$dados);
 		
 		$valor_liquido = $dados['valor_total'];
 		
@@ -49,7 +54,7 @@ class ContasReceberComponent {
 					'numero_documento' => $dados['numero_documento'],
 					'valor' => $valor_a_receber,
 					'conta_origem' => $forma_pagamento['conta_principal'],
-					'plano_conta_id' => '11',
+					'plano_conta_id' => $dados['plano_conta_id'],
 					'data_vencimento' => date("Y-m-d"),
 					'situacao' => 'N',
 					'empresa_id' => $dados['empresa_id'],
@@ -134,7 +139,7 @@ class ContasReceberComponent {
 						'numero_documento' => $dados['numero_documento'],
 						'valor' => $valor_a_receber[$i],
 						'conta_origem' => $forma_pagamento['conta_principal'],
-						'plano_conta_id' => '11',
+						'plano_conta_id' => $dados['plano_conta_id'],
 						'data_vencimento' => date("Y-m-d",time()+3600*24*($forma_pagamento['dias_intervalo_parcelamento'])),
 						'situacao' => 'N',
 						'empresa_id' => $dados['empresa_id'],

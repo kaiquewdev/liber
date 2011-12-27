@@ -63,6 +63,7 @@ class PedidoVendasController extends AppController {
 			$this->set('campos_ja_inseridos',$campos_ja_inseridos);
 			return 1;
 		}
+		
 		return 0;
 	}
 	
@@ -191,8 +192,11 @@ class PedidoVendasController extends AppController {
 			//o pedido de venda pode ser editado apenas se nao tiver sido cancelado ou vendido
 			$s = strtoupper($this->PedidoVenda->field('situacao'));
 			if ( ($s == 'V') || ($s == 'C') ) {
-				$this->Session->setFlash('A situação desta pedido de venda impede que seja editado','flash_erro');
-				return null;
+				// o usuario pode cancelar um pedido de venda na situacao 'Vendido'
+				if (strtoupper($this->data['PedidoVenda']['situacao']) != 'C') {
+					$this->Session->setFlash('A situação deste pedido de venda impede que seja editado','flash_erro');
+					return null;
+				}
 			}
 			$this->data['PedidoVenda']['id'] = $id;
 			$this->data['PedidoVenda'] += array ('usuario_alterou' => $this->Auth->user('id'));
