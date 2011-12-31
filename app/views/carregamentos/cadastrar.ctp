@@ -38,8 +38,10 @@
 // #XXX implementar o escolha automatica do veiculo assim que escolhe o motorista
 // com base no veiculo definido como padrao no cadastro do motorista
 print $form->create('Carregamento',array('autocomplete'=>'off','onsubmit'=>'submissaoFormulario(this); return false;'));
-print $form->input('descricao',array('label'=>'Descrição'));
 ?>
+<div class="grupo_horizontal">
+	<?php print $form->input('descricao',array('label'=>'Descrição')); ?>
+</div>
 <div class="grupo_horizontal">
 	<?php
 		print $form->label('motorista_id','Motorista',array('class'=>'required'));
@@ -57,16 +59,6 @@ print $form->input('descricao',array('label'=>'Descrição'));
 			'div'=>false,
 			'label'=>false,
 			'options'=>$opcoes_veiculos
-			));
-		?>
-</div>
-<div class="grupo_horizontal">
-	<?php
-		print $form->label('situacao','Situação',array('class'=>'required'));
-		print $form->input('situacao',array(
-			'div'=>false,
-			'label'=>false,
-			'options'=>$opcoes_situacoes
 			));
 		?>
 </div>

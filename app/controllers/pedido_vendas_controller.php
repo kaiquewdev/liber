@@ -5,10 +5,11 @@
  * O = Orçamento
  * C = Cancelado
  * V = Vendido
+ * T = Travado
  */
 
 //#TODO criar alerta caso o(s) pedido(s) totalize(m) um valor maior que o limite de credito  
-//FIXME utilizar transaction
+//#TODO ao cancelar um pedido de venda a conta a receber nao é cancela. Cancelar?
 class PedidoVendasController extends AppController {
 	var $name = 'PedidoVendas';
 	var $components = array ('Geral','ContasReceber');
@@ -32,6 +33,7 @@ class PedidoVendasController extends AppController {
 			'O' => 'Orçamento',
 			'C' => 'Cancelado',
 			'V' => 'Vendido',
+			'T' => 'Travado',
 		);
 		$this->set('opcoes_situacoes',$opcoes_situacoes);
 		
@@ -97,6 +99,9 @@ class PedidoVendasController extends AppController {
 		return $retorno;
 	}
 	
+	/**
+	 * @see Component ContasReceber
+	 */
 	function _gerar_conta_receber($valor_total=null) {
 		// Apenas crio a forma de pagamento se a situacao do pedido for 'Vendido'
 		if (strtoupper($this->data['PedidoVenda']['situacao']) == 'V' ) {
@@ -108,6 +113,7 @@ class PedidoVendasController extends AppController {
 			return $this->ContasReceber->gerarContaReceber($dados);
 			
 		}
+		return true;
 	}
 	
 	function index() {
@@ -142,16 +148,22 @@ class PedidoVendasController extends AppController {
 			$this->data['PedidoVenda'] += array ('valor_bruto' => $valor_bruto);
 			$this->data['PedidoVenda'] += array ('valor_liquido' => $valor_liquido);
 			
+			//Inicia uma transaction
+			$this->PedidoVenda->begin();
+			
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
-				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
-					return false;
+				if ( $this->_gerar_conta_receber($valor_liquido) !== true ) {
+					$this->PedidoVenda->rollback();
 				}
-				$this->Session->setFlash('Pedido de venda cadastrado com sucesso.','flash_sucesso');
-				
-				$this->redirect(array('action'=>'index'));
+				else {
+					$this->PedidoVenda->commit();
+					$this->Session->setFlash('Pedido de venda cadastrado com sucesso.','flash_sucesso');
+					$this->redirect(array('action'=>'index'));
+				}
 			}
 			else {
 				$this->Session->setFlash('Erro ao cadastrar o pedido de venda.','flash_erro');
+				$this->PedidoVenda->rollback();
 			}
 		}
 	}
@@ -160,6 +172,7 @@ class PedidoVendasController extends AppController {
 		$this->set("title_for_layout","Pedido de venda"); 
 		$this->_obter_opcoes();
 		if (empty ($this->data)) {
+			$this->PedidoVenda->id = $id;
 			$this->data = $this->PedidoVenda->read();
 			if ( ! $this->data) {
 				$this->Session->setFlash('Pedido de venda não encontrado.','flash_erro');
@@ -191,7 +204,7 @@ class PedidoVendasController extends AppController {
 			}
 			//o pedido de venda pode ser editado apenas se nao tiver sido cancelado ou vendido
 			$s = strtoupper($this->PedidoVenda->field('situacao'));
-			if ( ($s == 'V') || ($s == 'C') ) {
+			if ( ($s == 'V') || ($s == 'C') || ($s == 'T') ) {
 				// o usuario pode cancelar um pedido de venda na situacao 'Vendido'
 				if (strtoupper($this->data['PedidoVenda']['situacao']) != 'C') {
 					$this->Session->setFlash('A situação deste pedido de venda impede que seja editado','flash_erro');
@@ -210,23 +223,33 @@ class PedidoVendasController extends AppController {
 			$this->data['PedidoVenda'] += array ('valor_bruto' => $valor_bruto);
 			$this->data['PedidoVenda'] += array ('valor_liquido' => $valor_liquido);
 			
+			//Inicia uma transaction
+			$this->PedidoVenda->begin();
+			
 			// #TODO seria bom nao deletar e reinserir todos os registros
 			// deleto os itens que pertenciam a pedido de venda
 			if( ! ($this->PedidoVenda->PedidoVendaItem->deleteAll(array('pedido_venda_id'=>$id),false))) {
-				$this->Session->setFlash('Erro ao salvar a pedido de venda','flash_erro');
+				$this->Session->setFlash('Erro ao atualizar o pedido de venda','flash_erro');
+				$this->PedidoVenda->rollback();
 				return null;
 			}
+
 			// insiro o que foi enviado agora, inclusive os itens
 			if ($this->PedidoVenda->saveAll($this->data,array('validate'=>'first'))) {
-				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
-					return false;
+				if ($this->_gerar_conta_receber($valor_liquido) !== true ) {
+					$this->PedidoVenda->rollback();
 				}
-				$this->Session->setFlash('Pedido de venda atualizada com sucesso.','flash_sucesso');
-				$this->redirect(array('action'=>'index'));
+				else {
+					$this->PedidoVenda->commit();
+					$this->Session->setFlash('Pedido de venda cadastrado com sucesso.','flash_sucesso');
+					$this->redirect(array('action'=>'index'));
+				}
 			}
 			else {
-				$this->Session->setFlash('Erro ao atualizar a pedido de venda.','flash_erro');
+				$this->Session->setFlash('Erro ao cadastrar o pedido de venda.','flash_erro');
+				$this->PedidoVenda->rollback();
 			}
+			
 		}
 	}
 	

@@ -63,11 +63,6 @@ class ServicoOrdensController extends AppController {
 		$this->set('opcoes_usuarios',$this->opcoes_usuarios);
 	}	
 	
-	function index() {
-		$dados = $this->paginate('ServicoOrdem');
-		$this->set('consulta',$dados);
-	}
-	
 	/**
 	* caso algum item seja enviado (erro na validacao, editando registro, etc),
 	* o insiro na pagina
@@ -118,11 +113,13 @@ class ServicoOrdensController extends AppController {
 		return $retorno;
 	}
 	
-	
+	/**
+	 * @see Component ContasReceber
+	 */
 	function _gerar_conta_receber($valor_total=null) {
 		// Apenas crio a conta a receber se a situacao do serviço for Finalizado ou Entregue
 		if (strtoupper($this->data['ServicoOrdem']['situacao']) == 'F' || strtoupper($this->data['ServicoOrdem']['situacao']) == 'E'  ) {
-			$dados = array_merge(
+			$dados = array_merge (
 				array('valor_total'=>$valor_total),
 				array('numero_documento'=>$this->ServicoOrdem->id),
 				array('plano_conta_id'=>10),
@@ -131,6 +128,12 @@ class ServicoOrdensController extends AppController {
 			return $this->ContasReceber->gerarContaReceber($dados);
 			
 		}
+		return true;
+	}
+	
+	function index() {
+		$dados = $this->paginate('ServicoOrdem');
+		$this->set('consulta',$dados);
 	}
 	
 	function cadastrar() {
@@ -159,15 +162,22 @@ class ServicoOrdensController extends AppController {
 			$this->data['ServicoOrdem'] += array ('valor_bruto' => $valor_bruto);
 			$this->data['ServicoOrdem'] += array ('valor_liquido' => $valor_liquido);
 			
+			//Inicia uma transaction
+			$this->ServicoOrdem->begin();
+			
 			if ($this->ServicoOrdem->saveAll($this->data,array('validate'=>'first'))) {
-				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
-					return false;
+				if ( $this->_gerar_conta_receber($valor_liquido) !== true ) {
+					$this->ServicoOrdem->rollback();
 				}
-				$this->Session->setFlash('Ordem de serviço cadastrada com sucesso.','flash_sucesso');
-				$this->redirect(array('action'=>'index'));
+				else {
+					$this->ServicoOrdem->commit();
+					$this->Session->setFlash('Ordem de serviço cadastrada com sucesso.','flash_sucesso');
+					$this->redirect(array('action'=>'index'));
+				}
 			}
 			else {
 				$this->Session->setFlash('Erro ao cadastrar a ordem de serviço.','flash_erro');
+				$this->ServicoOrdem->rollback();
 			}
 		}
 	}
@@ -212,10 +222,14 @@ class ServicoOrdensController extends AppController {
 			$this->data['ServicoOrdem'] += array ('valor_bruto' => $valor_bruto);
 			$this->data['ServicoOrdem'] += array ('valor_liquido' => $valor_liquido);
 			
+			//Inicia uma transaction
+			$this->PedidoVenda->begin();
+			
 			// #TODO seria bom nao deletar e reinserir todos os registros
 			// deleto os itens que pertenciam a ordem de serviço
 			if( ! ($this->ServicoOrdem->ServicoOrdemItem->deleteAll(array('servico_ordem_id'=>$id),false))) {
 				$this->Session->setFlash('Erro ao salvar a ordem de serviço','flash_erro');
+				$this->ServicoOrdem->rollback();
 				return false;
 			}
 			// insiro o que foi enviado agora, inclusive os itens
@@ -223,20 +237,23 @@ class ServicoOrdensController extends AppController {
 				$s2 = $this->data['ServicoOrdem']['situacao'];
 				if ($s2 == 'F' || $s2 == 'E') { //se a situacao for Finalizada ou Entregue
 				$fim = $this->ServicoOrdem->field('data_hora_fim');
-				$this->log('fim '.$fim,LOG_DEBUG);
 					if (empty($fim)) {
 						// se a data final nao foi preenchida
 						$this->ServicoOrdem->save(array('data_hora_fim'=>date('Y-m-d H:i:s')));
 					}
 				}
-				if ( $this->_gerar_conta_receber($valor_liquido) === false ) {
-					return false;
+				if ( $this->_gerar_conta_receber($valor_liquido) !== true ) {
+					$this->ServicoOrdem->rollback();
 				}
-				$this->Session->setFlash('Ordem de serviço atualizada com sucesso.','flash_sucesso');
-				$this->redirect(array('action'=>'index'));
+				else {
+					$this->ServicoOrdem->commit();
+					$this->Session->setFlash('Ordem de serviço atualizada com sucesso.','flash_sucesso');
+					$this->redirect(array('action'=>'index'));
+				}
 			}
 			else {
 				$this->Session->setFlash('Erro ao atualizar a ordem de serviço.','flash_erro');
+				$this->ServicoOrdem->rollback();
 			}
 		}
 	}

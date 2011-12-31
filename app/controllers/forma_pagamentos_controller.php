@@ -80,6 +80,13 @@ class FormaPagamentosController extends AppController {
 			$this->_recupera_itens_inseridos();
 			$this->data['FormaPagamento']['id'] = $id;
 			
+			// #TODO seria bom nao deletar e reinserir todos os registros
+			// deleto os itens que pertenciam a forma de pagamento
+			if( ! ($this->FormaPagamento->FormaPagamentoItem->deleteAll(array('forma_pagamento_id'=>$id),false))) {
+				$this->Session->setFlash('Erro ao atualizar a forma de pagamento','flash_erro');
+				return null;
+			}
+			
 			if ($this->FormaPagamento->saveAll($this->data,array('validate'=>'first'))) {
 				$this->Session->setFlash('Forma de pagamento atualizada com sucesso.','flash_sucesso');
 				$this->redirect(array('action'=>'index'));

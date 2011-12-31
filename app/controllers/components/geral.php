@@ -5,12 +5,20 @@
  */
 class GeralComponent {
 	
+	/**
+	 * Recebe um numero em formato brasileiro e retorna-o em formato americano
+	 * @return number
+	 */
 	function moeda2numero ($variavel) {
 		$variavel = preg_replace('/\./', '', $variavel);
 		$variavel = preg_replace('/,/', '.', $variavel);
 		return number_format($variavel,2,'.','');
 	}
 	
+	/**
+	 * Recebe um numero em formato americano e formata para formato brasileiro
+	 * @return number/string
+	 */
 	function numero2moeda ($variavel) {
 		return number_format($variavel,2,',','.');
 	}

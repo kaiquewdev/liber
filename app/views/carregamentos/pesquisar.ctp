@@ -64,13 +64,17 @@ print $form->create(null,array('controller'=>'carregamentos','action'=>'pesquisa
 			<?php foreach ($resultados as $r) : ?>
 				<tr>
 					<td><?php print $r['Carregamento']['id']; ?></td>
-					<td><?php print $html->link($r['Carregamento']['data_hora_criado'],'editar/' . $r['Carregamento']['id']) ;?></td>
+					<td><?php print $html->link($r['Carregamento']['data_hora_criado'],'detalhar/' . $r['Carregamento']['id']) ;?></td>
 					<td><?php print $opcoes_situacoes[$r['Carregamento']['situacao']]; ?></td>
 					<td><?php print $r['Carregamento']['descricao']; ?></td>
 					<td><?php print $r['Motorista']['nome']; ?></td>
 					<td><?php print $r['Veiculo']['placa']; ?></td>
-					<td><?php print $html->image('edit24x24.png',array('title'=>'Editar',
-					'alt'=>'Editar','url'=>array('action'=>'editar',$r['Carregamento']['id']))) ?></td>
+					<td>
+					<?php print '<a title="Excluir" onclick="javascript: return confirm(\'Deseja realmente excluir este registro?\')"
+					href="'.$html->url(array('action'=>'excluir')).'/'.$r['Carregamento']['id'].'">'.
+					$html->image('del24x24.png', array('alt'=>'Excluir'))
+					.'</a>';?>
+					</td>
 					<td><?php print $html->image('detalhar24x24.png',array('title'=>'Detalhar',
 					'alt'=>'Detalhar','url'=>array('action'=>'detalhar',$r['Carregamento']['id']))) ?></td>
 				</tr>

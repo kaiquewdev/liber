@@ -38,7 +38,7 @@ $javascript->link('formatar_moeda.js',false);
 					<input style="margin-left: 1%; width: 80%" type="text" name="pesquisar_cliente" id="pesquisar_cliente" />
 				</div>
 				<?php
-				$opcoes_forma_pamamento = array_merge(array('0'=>''),$opcoes_forma_pamamento);
+				//$opcoes_forma_pamamento = array_merge(array('0'=>''),$opcoes_forma_pamamento);
 				print $form->input('forma_pagamento_id',array('label'=>'Forma de pagamento','options'=>$opcoes_forma_pamamento));
 				print $form->input('data_venda',array('label'=>'Data da venda','type'=>'text','class'=>'mascara_data datepicker'));
 				?>
@@ -47,6 +47,7 @@ $javascript->link('formatar_moeda.js',false);
 				<?php
 				print $form->input('data_saida',array('label'=>'Data da saída','type'=>'text','class'=>'mascara_data datepicker'));
 				print $form->input('data_entrega',array('label'=>'Data entrega','type'=>'text','class'=>'mascara_data datepicker'));
+				unset($opcoes_situacoes['T']);
 				print $form->input('situacao',array('label'=>'Situação','options'=>$opcoes_situacoes));
 				print $form->input('desconto',array('label'=>'Desconto'));
 				?>

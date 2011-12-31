@@ -20,7 +20,7 @@
 		
 		<tr>
 			<td><?php print $carregamento['Carregamento']['id'];?></td>
-			<td><?php print $html->link($formatacao->dataHora($carregamento['Carregamento']['data_hora_criado']),'editar/' . $carregamento['Carregamento']['id']) ;?></td>
+			<td><?php print $html->link($formatacao->dataHora($carregamento['Carregamento']['data_hora_criado']),'detalhar/' . $carregamento['Carregamento']['id']) ;?></td>
 			<td><?php print $carregamento['Carregamento']['descricao']; ?></td>
 			<td><?php print $opcoes_situacoes[$carregamento['Carregamento']['situacao']]; ?></td>
 			<td>
